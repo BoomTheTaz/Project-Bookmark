@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class Dropzone : MonoBehaviour, IDropHandler {
+public class Dropzone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
 	protected float Width;
 	protected float Height;
@@ -12,9 +12,8 @@ public class Dropzone : MonoBehaviour, IDropHandler {
 
 
     // Use this for initialization
-    void Start()
+    protected void Start()
     {
-        
         Width = GetComponent<RectTransform>().rect.width;
         Height = GetComponent<RectTransform>().rect.height;
 		usableSpace = Width - Card.Width;
@@ -23,24 +22,73 @@ public class Dropzone : MonoBehaviour, IDropHandler {
 
     
 
-	public void OnDrop(PointerEventData eventData)
-	{        
-		Draggable draggable = eventData.pointerDrag.GetComponent<Draggable>();
+	//public void OnDrop(PointerEventData eventData)
+	//{        
+	//	Draggable draggable = eventData.pointerDrag.GetComponent<Draggable>();
            
-		if (draggable != null)
-		{
-			draggable.transform.SetParent(transform);
-			ReorganizeCards();
-		}
+	//	if (draggable != null)
+	//	{
+	//		if (CanAddCard(draggable.GetComponent<Card>().AP))
+	//		{
+	//			Debug.Log("WE HAVE ENOUGH AP.");
+	//			draggable.transform.SetParent(transform);
+	//			draggable.SetCurrentDropzone(this);
+	//		}
+	//		else
+	//		{
+	//			Debug.Log("AHHHH!!! WE'RE OUT OF AP");
+	//		}
+
+
+
+	//	}
+	//}
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		if (eventData.pointerDrag == null)
+			return;
+		Draggable draggable = eventData.pointerDrag.GetComponent<Draggable>();
+
+        if (draggable != null)
+        {
+			if (CanAddCard(draggable.GetComponent<Card>().AP))
+            {
+				//Debug.Log("WE HAVE ENOUGH AP.");
+                //draggable.transform.SetParent(transform);
+                draggable.SetCurrentDropzone(this);
+            }
+            else
+            {
+                //Debug.Log("AHHHH!!! WE'RE OUT OF AP");
+            }
+
+
+
+        }
 	}
 
-    protected void ReorganizeCards()
+
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		//if (eventData.pointerDrag == null)
+  //          return;
+        
+		//Draggable draggable = eventData.pointerDrag.GetComponent<Draggable>();
+
+		//if (draggable != null)
+		//{
+		//	RemoveCardAP(draggable.GetComponent<Card>().AP);
+		//}
+	}
+
+
+    public void ReorganizeCards()
 	{
 		
 		// FIXME: this should not need to happen, part of loading combat
 		if (usableSpace == Width)
 		{
-			Debug.Log("HERE");
 			usableSpace = Width - Card.Width;
 		}
 
@@ -51,8 +99,42 @@ public class Dropzone : MonoBehaviour, IDropHandler {
         // Organize by sibling index
         for (int i = 0; i < numChildren; i++)
         {
-			transform.GetChild(i).transform.localPosition = new Vector3((i - mid + .5f) * xShift, Height/2, 0);
+			transform.GetChild(i).transform.localPosition = new Vector3((i - mid + .5f) * xShift, 0, 0);
         }
 
 	}
+
+    // Add a card to this dropzone
+	public void AddCard(GameObject card)
+	{
+		if (card == null)
+			return;
+
+		card.transform.SetParent(transform);
+
+		card.GetComponent<RectTransform>().pivot = GetComponent<RectTransform>().pivot;
+
+		card.transform.Rotate(0, -180, 0);
+		card.GetComponent<Card>().Flip();
+
+		card.transform.localScale = Vector3.one;
+		ReorganizeCards();
+
+  
+	}
+
+	protected virtual bool CanAddCard(int ap)
+	{
+		return true;
+	}
+
+	public virtual void RemoveCardAP(int ap)
+	{
+		return;
+	}
+
+	public virtual void AddCardAP(int ap)
+    {
+        return;
+    }
 }

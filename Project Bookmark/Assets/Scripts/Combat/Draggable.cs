@@ -7,6 +7,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	Vector2 offset;
 	Vector3 TargetPosition;
+	Dropzone previousDropzone;
+	Dropzone currentDropzone;
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
@@ -15,6 +17,9 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		offset = eventData.position - (Vector2)transform.position;
 
 		eventData.pointerDrag.GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+		SetCurrentDropzone(transform.parent.GetComponent<Dropzone>());
+		previousDropzone = transform.parent.GetComponent<Dropzone>();
 	}
 
 	public void OnDrag(PointerEventData eventData)
@@ -25,10 +30,42 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	public void OnEndDrag(PointerEventData eventData)
 	{
 		eventData.pointerDrag.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        
+		Dropped();      
 	}
 
 	public void SetTargetPosition(Vector3 v)
 	{
 		TargetPosition = v;
+	}
+
+	public void SetCurrentDropzone(Dropzone d)
+	{
+		if (currentDropzone == d)
+			return;
+        
+		currentDropzone = d;
+	}
+
+    public void GoToDropzone()
+	{
+		GetComponent<RectTransform>().pivot = transform.parent.GetComponent<RectTransform>().pivot;
+
+
+		currentDropzone.ReorganizeCards();
+	}
+    
+    void Dropped()
+	{
+		if (previousDropzone != currentDropzone)
+		{
+			transform.SetParent(currentDropzone.transform);
+            
+			previousDropzone.ReorganizeCards();
+			previousDropzone.RemoveCardAP(GetComponent<Card>().AP);
+			currentDropzone.AddCardAP(GetComponent<Card>().AP);
+		}
+
+		GoToDropzone();
 	}
 }

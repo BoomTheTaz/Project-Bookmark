@@ -18,6 +18,7 @@ public class Deck : MonoBehaviour {
 		
 		for (int i = 0; i < transform.childCount-1; i++)
 		{
+
 			int rand = Random.Range(i, numCards);
 
 			transform.GetChild(rand).SetSiblingIndex(i);

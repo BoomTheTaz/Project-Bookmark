@@ -22,10 +22,13 @@ public class ControlManager : MonoBehaviour {
 
 
 
-    void CombatControls()
+	void CombatControls()
 	{
+
 		if (Input.GetKeyDown(KeyCode.Space))
-			FindObjectOfType<Hand>().AddCard();
-            
+			FindObjectOfType<Hand>().DrawCard();
+
+		if (Input.GetKeyDown(KeyCode.RightArrow))
+			FindObjectOfType<CombatManager>().Evaluate();
 	}
 }

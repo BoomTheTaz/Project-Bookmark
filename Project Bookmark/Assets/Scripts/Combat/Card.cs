@@ -3,18 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+public enum CardType { ATK_Phys, ATK_Mag, DEF_Phys, DEF_Mag}
+
 public class Card : MonoBehaviour {
     
 	public GameObject CardFront;
 	public GameObject CardBack;
-	public float speed;
+	public float Speed { get; protected set; }
 
-	public float ATK { get; protected set; }
-	public float DEF { get; protected set; }
+	public int ATK { get; protected set; }
+	public int DEF { get; protected set; }
 	public int AP { get; protected set; }
     
 	public static int Width;
 	public static int Height;
+
+	public Text ATKText;
+	public Text DEFText;
+	public Text APText;
+	public Text CardName;
+	public Image CardTypeIMG;
+
+	public CardType Type { get; protected set; }
+	public string Name { get; protected set; }
+
 
 
 	bool isFront = true;
@@ -59,11 +72,15 @@ public class Card : MonoBehaviour {
 		return GetComponent<RectTransform>().rect.width;
 	}
 
-    public void SetStats(float a, float d, int ap)
+	public void SetupCard(CardStats c)
 	{
-		ATK = a;
-		DEF = d;
-		AP = ap;
+		Type = c.Type;
+		Name = c.Name;
+		ATK = c.ATK;
+		DEF = c.DEF;
+		AP = c.AP;
+
+		UpdateVisuals();
 	}
 
     public void Flip()
@@ -80,5 +97,38 @@ public class Card : MonoBehaviour {
             CardFront.SetActive(false);
             CardBack.SetActive(true);
         }
+	}
+
+    void UpdateVisuals()
+	{
+		ATKText.text = ATK.ToString();
+		DEFText.text = DEF.ToString();
+		CardName.text = Name;
+		APText.text = AP.ToString();
+
+        switch (Type)
+		{
+
+			case CardType.ATK_Mag:
+				CardTypeIMG.color = Color.magenta;
+				break;
+			
+			case CardType.ATK_Phys:
+				CardTypeIMG.color = Color.red;
+                break;
+			case CardType.DEF_Mag:
+				CardTypeIMG.color = Color.cyan;
+                break;
+			case CardType.DEF_Phys:
+				CardTypeIMG.color = Color.blue;
+                break;
+
+
+			default:
+				CardTypeIMG.color = Color.black;
+				Debug.LogError("Invalid card type.");
+				break;
+		}
+
 	}
 }

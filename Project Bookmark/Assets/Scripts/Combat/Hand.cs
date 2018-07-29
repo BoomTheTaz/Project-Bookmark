@@ -4,16 +4,22 @@ using UnityEngine;
 
 
 // TODO: Eliminate this class, unnecessary
-public class Hand : Dropzone {
+public class Hand : MonoBehaviour {
 
+	public Deck deck;
+	Dropzone HandDropzone;
 
-	public GameObject CardPrefab;
-
-    // Add a card to the hand
-    public void AddCard()
+	private void Start()
 	{
-		Instantiate(CardPrefab, this.transform);
-		base.ReorganizeCards();
+		HandDropzone = GetComponent<Dropzone>();
+	}
+
+	   
+    public void DrawCard()
+	{
+		GameObject card = deck.DrawCard();
+
+		HandDropzone.AddCard(card);
 	}
 
      

@@ -326,11 +326,15 @@
     <Compile Include="Assets\Scripts\Book\TestSection.cs" />
     <Compile Include="Assets\Scripts\Book\UIManager.cs" />
     <Compile Include="Assets\Scripts\Combat\Card.cs" />
+    <Compile Include="Assets\Scripts\Combat\CardStats.cs" />
+    <Compile Include="Assets\Scripts\Combat\CardTemplate.cs" />
     <Compile Include="Assets\Scripts\Combat\CombatManager.cs" />
     <Compile Include="Assets\Scripts\Combat\Deck.cs" />
     <Compile Include="Assets\Scripts\Combat\Draggable.cs" />
     <Compile Include="Assets\Scripts\Combat\Dropzone.cs" />
     <Compile Include="Assets\Scripts\Combat\Hand.cs" />
+    <Compile Include="Assets\Scripts\Combat\PlayArea.cs" />
+    <Compile Include="Assets\Scripts\Combat\Player.cs" />
     <Compile Include="Assets\Scripts\ControlManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
   </ItemGroup>

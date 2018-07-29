@@ -1,13 +1,19 @@
-﻿<Properties StartupConfiguration="{89EA38B5-F879-783A-A9DE-92EE8D1DD7C6}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/ControlManager.cs">
+﻿<Properties StartupConfiguration="{24EB6591-4649-E7BE-7F0F-46E622B31C84}|">
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Combat/CombatManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/Combat/Card.cs" Line="76" Column="30" />
-      <File FileName="Assets/Scripts/Combat/Hand.cs" Line="10" Column="31" />
+      <File FileName="Assets/Scripts/Combat/Card.cs" Line="133" Column="3" />
+      <File FileName="Assets/Scripts/Combat/Hand.cs" Line="18" Column="2" />
       <File FileName="Assets/Scripts/Combat/Deck.cs" Line="18" Column="3" />
       <File FileName="Assets/Scripts/ControlManager.cs" Line="18" Column="24" />
-      <File FileName="Assets/Scripts/Combat/CombatManager.cs" Line="14" Column="3" />
-      <File FileName="Assets/Scripts/Combat/Dropzone.cs" Line="40" Column="67" />
-      <File FileName="Assets/Scripts/Combat/Draggable.cs" Line="24" Column="2" />
+      <File FileName="Assets/Scripts/Combat/CombatManager.cs" Line="112" Column="2" />
+      <File FileName="Assets/Scripts/Combat/Dropzone.cs" Line="134" Column="22" />
+      <File FileName="Assets/Scripts/Combat/Draggable.cs" Line="18" Column="3" />
+      <File FileName="Assets/Scripts/Combat/Player.cs" Line="11" Column="22" />
+      <File FileName="Assets/Scripts/Combat/PlayArea.cs" Line="27" Column="2" />
+      <File FileName="Assets/Scripts/Combat/CardTemplate.cs" Line="11" Column="4" />
+      <File FileName="Assets/Scripts/Combat/CardStats.cs" Line="8" Column="40" />
+      <File FileName="Assets/Scripts/Combat/EnemyAI.cs" Line="8" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

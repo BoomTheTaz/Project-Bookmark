@@ -129,6 +129,11 @@ public class Card : MonoBehaviour {
 				Debug.LogError("Invalid card type.");
 				break;
 		}
+        
+	}
 
+    public void SetEnemyBack()
+	{
+		CardBack.GetComponent<Image>().sprite = Resources.Load<Sprite>("EnemyBack");
 	}
 }

@@ -9,10 +9,18 @@ public class CombatManager : MonoBehaviour {
 	public GameObject CardPrefab;
 	public PlayArea playArea;
 
-	public Deck playerDeck;
+	public Deck PlayerDeck;
 	public Deck AIDeck;
 
-	CombatState currentState;
+	public Transform AttackDeck;
+	public Transform PlayerCardReveal;
+	public Transform EnemyCardReveal;
+	public Transform PlayerDiscard;
+	public Transform EnemyDiscard;
+
+	public static bool CanDrag;
+
+	public static CombatState currentState { get; private set; }
 
 	int PlayerATK;
 	int PlayerDEF;
@@ -25,11 +33,15 @@ public class CombatManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         
+		// TEMP: create Decks for player and AI
 		CreateDeck();
 		CreateAIDeck();
 
+		// TEMP: Start with player attacking
+        //      Compare Speeds in future to decide who initiates
 		currentState = CombatState.Player_ATK;
 
+        // Grab necessary Components
 		AI = FindObjectOfType<EnemyAI>();
 	}
 
@@ -42,9 +54,8 @@ public class CombatManager : MonoBehaviour {
 
 		for (int i = 0; i < numCards; i++)
 		{
-			temp[i] = Instantiate(CardPrefab, playerDeck.transform.position, Quaternion.identity,playerDeck.transform);
+			temp[i] = Instantiate(CardPrefab, PlayerDeck.transform.position, Quaternion.identity,PlayerDeck.transform);
 			temp[i].transform.Rotate(new Vector3(0, 180, 0));
-			temp[i].GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
 
 			temp[i].GetComponent<Card>().Flip();
 
@@ -53,7 +64,7 @@ public class CombatManager : MonoBehaviour {
 			temp[i].GetComponent<Card>().SetupCard(CardTemplate.GetTemplate(i % 6));
 		}
 
-		playerDeck.Shuffle();
+		PlayerDeck.Shuffle();
 	}
 
 	void CreateAIDeck()
@@ -61,54 +72,59 @@ public class CombatManager : MonoBehaviour {
 		int numCards = 10;
 
         GameObject[] temp = new GameObject[numCards];
-
+        
         for (int i = 0; i < numCards; i++)
         {
 			temp[i] = Instantiate(CardPrefab, AIDeck.transform.position, Quaternion.identity, AIDeck.transform);
-            temp[i].transform.Rotate(new Vector3(0, 180, 0));
-            temp[i].GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            temp[i].transform.Rotate(new Vector3(0, 180, 180));
 
             temp[i].GetComponent<Card>().Flip();
 
-            temp[i].name = "Card " + i.ToString();
+            temp[i].name = "Enemy Card " + i.ToString();
 
             temp[i].GetComponent<Card>().SetupCard(CardTemplate.GetTemplate(i % 6));
+			temp[i].GetComponent<Card>().SetEnemyBack();
         }
 
 		AIDeck.Shuffle();
 	}
 
-
+    // Figure out where to go next
     public void Evaluate()
 	{
 		if (currentState == CombatState.Player_ATK)
 			FinalizePlayerAttack();
+		else if (PlayerCardReveal.childCount > 0 || EnemyCardReveal.childCount > 0)
+			EvaluateCombat();
+		else if (currentState == CombatState.AI_DEF && AttackDeck.transform.childCount > 0)
+			DrawFromAttackDeck(true);
 		else if (currentState == CombatState.AI_DEF)
 			FinalizeAIDefense();
 		else if (currentState == CombatState.AI_ATK)
 			FinalizeAIAttack();
+		else if (currentState == CombatState.Player_DEF && AttackDeck.transform.childCount > 0)
+			DrawFromAttackDeck(false);
 		else if (currentState == CombatState.Player_DEF)
 			FinalizePlayerDefense();
+
+		Debug.Log(currentState);
 	}
 
 
     // Lock in atk power/dmg against AI
+    // Take all cards in play area and put in attack deck
     void FinalizePlayerAttack()
 	{
 		if(playArea.transform.childCount > 0)
 		{
-			PlayerATK = 0;
-			for (int i = 0; i < playArea.transform.childCount; i++)
-			{
-				PlayerATK += playArea.transform.GetChild(i).GetComponent<Card>().ATK;
-			}
+			CreateAttackDeck();
 		}
 
-		Debug.Log("Locked in player attacks. ATK: " + PlayerATK.ToString()) ;
 		currentState = CombatState.AI_DEF;
 	}
 
     // Resolve player attacks against AI defense
+    // Draw from attack deck one by one and prompt AI for defense card
 	void FinalizeAIDefense()
     {
 		AI.Defend();
@@ -116,13 +132,22 @@ public class CombatManager : MonoBehaviour {
     }
 
     // Lock in atk power/dmg against player
+    // Have AI choose attack cards, then move all in play area to attack deck
 	void FinalizeAIAttack()
     {
 		AI.Attack();
+
+		if (playArea.transform.childCount > 0)
+        {
+            CreateAttackDeck();
+        }
+
 		currentState = CombatState.Player_DEF;
+		playArea.ResetAP();
     }
 
     // Resolve AI attacks against player
+    // Draw from attack deck one by one, prompting player for defense card
 	void FinalizePlayerDefense()
     {
 		if (playArea.transform.childCount > 0)
@@ -134,8 +159,112 @@ public class CombatManager : MonoBehaviour {
             }
         }
 
-		Debug.Log("Locked in player defense. DEF: " + PlayerDEF.ToString());
 		currentState = CombatState.Player_ATK;
     }
+   
+    void CreateAttackDeck()
+	{
+		// Get all cards in play area
+        // Parent and relocate cads to attack deck
+		int childCount = playArea.transform.childCount;
+        for (int i = 0; i < childCount; i++)
+        {
+            // Take top card
+            Card temp = playArea.transform.GetChild(0).GetComponent<Card>();
+
+			temp.transform.SetParent(AttackDeck);
+			temp.transform.position = AttackDeck.position;
+
+        }
+	}
+
+    void DrawFromAttackDeck(bool isPlayerAttack)
+	{
+		Transform child = AttackDeck.GetChild(0);
+
+		// Take top card off attack deck and move it to appropriate reveal area
+		if (isPlayerAttack == true)
+		{
+			
+			child.position = PlayerCardReveal.position;
+			child.SetParent(PlayerCardReveal);
+
+			CardsInCombat[0] = child.GetComponent<Card>();
+
+		}
+
+		else 
+		{
+
+			child.position = EnemyCardReveal.position;
+			child.SetParent(EnemyCardReveal);
+
+            CardsInCombat[1] = child.GetComponent<Card>();
+
+		}
+	}
+
+    // Array to store relevant cards in combat
+	Card[] CardsInCombat = new Card[2];
+
+    void EvaluateCombat()
+	{
+		// Compare cards in reveal areas and compute damage/other effects
+      
+        // Calculate damage based on current state
+		if (currentState == CombatState.AI_DEF)
+		{
+			if (EnemyCardReveal.childCount > 0)
+            {
+                CardsInCombat[1] = EnemyCardReveal.GetChild(0).GetComponent<Card>();
+            }
+            else
+            {
+                CardsInCombat[1] = null;
+            }
+
+			// TODO: Figure out damage equation
+
+			if (CardsInCombat[0] != null)
+			    Debug.Log("Player AttacK: " + CardsInCombat[0].ATK.ToString());
+			if (CardsInCombat[1] != null)
+    			Debug.Log("Enemy Defense: " + CardsInCombat[1].DEF.ToString());
+		}
+
+		else if (currentState == CombatState.Player_DEF)
+		{
+			if (PlayerCardReveal.childCount > 0)
+            {
+                CardsInCombat[0] = PlayerCardReveal.GetChild(0).GetComponent<Card>();
+            }
+            else
+            {
+                CardsInCombat[0] = null;
+            }
+
+			// TODO: Figure out damage equation
+			if (CardsInCombat[0] != null)
+                Debug.Log("Player Defense: " + CardsInCombat[0].DEF.ToString());
+            if (CardsInCombat[1] != null)
+				Debug.Log("Enemy Attack: " + CardsInCombat[1].ATK.ToString());
+		}
+		else
+			Debug.LogError("Invalid State to evaluate combat.");
+
+        // Move cards to discard pile
+		if (CardsInCombat[0] != null)
+		{
+			CardsInCombat[0].transform.SetParent(PlayerDiscard);
+			CardsInCombat[0].transform.position = PlayerDiscard.position;
+			CardsInCombat[0].transform.localScale = Vector3.one;
+		}
+		if (CardsInCombat[1] != null)
+        {
+			CardsInCombat[1].transform.SetParent(EnemyDiscard);
+			CardsInCombat[1].transform.position = EnemyDiscard.position;
+			CardsInCombat[1].transform.localScale = Vector3.one;
+
+        }
+	}
 
 }

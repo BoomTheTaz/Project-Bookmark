@@ -21,6 +21,33 @@ public class Hand : MonoBehaviour {
 
 		HandDropzone.AddCard(card);
 	}
+    
+	public Card GetHighestATK()
+	{
+		Card result = null;
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			if (result == null)
+				result = transform.GetChild(i).GetComponent<Card>();
+			else if (transform.GetChild(i).GetComponent<Card>().ATK > result.ATK)
+				result = transform.GetChild(i).GetComponent<Card>();
+		}
+		Debug.Log(result.ATK);
+		return result;
+	}
 
-     
+	public Card GetHighestDEF()
+    {
+        Card result = null;
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            if (result == null)
+                result = transform.GetChild(i).GetComponent<Card>();
+            else if (transform.GetChild(i).GetComponent<Card>().DEF > result.DEF)
+                result = transform.GetChild(i).GetComponent<Card>();
+        }
+		Debug.Log(result.DEF);
+        return result;
+    }
+
 }

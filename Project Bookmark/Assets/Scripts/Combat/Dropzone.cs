@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class Dropzone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
+public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 
 	protected float Width;
 	protected float Height;
@@ -46,12 +46,15 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
+		// return if no dragging object
 		if (eventData.pointerDrag == null)
 			return;
 		Draggable draggable = eventData.pointerDrag.GetComponent<Draggable>();
 
+        // if there is a draggable
         if (draggable != null)
         {
+			// and has enough AP to add
 			if (CanAddCard(draggable.GetComponent<Card>().AP))
             {
 				//Debug.Log("WE HAVE ENOUGH AP.");
@@ -67,22 +70,7 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         }
 	}
-
-
-	public void OnPointerExit(PointerEventData eventData)
-	{
-		//if (eventData.pointerDrag == null)
-  //          return;
-        
-		//Draggable draggable = eventData.pointerDrag.GetComponent<Draggable>();
-
-		//if (draggable != null)
-		//{
-		//	RemoveCardAP(draggable.GetComponent<Card>().AP);
-		//}
-	}
-
-
+      
     public void ReorganizeCards()
 	{
 		
@@ -111,9 +99,7 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 			return;
 
 		card.transform.SetParent(transform);
-
-		card.GetComponent<RectTransform>().pivot = GetComponent<RectTransform>().pivot;
-
+  
 		card.transform.Rotate(0, -180, 0);
 		card.GetComponent<Card>().Flip();
 
@@ -121,6 +107,21 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 		ReorganizeCards();
 
   
+	}
+
+	public void AddAICard(GameObject card)
+	{
+		if (card == null)
+            return;
+
+        card.transform.SetParent(transform);
+		card.transform.Rotate(0, 0, -180);
+
+        card.GetComponent<RectTransform>().pivot = GetComponent<RectTransform>().pivot;
+
+              
+        card.transform.localScale = Vector3.one;
+        ReorganizeCards();
 	}
 
 	protected virtual bool CanAddCard(int ap)
@@ -136,5 +137,10 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 	public virtual void AddCardAP(int ap)
     {
         return;
+    }
+
+	public virtual Transform GetRelevantTransform()
+    {
+		return transform;
     }
 }

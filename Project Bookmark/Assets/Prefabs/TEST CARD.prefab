@@ -88,8 +88,8 @@ GameObject:
   m_Component:
   - component: {fileID: 224992822749129950}
   - component: {fileID: 114352390593462518}
-  - component: {fileID: 114980842123234770}
   - component: {fileID: 225535545262163136}
+  - component: {fileID: 114544071671701920}
   m_Layer: 5
   m_Name: TEST CARD
   m_TagString: Untagged
@@ -494,7 +494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -569,6 +569,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114544071671701920
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1396743686663866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4322d9cd15af4c6b8fae1fac08d4db0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114659088405637086
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -672,17 +683,6 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
---- !u!114 &114980842123234770
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1396743686663866}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4322d9cd15af4c6b8fae1fac08d4db0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!222 &222062923259750436
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -896,7 +896,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224992822749129950}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -934,7 +934,7 @@ RectTransform:
   - {fileID: 224751002951475948}
   - {fileID: 224813121935899318}
   m_Father: {fileID: 224992822749129950}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1029,8 +1029,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 224543397568201050}
   - {fileID: 224723228287062348}
+  - {fileID: 224543397568201050}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

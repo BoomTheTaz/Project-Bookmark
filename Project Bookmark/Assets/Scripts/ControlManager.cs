@@ -7,6 +7,8 @@ public class ControlManager : MonoBehaviour {
 	delegate void OnUpdate();
 	OnUpdate Controls;
 
+	public Hand PlayerHand;
+
 	private void Start()
 	{
 		Controls += CombatControls;
@@ -26,9 +28,10 @@ public class ControlManager : MonoBehaviour {
 	{
 
 		if (Input.GetKeyDown(KeyCode.Space))
-			FindObjectOfType<Hand>().DrawCard();
+			PlayerHand.DrawCard();
 
 		if (Input.GetKeyDown(KeyCode.RightArrow))
 			FindObjectOfType<CombatManager>().Evaluate();
+
 	}
 }

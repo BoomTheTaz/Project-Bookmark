@@ -6,20 +6,25 @@ using UnityEngine.EventSystems;
 public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler {
 
 	Vector2 offset;
-	Vector3 TargetPosition;
 	Dropzone previousDropzone;
 	Dropzone currentDropzone;
 
+	Transform targetTransform;
+	Vector3 previousPosition;
+
+    // What to do at the beginning of the drag
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-		TargetPosition = transform.position;
+		// Set target transform to current transform
+		previousPosition = transform.position;
 
 		offset = eventData.position - (Vector2)transform.position;
 
 		eventData.pointerDrag.GetComponent<CanvasGroup>().blocksRaycasts = false;
-
+        
 		SetCurrentDropzone(transform.parent.GetComponent<Dropzone>());
 		previousDropzone = transform.parent.GetComponent<Dropzone>();
+
 	}
 
 	public void OnDrag(PointerEventData eventData)
@@ -34,9 +39,9 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		Dropped();      
 	}
 
-	public void SetTargetPosition(Vector3 v)
+	public void SetNewTransform(Transform t)
 	{
-		TargetPosition = v;
+		targetTransform = t;
 	}
 
 	public void SetCurrentDropzone(Dropzone d)
@@ -45,25 +50,37 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			return;
         
 		currentDropzone = d;
-	}
 
+		SetNewTransform(d.GetRelevantTransform());
+	}
+    
     public void GoToDropzone()
 	{
-		GetComponent<RectTransform>().pivot = transform.parent.GetComponent<RectTransform>().pivot;
+		//GetComponent<RectTransform>().pivot = transform.parent.GetComponent<RectTransform>().pivot;
+		// if null
 
 
-		currentDropzone.ReorganizeCards();
+		if (currentDropzone == previousDropzone)
+			transform.position = previousPosition;
+		else
+		    transform.position = targetTransform.position;
+
+        
+		if (currentDropzone.transform == targetTransform )
+		    currentDropzone.ReorganizeCards();
 	}
     
     void Dropped()
 	{
 		if (previousDropzone != currentDropzone)
 		{
-			transform.SetParent(currentDropzone.transform);
+			transform.SetParent(targetTransform);
+
+            currentDropzone.AddCardAP(GetComponent<Card>().AP);
             
 			previousDropzone.ReorganizeCards();
 			previousDropzone.RemoveCardAP(GetComponent<Card>().AP);
-			currentDropzone.AddCardAP(GetComponent<Card>().AP);
+            
 		}
 
 		GoToDropzone();

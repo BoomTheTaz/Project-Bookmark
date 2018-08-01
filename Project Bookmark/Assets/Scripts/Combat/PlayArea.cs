@@ -6,7 +6,7 @@ public class PlayArea : Dropzone {
 
 	public int CurrentAP { get; protected set; }
 	public int MaxAP;
-
+	public Transform PlayerReveal;
     
 	private new void Start()
 	{
@@ -16,6 +16,9 @@ public class PlayArea : Dropzone {
 
 	}
 
+
+
+
 	protected override bool CanAddCard(int ap)
 	{
 		if (MaxAP - CurrentAP >= ap)
@@ -24,21 +27,38 @@ public class PlayArea : Dropzone {
 		}
 		return false;
 	}
-
-	public void Reset()
-	{
-		CurrentAP = 0;
-	}
-
+   
 	public override void RemoveCardAP(int ap)
 	{
 		CurrentAP -= ap;
 		Debug.Log("REMOVING AP. Current AP: " + CurrentAP.ToString());
 	}
-
+    
 	public override void AddCardAP(int ap)
     {
         CurrentAP += ap;
         Debug.Log("ADDING AP. Current AP: " + CurrentAP.ToString());
     }
+
+	public override Transform GetRelevantTransform()
+	{
+
+		if (CombatManager.currentState == CombatState.Player_ATK)
+		{
+			return transform;
+		}
+		if (CombatManager.currentState == CombatState.Player_DEF)
+		{
+			return PlayerReveal;
+		}
+		Debug.LogError("Cannot get relevant transform in this state.");
+		return transform;
+			
+
+	}
+
+    public void ResetAP()
+	{
+		CurrentAP = 0;
+	}
 }

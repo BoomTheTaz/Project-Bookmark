@@ -18,10 +18,10 @@ public class GameManager : MonoBehaviour {
 		//Debug.Log("Wisdom: " + player.GetStat(Stats.Wisdom).ToString());
 		//Debug.Log("Charisma: " + player.GetStat(Stats.Charisma).ToString());
 
-		bookManager = new BookManager("Prologue");
-		bookManager.SetupPage(0);
+		//bookManager = new BookManager("Prologue");
+		//bookManager.SetupPage(0);
 
-		UIManager.instance.SetButtonListeners(bookManager);
+		//UIManager.instance.SetButtonListeners(bookManager);
 
 
 	}

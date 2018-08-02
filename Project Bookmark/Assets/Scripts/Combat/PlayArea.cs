@@ -7,6 +7,7 @@ public class PlayArea : Dropzone {
 	public int CurrentAP { get; protected set; }
 	public int MaxAP;
 	public Transform PlayerReveal;
+	public Transform EnemyReveal;
     
 	private new void Start()
 	{
@@ -43,11 +44,11 @@ public class PlayArea : Dropzone {
 	public override Transform GetRelevantTransform()
 	{
 
-		if (CombatManager.currentState == CombatState.Player_ATK)
+		if (CombatManager.CurrentState == CombatState.Player_ATK)
 		{
 			return transform;
 		}
-		if (CombatManager.currentState == CombatState.Player_DEF)
+		if (CombatManager.CurrentState == CombatState.Player_DEF)
 		{
 			return PlayerReveal;
 		}
@@ -60,5 +61,11 @@ public class PlayArea : Dropzone {
     public void ResetAP()
 	{
 		CurrentAP = 0;
+	}
+
+	public void AddCardToEnemyReveal(Transform t)
+	{
+		t.SetParent(EnemyReveal);
+		t.position = EnemyReveal.position;
 	}
 }

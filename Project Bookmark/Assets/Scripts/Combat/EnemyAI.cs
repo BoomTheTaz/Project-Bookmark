@@ -20,7 +20,6 @@ public class EnemyAI : MonoBehaviour {
         {
             if (deck.transform.childCount == 0)
                 break;
-
             handDZ.AddAICard(deck.DrawCard());
         }
 
@@ -39,13 +38,13 @@ public class EnemyAI : MonoBehaviour {
 			handDZ.AddAICard(deck.DrawCard());
 		}
 
-		playArea.AddCard(hand.GetHighestDEF().gameObject);
+		playArea.AddCardToEnemyReveal(hand.GetHighestDEF().transform);
 
 	}
 
 	public void Attack()
     {
         Debug.Log("Time to attack");
-		hand.GetHighestATK();
+		playArea.AddAICard(hand.GetHighestATK().gameObject);
     }
 }

@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\Combat\CardStats.cs" />
     <Compile Include="Assets\Scripts\Combat\CardTemplate.cs" />
     <Compile Include="Assets\Scripts\Combat\CombatManager.cs" />
+    <Compile Include="Assets\Scripts\Combat\CombatUI.cs" />
     <Compile Include="Assets\Scripts\Combat\Deck.cs" />
     <Compile Include="Assets\Scripts\Combat\Draggable.cs" />
     <Compile Include="Assets\Scripts\Combat\Dropzone.cs" />

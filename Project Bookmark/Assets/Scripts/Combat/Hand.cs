@@ -32,7 +32,7 @@ public class Hand : MonoBehaviour {
 			else if (transform.GetChild(i).GetComponent<Card>().ATK > result.ATK)
 				result = transform.GetChild(i).GetComponent<Card>();
 		}
-		Debug.Log(result.ATK);
+
 		return result;
 	}
 

@@ -11,12 +11,13 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	Transform targetTransform;
 	Vector3 previousPosition;
+	Transform previousTransform;
 
     // What to do at the beginning of the drag
 	public void OnBeginDrag(PointerEventData eventData)
 	{
 		// Set target transform to current transform
-		previousPosition = transform.position;
+		previousPosition = transform.localPosition;
 
 		offset = eventData.position - (Vector2)transform.position;
 
@@ -61,13 +62,17 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 
 		if (currentDropzone == previousDropzone)
-			transform.position = previousPosition;
+			//transform.position = previousPosition;
+			GetComponent<Card>().RegisterToMove(previousPosition);
 		else
-		    transform.position = targetTransform.position;
+		{
+			currentDropzone.ReorganizeCards();
+		}
+		    //transform.position = targetTransform.position;
 
         
-		if (currentDropzone.transform == targetTransform )
-		    currentDropzone.ReorganizeCards();
+		//if (currentDropzone.transform == targetTransform )
+		    //currentDropzone.ReorganizeCards();
 	}
     
     void Dropped()

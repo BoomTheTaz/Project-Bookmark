@@ -83,11 +83,14 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 		int numChildren = transform.childCount;
         float xShift = usableSpace / numChildren;
         float mid = numChildren / 2f;
-
+        
         // Organize by sibling index
         for (int i = 0; i < numChildren; i++)
         {
-			transform.GetChild(i).transform.localPosition = new Vector3((i - mid + .5f) * xShift, 0, 0);
+			transform.GetChild(i).GetComponent<Card>().RegisterToMove(new Vector3((i - mid + .5f) * xShift, 0, 0));
+
+			//transform.GetChild(i).transform.localPosition = new Vector3((i - mid + .5f) * xShift, 0, 0);
+			//transform.GetChild(i).transform.position = transform.position + new Vector3((i - mid + .5f) * xShift, 0, 0);
         }
 
 	}
@@ -99,11 +102,11 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 			return;
 
 		card.transform.SetParent(transform);
-  
-		card.transform.Rotate(0, -180, 0);
-		card.GetComponent<Card>().Flip();
 
-		card.transform.localScale = Vector3.one;
+		card.GetComponent<Card>().RegisterToFlip();
+		card.GetComponent<Card>().RegisterToScale();
+        
+		//card.transform.localScale = Vector3.one;
 		ReorganizeCards();
 
   
@@ -113,11 +116,10 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 	{
 		if (card == null)
             return;
-
+        
         card.transform.SetParent(transform);
-		card.transform.Rotate(0, 0, -180);
 
-        card.GetComponent<RectTransform>().pivot = GetComponent<RectTransform>().pivot;
+		card.transform.position = transform.position;
 
               
         card.transform.localScale = Vector3.one;

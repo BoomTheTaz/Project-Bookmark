@@ -9,23 +9,20 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	Dropzone previousDropzone;
 	Dropzone currentDropzone;
 
-	Transform targetTransform;
-	Vector3 previousPosition;
 	Transform previousTransform;
 
-    // What to do at the beginning of the drag
+	#region Drag Functions
+	// What to do at the beginning of the drag
 	public void OnBeginDrag(PointerEventData eventData)
 	{
 		// Set target transform to current transform
-		previousPosition = transform.localPosition;
-
+		Debug.Log(currentDropzone.name);
 		offset = eventData.position - (Vector2)transform.position;
 
 		eventData.pointerDrag.GetComponent<CanvasGroup>().blocksRaycasts = false;
-        
-		SetCurrentDropzone(transform.parent.GetComponent<Dropzone>());
-		previousDropzone = transform.parent.GetComponent<Dropzone>();
 
+		previousDropzone = currentDropzone;
+		
 	}
 
 	public void OnDrag(PointerEventData eventData)
@@ -37,57 +34,66 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	{
 		eventData.pointerDrag.GetComponent<CanvasGroup>().blocksRaycasts = true;
         
-		Dropped();      
+		Dropped();
+		Debug.Log(currentDropzone.name);
 	}
 
-	public void SetNewTransform(Transform t)
-	{
-		targetTransform = t;
-	}
-
+#endregion
+ 
 	public void SetCurrentDropzone(Dropzone d)
 	{
-		if (currentDropzone == d)
-			return;
-        
 		currentDropzone = d;
 
-		SetNewTransform(d.GetRelevantTransform());
+		//SetNewTransform(d.GetRelevantTransform());
 	}
     
-    public void GoToDropzone()
-	{
-		//GetComponent<RectTransform>().pivot = transform.parent.GetComponent<RectTransform>().pivot;
-		// if null
+ //   public void GoToDropzone()
+	//{
+	//	//GetComponent<RectTransform>().pivot = transform.parent.GetComponent<RectTransform>().pivot;
+	//	// if null
 
 
-		if (currentDropzone == previousDropzone)
-			//transform.position = previousPosition;
-			GetComponent<Card>().RegisterToMove(previousPosition);
-		else
-		{
-			currentDropzone.ReorganizeCards();
-		}
-		    //transform.position = targetTransform.position;
+	//	if (currentDropzone == previousDropzone)
+	//		//transform.position = previousPosition;
+	//		GetComponent<Card>().RegisterToMove(previousPosition);
+	//	else
+	//	{
+	//		currentDropzone.ReorganizeCards();
+	//	}
+	//	    //transform.position = targetTransform.position;
 
         
-		//if (currentDropzone.transform == targetTransform )
-		    //currentDropzone.ReorganizeCards();
-	}
+	//	//if (currentDropzone.transform == targetTransform )
+	//	    //currentDropzone.ReorganizeCards();
+	//}
     
     void Dropped()
 	{
 		if (previousDropzone != currentDropzone)
 		{
-			transform.SetParent(targetTransform);
+			//transform.SetParent(targetTransform);
 
-            currentDropzone.AddCardAP(GetComponent<Card>().AP);
-            
+			Debug.Log("HERE");
+			currentDropzone.AddCardAP(GetComponent<Card>().AP);
+			// ========================== DO SOMETHING WITH THIS, 
+			// ========================== GIVE PLAY AREA CARD AND LET IT DECIDE HOW THE CARD IS PLAYED
+			currentDropzone.PlaceCard(GetComponent<Card>());
+			// =======================
+
 			previousDropzone.ReorganizeCards();
 			previousDropzone.RemoveCardAP(GetComponent<Card>().AP);
-            
-		}
 
-		GoToDropzone();
+			//currentDropzone = previousDropzone;
+
+
+		}
+		else if (transform.parent.GetComponent<Dropzone>() == null)
+			GetComponent<Card>().RegisterToMove(Vector3.zero);
+		else
+		{
+			previousDropzone.ReorganizeCards();
+			Debug.Log("HEREEEE");
+		}
+		//GoToDropzone();
 	}
 }

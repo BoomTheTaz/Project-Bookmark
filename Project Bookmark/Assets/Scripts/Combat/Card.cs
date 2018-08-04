@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public enum CardType { ATK_Phys, ATK_Mag, DEF_Phys, DEF_Mag}
 
-public class Card : MonoBehaviour {
-    
+public class Card : MonoBehaviour
+{
+
 	public GameObject CardFront;
 	public GameObject CardBack;
 	public float Speed { get; protected set; }
@@ -15,7 +16,7 @@ public class Card : MonoBehaviour {
 	public int ATK { get; protected set; }
 	public int DEF { get; protected set; }
 	public int AP { get; protected set; }
-    
+
 	public static int Width;
 	public static int Height;
 
@@ -32,11 +33,13 @@ public class Card : MonoBehaviour {
 	Vector3 targetPosition;
 	Quaternion targetRotation;
 	Vector3 targetScale;
-    
+
 	bool isFront = true;
 	bool hasFlipped;
 	bool isScalingToOne;
-    
+
+	public bool isPlayer;
+
 
 	float moveSpeed = 0.07f;
 	float flipSpeed = 0.08f;
@@ -53,14 +56,15 @@ public class Card : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void Update () {
+	void Update()
+	{
 
 		//RectTransform rt = GetComponent<RectTransform>();
 
 		//rt.Rotate(Vector3.up * speed);
 
 		//int mod = Mathf.RoundToInt(rt.rotation.eulerAngles.y+180)%360;
-        
+
 		//if ( mod >= 90 && mod <= 270 && isFront == false)
 		//{
 		//	Debug.Log("Flipping");
@@ -69,16 +73,16 @@ public class Card : MonoBehaviour {
 		//	isFront = true;
 		//}
 		//else if ((mod < 90 || mod > 270) && isFront == true)
-   //     {
-			//Debug.Log("FlippingBack");
-        //    CardFront.SetActive(false);
-        //    CardBack.SetActive(true);
-        //    isFront = false;
-        //}
+		//     {
+		//Debug.Log("FlippingBack");
+		//    CardFront.SetActive(false);
+		//    CardBack.SetActive(true);
+		//    isFront = false;
+		//}
 
 	}
 
-    public float GetWidth()
+	public float GetWidth()
 	{
 		return GetComponent<RectTransform>().rect.width;
 	}
@@ -93,48 +97,30 @@ public class Card : MonoBehaviour {
 
 		UpdateVisuals();
 	}
-
-    public void FlipInstant()
-	{
-		isFront = !isFront;
-
-		if (isFront == true)
-		{
-			transform.rotation = Quaternion.Euler(0, 0, 0);
-			CardFront.SetActive(true);
-			CardBack.SetActive(false);
-		}
-		else if (isFront == false)
-        {
-			transform.rotation = Quaternion.Euler(0, 180, 0);
-            CardFront.SetActive(false);
-            CardBack.SetActive(true);
-        }
-	}
-
-    void UpdateVisuals()
+    
+	void UpdateVisuals()
 	{
 		ATKText.text = ATK.ToString();
 		DEFText.text = DEF.ToString();
 		CardName.text = Name;
 		APText.text = AP.ToString();
 
-        switch (Type)
+		switch (Type)
 		{
 
 			case CardType.ATK_Mag:
 				CardTypeIMG.color = Color.magenta;
 				break;
-			
+
 			case CardType.ATK_Phys:
 				CardTypeIMG.color = Color.red;
-                break;
+				break;
 			case CardType.DEF_Mag:
 				CardTypeIMG.color = Color.cyan;
-                break;
+				break;
 			case CardType.DEF_Phys:
 				CardTypeIMG.color = Color.blue;
-                break;
+				break;
 
 
 			default:
@@ -142,17 +128,25 @@ public class Card : MonoBehaviour {
 				Debug.LogError("Invalid card type.");
 				break;
 		}
-        
+
 	}
 
-    public void SetEnemyBack()
+	public void SetEnemyBack()
 	{
 		CardBack.GetComponent<Image>().sprite = Resources.Load<Sprite>("EnemyBack");
 	}
-    
-    public void Move()
+
+	#region Move Card
+	public void RegisterToMove(Vector3 p)
 	{
-		
+		targetPosition = p;
+
+		CombatUI.instance.RegisterCardToMove(this);
+	}
+
+	public void Move()
+	{
+
 
 		//transform.position = Vector3.MoveTowards(transform.position, targetPosition, 15);
 		transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition, moveSpeed);
@@ -165,9 +159,21 @@ public class Card : MonoBehaviour {
 			CombatUI.instance.UnregisterCardToMove(this);
 		}
 	}
-    
-    
-    public void Flip()
+	#endregion
+
+	#region Flip Card
+	public void RegisterToFlip()
+	{
+		hasFlipped = false;
+
+		if (isFront == true)
+			targetRotation = Quaternion.Euler(0, 180, 0);
+		else
+			targetRotation = Quaternion.Euler(0, 0, 0);
+
+		CombatUI.instance.RegisterCardToFlip(this);
+	}
+	public void Flip()
 	{
 		float before = transform.rotation.eulerAngles.y;
 		// Lerp rotation to target
@@ -183,31 +189,56 @@ public class Card : MonoBehaviour {
 		if (hasFlipped == true)
 			return;
 
-        // if was front, but now paseed 90, switch active side of card
-		if (before >= 270 && after < 270)
+		if (Mathf.Abs(before - after) < 20)
 		{
-			CardFront.SetActive(false);
-			CardBack.SetActive(true);
-			hasFlipped = true;
-			isFront = false;
-		}
-        // else if was back, but now less than 90, switch active side of card
-		else if (before <270 && after >= 270)
-		{
-			CardFront.SetActive(true);
-            CardBack.SetActive(false);
-			hasFlipped = true;
-			isFront = true;
+
+			// if was front, but now paseed 90, switch active side of card
+			if (before >= 270 && after < 270)
+			{
+				CardFront.SetActive(false);
+				CardBack.SetActive(true);
+				hasFlipped = true;
+				isFront = false;
+			}
+			// else if was back, but now less than 90, switch active side of card
+			else if (before < 270 && after >= 270)
+			{
+				CardFront.SetActive(true);
+				CardBack.SetActive(false);
+				hasFlipped = true;
+				isFront = true;
+			}
 		}
 	}
 
-    public void Scale()
+	public void FlipInstant()
+    {
+        isFront = !isFront;
+
+        if (isFront == true)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            CardFront.SetActive(true);
+            CardBack.SetActive(false);
+        }
+        else if (isFront == false)
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+            CardFront.SetActive(false);
+            CardBack.SetActive(true);
+        }
+    }
+
+	#endregion
+
+	#region Scale Card
+	public void Scale()
 	{
 		transform.localScale = Vector3.Lerp(transform.localScale, targetScale, scaleSpeed);
 
-		if (Vector3.Distance(transform.localScale,targetScale) < 0.1f)
+		if (Vector3.Distance(transform.localScale, targetScale) < 0.1f)
 		{
-			if ( isScalingToOne == false)
+			if (isScalingToOne == false)
 			{
 				targetScale = Vector3.one;
 				isScalingToOne = true;
@@ -220,30 +251,24 @@ public class Card : MonoBehaviour {
 			}
 		}
 	}
-    
-	public void RegisterToMove(Vector3 p)
-    {
-		targetPosition = p;
 
-        CombatUI.instance.RegisterCardToMove(this);
-    }
 
-	public void RegisterToFlip()
+
+	public void RegisterToScale(bool isAI = false)
 	{
-		hasFlipped = false;
+		if (isAI == false)
+		{
+			isScalingToOne = false;
+			targetScale = Vector3.one * scaleScaler;
+			CombatUI.instance.RegisterCardToScale(this);
 
-		if (isFront == true)
-			targetRotation = Quaternion.Euler(0, 180, 0);
+		}
 		else
-			targetRotation = Quaternion.Euler(0, 0, 0);
-
-		CombatUI.instance.RegisterCardToFlip(this);
+		{
+			targetScale = Vector3.one;
+			isScalingToOne = true;
+			CombatUI.instance.RegisterCardToScale(this);
+		}
 	}
-
-	public void RegisterToScale()
-	{
-		isScalingToOne = false;
-		targetScale = Vector3.one * scaleScaler;
-		CombatUI.instance.RegisterCardToScale(this);
-    }
+#endregion
 }

@@ -8,6 +8,7 @@ public class PlayArea : Dropzone {
 	public int MaxAP;
 	public Transform PlayerReveal;
 	public Transform EnemyReveal;
+	public Dropzone PlayerHand;
     
 	private new void Start()
 	{
@@ -17,9 +18,7 @@ public class PlayArea : Dropzone {
 
 	}
 
-
-
-
+    
 	protected override bool CanAddCard(int ap)
 	{
 		if (MaxAP - CurrentAP >= ap)
@@ -41,22 +40,22 @@ public class PlayArea : Dropzone {
         Debug.Log("ADDING AP. Current AP: " + CurrentAP.ToString());
     }
 
-	public override Transform GetRelevantTransform()
-	{
+	//public override Transform GetRelevantTransform()
+	//{
 
-		if (CombatManager.CurrentState == CombatState.Player_ATK)
-		{
-			return transform;
-		}
-		if (CombatManager.CurrentState == CombatState.Player_DEF)
-		{
-			return PlayerReveal;
-		}
-		Debug.LogError("Cannot get relevant transform in this state.");
-		return transform;
+	//	if (CombatManager.CurrentState == CombatState.Player_ATK)
+	//	{
+	//		return transform;
+	//	}
+	//	if (CombatManager.CurrentState == CombatState.Player_DEF)
+	//	{
+	//		return PlayerReveal;
+	//	}
+	//	Debug.LogError("Cannot get relevant transform in this state.");
+	//	return transform;
 			
 
-	}
+	//}
 
     public void ResetAP()
 	{
@@ -66,6 +65,45 @@ public class PlayArea : Dropzone {
 	public void AddCardToEnemyReveal(Transform t)
 	{
 		t.SetParent(EnemyReveal);
-		t.position = EnemyReveal.position;
+		t.GetComponent<Card>().RegisterToMove(Vector3.zero);
+		t.GetComponent<Card>().RegisterToFlip();
+
 	}
+
+
+	public override void PlaceCard(Card card)
+    {
+
+		if (CombatManager.CurrentState == CombatState.Player_ATK)
+        {            
+            // Set parent
+			card.transform.SetParent(transform);
+
+			// Reorganize to take care of movement
+			ReorganizeCards();
+        }
+        else if (CombatManager.CurrentState == CombatState.Player_DEF)
+        {
+			// If already card in player reveal, replace it
+            if (PlayerReveal.childCount > 0)
+            {
+				RemoveCardAP(PlayerReveal.GetChild(0).GetComponent<Card>().AP);
+				PlayerHand.PlaceCard(PlayerReveal.GetChild(0).GetComponent<Card>());
+            }
+
+			// Set Parent
+			if (card.isPlayer == true)
+				card.transform.SetParent(PlayerReveal);
+			else
+				card.transform.SetParent(EnemyReveal);
+            
+			// Go to local zero
+			card.RegisterToMove(Vector3.zero);
+
+
+        }
+		else
+		    Debug.LogError("Cannot get relevant transform in this state.");
+
+    }
 }

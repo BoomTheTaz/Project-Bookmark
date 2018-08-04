@@ -421,7 +421,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 85, y: 0}
+  m_AnchoredPosition: {x: 85, y: 25}
   m_SizeDelta: {x: 150, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &585739953
@@ -803,6 +803,7 @@ MonoBehaviour:
   MaxAP: 0
   PlayerReveal: {fileID: 210424694}
   EnemyReveal: {fileID: 110261783}
+  PlayerHand: {fileID: 937315902}
 --- !u!114 &941190231
 MonoBehaviour:
   m_ObjectHideFlags: 0

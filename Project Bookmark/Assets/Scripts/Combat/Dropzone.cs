@@ -56,7 +56,7 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
         {
 			// and has enough AP to add
 			if (CanAddCard(draggable.GetComponent<Card>().AP))
-            {
+			{
 				//Debug.Log("WE HAVE ENOUGH AP.");
                 //draggable.transform.SetParent(transform);
                 draggable.SetCurrentDropzone(this);
@@ -102,11 +102,12 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 			return;
 
 		card.transform.SetParent(transform);
-
+        
 		card.GetComponent<Card>().RegisterToFlip();
 		card.GetComponent<Card>().RegisterToScale();
+
+		card.GetComponent<Draggable>().SetCurrentDropzone(this);
         
-		//card.transform.localScale = Vector3.one;
 		ReorganizeCards();
 
   
@@ -119,10 +120,10 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
         
         card.transform.SetParent(transform);
 
-		card.transform.position = transform.position;
+		//card.transform.position = transform.position;
 
-              
-        card.transform.localScale = Vector3.one;
+
+		card.GetComponent<Card>().RegisterToScale(true);
         ReorganizeCards();
 	}
 
@@ -145,4 +146,18 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
     {
 		return transform;
     }
+
+
+    // Place card in proper spot when placed on dropzone
+	// NOTE: Maybe add bool parameters for flip and scale
+	public virtual void PlaceCard(Card card)
+	{
+        // Set the parent
+		card.transform.SetParent(transform);
+		card.GetComponent<Draggable>().SetCurrentDropzone(this);
+
+		// Reorganize dropzone, takes care of movement
+		ReorganizeCards();
+
+	}
 }

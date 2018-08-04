@@ -61,6 +61,8 @@ public class CombatManager : MonoBehaviour {
 			temp[i].name = "Card " + i.ToString();
 
 			temp[i].GetComponent<Card>().SetupCard(CardTemplate.GetTemplate(i % 6));
+
+			temp[i].GetComponent<Card>().isPlayer = true;
 		}
 
 		PlayerDeck.Shuffle();
@@ -168,29 +170,33 @@ public class CombatManager : MonoBehaviour {
 		// Get all cards in play area
         // Parent and relocate cads to attack deck
 		int childCount = playArea.transform.childCount;
-        for (int i = 0; i < childCount; i++)
+
+		for (int i = childCount - 1; i >= 0; i--)
         {
             // Take top card
-            Card temp = playArea.transform.GetChild(0).GetComponent<Card>();
+            Card temp = playArea.transform.GetChild(i).GetComponent<Card>();
 
 			temp.transform.SetParent(AttackDeck);
-			temp.transform.position = AttackDeck.position;
+			temp.RegisterToMove(Vector3.zero);
+
+			if (temp.isPlayer == true)
+			    temp.RegisterToFlip();
 
         }
 	}
 
     void DrawFromAttackDeck(bool isPlayerAttack)
 	{
-		Transform child = AttackDeck.GetChild(0);
+		Card child = AttackDeck.GetChild(AttackDeck.childCount-1).GetComponent<Card>();
 
 		// Take top card off attack deck and move it to appropriate reveal area
 		if (isPlayerAttack == true)
 		{
 			
-			child.position = PlayerCardReveal.position;
-			child.SetParent(PlayerCardReveal);
+			child.transform.SetParent(PlayerCardReveal);
 
-			CardsInCombat[0] = child.GetComponent<Card>();
+
+			CardsInCombat[0] = child;
 
 			AI.Defend();
 
@@ -199,12 +205,13 @@ public class CombatManager : MonoBehaviour {
 		else 
 		{
 
-			child.position = EnemyCardReveal.position;
-			child.SetParent(EnemyCardReveal);
+			child.transform.SetParent(EnemyCardReveal);
 
-            CardsInCombat[1] = child.GetComponent<Card>();
+            CardsInCombat[1] = child;
 
 		}
+		child.RegisterToMove(Vector3.zero);
+		child.RegisterToFlip();
 	}
 
     // Array to store relevant cards in combat

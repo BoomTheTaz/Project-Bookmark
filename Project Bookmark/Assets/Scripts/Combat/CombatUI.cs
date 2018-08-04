@@ -41,7 +41,6 @@ public class CombatUI : MonoBehaviour {
     
 	public void UnregisterCardToMove(Card c)
     {
-		Debug.Log("Unregistering card to move");
         CardsToMove -= c.Move;
     }
 
@@ -57,13 +56,11 @@ public class CombatUI : MonoBehaviour {
 
 	public void RegisterCardToScale(Card c)
     {
-		Debug.Log("registering card to scale");
 		CardsToScale += c.Scale;
     }
 
     public void UnregisterCardToScale(Card c)
     {
-		Debug.Log("unregistering card to scale");
 
 		CardsToScale -= c.Scale;
     }

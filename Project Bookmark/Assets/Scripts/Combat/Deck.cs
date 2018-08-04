@@ -4,14 +4,6 @@ using UnityEngine;
 
 public class Deck : MonoBehaviour {
 
-
-	int numCards;
-
-    public Deck(int i)
-	{
-		numCards = i;
-	}
-    
     
     public void Shuffle()
 	{
@@ -19,12 +11,13 @@ public class Deck : MonoBehaviour {
 		for (int i = 0; i < transform.childCount-1; i++)
 		{
 
-			int rand = Random.Range(i, numCards);
+			int rand = Random.Range(i, transform.childCount);
 
 			transform.GetChild(rand).SetSiblingIndex(i);
-			transform.GetChild(i + 1).SetSiblingIndex(rand);         
+			transform.GetChild(i+1).SetSiblingIndex(rand);         
             
 		}
+
 	}
 
     

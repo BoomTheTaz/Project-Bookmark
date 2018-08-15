@@ -16,35 +16,64 @@ public class EnemyAI : MonoBehaviour {
 	void Start () {
 		handDZ = hand.GetComponent<Dropzone>();
 
-		while (hand.transform.childCount < MaxCardsInHand)
-        {
-            if (deck.transform.childCount == 0)
-                break;
-            handDZ.AddAICard(deck.DrawCard());
-        }
+		//while (hand.transform.childCount < MaxCardsInHand)
+  //      {
+  //          if (deck.transform.childCount == 0)
+  //              break;
+  //          handDZ.AddAICard(deck.DrawCard());
+  //      }
 
-		handDZ.ReorganizeCards();
+		//handDZ.ReorganizeCards();
 	}
-   
-    public void Defend()
+
+
+	int APLimit;
+	   
+    public void Defend(int ap)
 	{
-		Debug.Log("Time to defend");
+		APLimit = ap;
+		StartCoroutine("DecideDefense");
 
-		while(hand.transform.childCount < 5)
-		{
-			if (deck.transform.childCount == 0)
-				break;
+	}
 
-			handDZ.AddAICard(deck.DrawCard());
-		}
+	IEnumerator DecideDefense()
+	{   
+		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		// TODO: ADD ACTUAL LOGIC TO THIS
+		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         
+		//while (hand.transform.childCount < 5)
+   //     {
+   //         if (deck.transform.childCount == 0)
+   //             break;
 
-		playArea.AddCardToEnemyReveal(hand.GetHighestDEF().transform);
+			//hand.DrawCard();
 
+			//yield return new WaitForSeconds(0.5f);
+        //}
+
+		yield return new WaitForSeconds(Random.Range(3, 10) / 10f);
+
+		playArea.AddCardToEnemyReveal(hand.GetHighestDEF(APLimit).transform);
+		hand.Reorganize();
+
+		Debug.Log("DECIDED");
 	}
 
 	public void Attack()
     {
-        Debug.Log("Time to attack");
-		playArea.AddAICard(hand.GetHighestATK().gameObject);
+        //Debug.Log("Time to attack");
+		StartCoroutine("DecideAttack");
     }
+
+	IEnumerator DecideAttack()
+	{
+		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // TODO: ADD ACTUAL LOGIC TO THIS
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      
+
+		yield return new WaitForSeconds(Random.Range(5, 15) / 10f);
+		playArea.AddAICard(hand.GetHighestATK().gameObject);
+		hand.Reorganize();
+	}
 }

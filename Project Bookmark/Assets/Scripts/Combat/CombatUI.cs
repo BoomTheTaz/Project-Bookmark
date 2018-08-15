@@ -42,6 +42,10 @@ public class CombatUI : MonoBehaviour {
 	public void UnregisterCardToMove(Card c)
     {
         CardsToMove -= c.Move;
+
+		if (CardsToFlip == null && CardsToMove == null && CardsToScale == null)         
+            CombatManager.instance.DoneMoving();
+        
     }
 
 	public void RegisterCardToFlip(Card c)
@@ -52,6 +56,8 @@ public class CombatUI : MonoBehaviour {
     public void UnregisterCardToFlip(Card c)
     {
 		CardsToFlip -= c.Flip;
+		if (CardsToFlip == null && CardsToMove == null && CardsToScale == null)
+            CombatManager.instance.DoneMoving();
     }
 
 	public void RegisterCardToScale(Card c)
@@ -63,5 +69,7 @@ public class CombatUI : MonoBehaviour {
     {
 
 		CardsToScale -= c.Scale;
+		if (CardsToFlip == null && CardsToMove == null && CardsToScale == null)
+            CombatManager.instance.DoneMoving();
     }
 }

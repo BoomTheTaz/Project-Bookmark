@@ -42,58 +42,64 @@ public class Card : MonoBehaviour
 
 
 	float moveSpeed = 0.07f;
-	float flipSpeed = 0.08f;
+	float flipSpeed = 0.07f;
 	float scaleSpeed = 0.15f;
 	float scaleScaler = 1.5f;
 
-	private void Start()
+	public int TemplateID { get; private set; }
+
+	private void Awake()
 	{
 		if (Width == 0)
-		{
-			Width = Mathf.RoundToInt(GetComponent<RectTransform>().rect.width);
-			Height = Mathf.RoundToInt(GetComponent<RectTransform>().rect.height);
-		}
+        {
+            Width = Mathf.RoundToInt(GetComponent<RectTransform>().rect.width);
+            Height = Mathf.RoundToInt(GetComponent<RectTransform>().rect.height);
+        }
 	}
-
-	// Update is called once per frame
-	void Update()
-	{
-
-		//RectTransform rt = GetComponent<RectTransform>();
-
-		//rt.Rotate(Vector3.up * speed);
-
-		//int mod = Mathf.RoundToInt(rt.rotation.eulerAngles.y+180)%360;
-
-		//if ( mod >= 90 && mod <= 270 && isFront == false)
-		//{
-		//	Debug.Log("Flipping");
-		//	CardFront.SetActive(true);
-		//	CardBack.SetActive(false);
-		//	isFront = true;
-		//}
-		//else if ((mod < 90 || mod > 270) && isFront == true)
-		//     {
-		//Debug.Log("FlippingBack");
-		//    CardFront.SetActive(false);
-		//    CardBack.SetActive(true);
-		//    isFront = false;
-		//}
-
-	}
-
+ 
 	public float GetWidth()
 	{
 		return GetComponent<RectTransform>().rect.width;
 	}
 
-	public void SetupCard(CardStats c)
+	float BaseScaler = 1.1f;
+	float AttackScaler = 1.1f;
+	float MagicScaler = 1.25f;
+	float AltScaler = 2f;
+
+
+	public void SetupCard(CardStats c, CharacterData data)
 	{
 		Type = c.Type;
 		Name = c.Name;
-		ATK = c.ATK;
-		DEF = c.DEF;
 		AP = c.AP;
+		TemplateID = c.TemplateID;
+        
+		switch (Type)
+		{
+			case CardType.ATK_Mag:
+				ATK = Mathf.RoundToInt(data.WeaponMag + AttackScaler * MagicScaler * BaseScaler * data.GetStat(Stats.Magic) * (Mathf.Pow(c.AP, 2) + c.ATK));
+				DEF = Mathf.RoundToInt(data.ArmorMag + MagicScaler * BaseScaler * data.GetStat(Stats.Magic) * (Mathf.Pow(c.AP,2) + c.DEF) / AltScaler);
+				break;
+			case CardType.ATK_Phys:
+				ATK = Mathf.RoundToInt(data.WeaponPhys + AttackScaler * BaseScaler * data.GetStat(Stats.Power) * (Mathf.Pow(c.AP, 2) + c.ATK));
+				DEF = Mathf.RoundToInt(data.ArmorPhys + BaseScaler * data.GetStat(Stats.Technique) * (Mathf.Pow(c.AP, 2) + c.DEF) / AltScaler);
+				break;
+			case CardType.DEF_Mag:
+				ATK = Mathf.RoundToInt(data.WeaponMag + AttackScaler * MagicScaler * BaseScaler * data.GetStat(Stats.Magic) * (Mathf.Pow(c.AP, 2) + c.ATK) / AltScaler);
+				DEF = Mathf.RoundToInt(data.ArmorMag + MagicScaler * BaseScaler * data.GetStat(Stats.Magic) * (Mathf.Pow(c.AP, 2) + c.DEF));
+                break;
+			case CardType.DEF_Phys:
+				ATK = Mathf.RoundToInt(data.WeaponPhys + AttackScaler * BaseScaler * data.GetStat(Stats.Power) * (Mathf.Pow(c.AP, 2) + c.ATK) / AltScaler);
+				DEF = Mathf.RoundToInt(data.ArmorPhys + BaseScaler * data.GetStat(Stats.Technique) * (Mathf.Pow(c.AP, 2) + c.DEF));
+                break;
+                
+			default:
+				Debug.LogError("Invalid Card type");
+				break;
+		}
+
+		ATK = Mathf.RoundToInt(ATK * AttackScaler);
 
 		UpdateVisuals();
 	}
@@ -136,6 +142,7 @@ public class Card : MonoBehaviour
 		CardBack.GetComponent<Image>().sprite = Resources.Load<Sprite>("EnemyBack");
 	}
 
+
 	#region Move Card
 	public void RegisterToMove(Vector3 p)
 	{
@@ -148,9 +155,9 @@ public class Card : MonoBehaviour
 	{
 
 
-		//transform.position = Vector3.MoveTowards(transform.position, targetPosition, 15);
+		//transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, 10);
 		transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition, moveSpeed);
-		//transform.position = Vector3.Slerp(transform.position, targetPosition, .3f);
+		//transform.localPosition = Vector3.Slerp(transform.localPosition, targetPosition, moveSpeed);
 		//Debug.Log(transform.localPosition);
 		//Debug.Log(targetPosition);
 		if (Vector3.Distance(transform.localPosition, targetPosition) < 1)
@@ -162,10 +169,12 @@ public class Card : MonoBehaviour
 	#endregion
 
 	#region Flip Card
+
+	float angleFlipped;
 	public void RegisterToFlip()
 	{
 		hasFlipped = false;
-
+		angleFlipped = 0;
 		if (isFront == true)
 			targetRotation = Quaternion.Euler(0, 180, 0);
 		else
@@ -180,7 +189,10 @@ public class Card : MonoBehaviour
 		transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, flipSpeed);
 		float after = transform.rotation.eulerAngles.y;
 
-		if (Mathf.Abs(transform.rotation.eulerAngles.y - targetRotation.eulerAngles.y) <= .1)
+		if (hasFlipped == true)
+		    angleFlipped += Mathf.Abs(after - before);
+
+		if (90-angleFlipped < 2)
 		{
 			transform.rotation = targetRotation;
 			CombatUI.instance.UnregisterCardToFlip(this);
@@ -251,17 +263,17 @@ public class Card : MonoBehaviour
 			}
 		}
 	}
+    
 
-
-
-	public void RegisterToScale(bool isAI = false)
+    
+	public void RegisterToScale(bool shouldEnlarge = false)
 	{
-		if (isAI == false)
+		
+		if (isPlayer == true && shouldEnlarge == true)
 		{
 			isScalingToOne = false;
 			targetScale = Vector3.one * scaleScaler;
 			CombatUI.instance.RegisterCardToScale(this);
-
 		}
 		else
 		{
@@ -269,6 +281,8 @@ public class Card : MonoBehaviour
 			isScalingToOne = true;
 			CombatUI.instance.RegisterCardToScale(this);
 		}
+
+
 	}
 #endregion
 }

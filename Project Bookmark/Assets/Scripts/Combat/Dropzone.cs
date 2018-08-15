@@ -103,8 +103,11 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 
 		card.transform.SetParent(transform);
         
-		card.GetComponent<Card>().RegisterToFlip();
-		card.GetComponent<Card>().RegisterToScale();
+        // Only flip player cards
+		if (card.GetComponent<Card>().isPlayer == true)
+		    card.GetComponent<Card>().RegisterToFlip();
+		
+		card.GetComponent<Card>().RegisterToScale(true);
 
 		card.GetComponent<Draggable>().SetCurrentDropzone(this);
         
@@ -119,11 +122,8 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
             return;
         
         card.transform.SetParent(transform);
-
-		//card.transform.position = transform.position;
-
-
-		card.GetComponent<Card>().RegisterToScale(true);
+        
+		card.GetComponent<Card>().RegisterToScale();
         ReorganizeCards();
 	}
 

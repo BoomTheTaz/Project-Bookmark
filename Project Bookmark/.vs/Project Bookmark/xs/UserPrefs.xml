@@ -1,16 +1,19 @@
 ﻿<Properties StartupConfiguration="{24EB6591-4649-E7BE-7F0F-46E622B31C84}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Combat/PlayArea.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Combat/CombatManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/Combat/Card.cs" Line="133" Column="2" />
-      <File FileName="Assets/Scripts/Combat/Hand.cs" Line="22" Column="30" />
-      <File FileName="Assets/Scripts/Combat/Deck.cs" Line="18" Column="13" />
-      <File FileName="Assets/Scripts/Combat/CombatManager.cs" Line="182" Column="30" />
-      <File FileName="Assets/Scripts/Combat/Draggable.cs" Line="77" Column="20" />
-      <File FileName="Assets/Scripts/Combat/Dropzone.cs" Line="156" Column="39" />
-      <File FileName="Assets/Scripts/Combat/PlayArea.cs" Line="91" Column="38" />
-      <File FileName="Assets/Scripts/Combat/EnemyAI.cs" Line="30" Column="3" />
-      <File FileName="Assets/Scripts/Combat/CombatUI.cs" Line="7" Column="28" />
+      <File FileName="Assets/Scripts/Combat/Card.cs" Line="195" Column="27" />
+      <File FileName="Assets/Scripts/Combat/Hand.cs" Line="18" Column="19" />
+      <File FileName="Assets/Scripts/Combat/CombatManager.cs" Line="318" Column="25" />
+      <File FileName="Assets/Scripts/Combat/Draggable.cs" Line="41" Column="26" />
+      <File FileName="Assets/Scripts/Combat/Dropzone.cs" Line="103" Column="3" />
+      <File FileName="Assets/Scripts/Combat/EnemyAI.cs" Line="31" Column="2" />
+      <File FileName="Assets/Scripts/Combat/CombatUI.cs" Line="64" Column="6" />
+      <File FileName="Assets/Scripts/Combat/CharacterData.cs" Line="23" Column="2" />
+      <File FileName="Assets/Scripts/Book/PlayerData.cs" Line="33" Column="72" />
+      <File FileName="Assets/Scripts/Combat/PlayArea.cs" Line="36" Column="14" />
+      <File FileName="Assets/Scripts/Combat/Deck.cs" Line="121" Column="10" />
+      <File FileName="Assets/Scripts/ControlManager.cs" Line="31" Column="15" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

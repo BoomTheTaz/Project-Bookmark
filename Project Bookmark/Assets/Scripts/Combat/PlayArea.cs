@@ -14,7 +14,7 @@ public class PlayArea : Dropzone {
 	{
 		base.Start();
 
-		MaxAP = FindObjectOfType<Player>().AP;
+		MaxAP = FindObjectOfType<PlayerData>().MaxAP;
 
 	}
 
@@ -22,8 +22,21 @@ public class PlayArea : Dropzone {
 	protected override bool CanAddCard(int ap)
 	{
 		if (MaxAP - CurrentAP >= ap)
-		{
-			return true;
+        {
+			// DO THIS SHIT
+
+    		if (CombatManager.CurrentState == CombatState.Player_ATK)
+            {
+				return true;
+            }
+
+			if (CombatManager.CurrentState == CombatState.Player_DEF && ap <= EnemyReveal.GetChild(0).GetComponent<Card>().AP)
+            {
+                return true;
+            }
+            else
+                Debug.Log("Not a fast enough card");
+
 		}
 		return false;
 	}

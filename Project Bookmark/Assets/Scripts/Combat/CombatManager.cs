@@ -10,13 +10,18 @@ public class CombatManager : MonoBehaviour {
 	public PlayArea playArea;
 
 	public Deck PlayerDeck;
-	public Deck AIDeck;
+	public Deck EnemyDeck;
 
 	public Transform AttackDeck;
 	public Transform PlayerCardReveal;
 	public Transform EnemyCardReveal;
 	public Transform PlayerDiscard;
 	public Transform EnemyDiscard;
+
+	public CharacterData Enemy;
+	public PlayerData Player;
+	public Hand PlayerHand;
+	public Hand EnemyHand;
 
 	public static bool CanDrag;
 
@@ -27,8 +32,22 @@ public class CombatManager : MonoBehaviour {
 	int AI_ATK;
 	int AI_DEF;
 
-
+	PlayerData player;
 	EnemyAI AI;
+
+	public static CombatManager instance;
+	delegate void NextStep();
+	NextStep OnMoveEnd;
+
+	bool isPlayerStarting;
+
+	private void Awake()
+	{
+		if (instance == null)
+			instance = this;
+		else
+			Destroy(this);
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -43,53 +62,54 @@ public class CombatManager : MonoBehaviour {
 
         // Grab necessary Components
 		AI = FindObjectOfType<EnemyAI>();
+		player = FindObjectOfType<PlayerData>();
+
+		StartCoroutine("SetupBoard");
+
+		if (isPlayerStarting == false)
+		{
+			OnMoveEnd = AI.Attack;
+			CurrentState = CombatState.AI_ATK;
+		}
+		else
+        {
+            OnMoveEnd = null;
+			CurrentState = CombatState.Player_ATK;
+        }
+	}
+
+	IEnumerator SetupBoard()
+	{
+		int playerCard = player.CardsInHand;
+		int enemyCard = Enemy.CardsInHand;
+
+		for (int i = 0; i < Mathf.Max(playerCard, enemyCard); i++)
+		{
+			yield return new WaitForSeconds(0.5f);
+
+			if (i < playerCard)
+			{
+				PlayerHand.DrawCard();
+			}
+			if (i < enemyCard)
+			{
+				EnemyHand.DrawCard();
+			}
+
+
+		}
+
 	}
 
 	// TEMPORARY: Generate generic deck
     void CreateDeck()
-	{
-		int numCards = 10;
-
-		GameObject[] temp = new GameObject[numCards];
-
-		for (int i = 0; i < numCards; i++)
-		{
-			temp[i] = Instantiate(CardPrefab, PlayerDeck.transform.position, Quaternion.identity,PlayerDeck.transform);
-
-			temp[i].GetComponent<Card>().FlipInstant();
-
-			temp[i].name = "Card " + i.ToString();
-
-			temp[i].GetComponent<Card>().SetupCard(CardTemplate.GetTemplate(i % 6));
-
-			temp[i].GetComponent<Card>().isPlayer = true;
-		}
-
-		PlayerDeck.Shuffle();
+	{      
+		PlayerDeck.CreateDeck(new int[] { 1, 2, 3, 4, 5, 0, 0, 1, 2, 3, 4, 5 });
 	}
 
 	void CreateAIDeck()
 	{
-		int numCards = 10;
-
-        GameObject[] temp = new GameObject[numCards];
-        
-        for (int i = 0; i < numCards; i++)
-        {
-			temp[i] = Instantiate(CardPrefab, AIDeck.transform.position, Quaternion.identity, AIDeck.transform);
-            temp[i].transform.Rotate(new Vector3(0, 180, 0));
-
-			temp[i].GetComponent<CanvasGroup>().blocksRaycasts = false;
-
-			temp[i].GetComponent<Card>().FlipInstant();
-
-            temp[i].name = "Enemy Card " + i.ToString();
-
-            temp[i].GetComponent<Card>().SetupCard(CardTemplate.GetTemplate(i % 6));
-			temp[i].GetComponent<Card>().SetEnemyBack();
-        }
-
-		AIDeck.Shuffle();
+		EnemyDeck.CreateDeck(new int[] { 1, 2, 3, 4, 5, 0, 0, 1, 2, 3, 4, 5 });
 	}
 
     // Figure out where to go next
@@ -100,7 +120,7 @@ public class CombatManager : MonoBehaviour {
 		else if (PlayerCardReveal.childCount > 0 || EnemyCardReveal.childCount > 0)
 			EvaluateCombat();
 		else if (CurrentState == CombatState.AI_DEF && AttackDeck.transform.childCount > 0)
-			DrawFromAttackDeck(true);
+			DrawFromAttackDeck();
 		else if (CurrentState == CombatState.AI_DEF)
 			FinalizeAIDefense();
 		else if (CurrentState == CombatState.AI_ATK && playArea.transform.childCount == 0)
@@ -108,7 +128,7 @@ public class CombatManager : MonoBehaviour {
 		else if (CurrentState == CombatState.AI_ATK)
 			FinalizeAIAttack();
 		else if (CurrentState == CombatState.Player_DEF && AttackDeck.transform.childCount > 0)
-			DrawFromAttackDeck(false);
+			DrawFromAttackDeck();
 		else if (CurrentState == CombatState.Player_DEF)
 			FinalizePlayerDefense();
 
@@ -120,12 +140,16 @@ public class CombatManager : MonoBehaviour {
     // Take all cards in play area and put in attack deck
     void FinalizePlayerAttack()
 	{
-		if(playArea.transform.childCount > 0)
-		{
-			CreateAttackDeck();
-		}
-
 		CurrentState = CombatState.AI_DEF;
+
+		if (playArea.transform.childCount > 0)
+        {
+            CreateAttackDeck();
+			OnMoveEnd = DrawFromAttackDeck;
+        }
+
+		StartCoroutine("FillHand");
+
 	}
 
     // Resolve player attacks against AI defense
@@ -139,13 +163,15 @@ public class CombatManager : MonoBehaviour {
     // Have AI choose attack cards, then move all in play area to attack deck
 	void FinalizeAIAttack()
     {
+		CurrentState = CombatState.Player_DEF;
 
 		if (playArea.transform.childCount > 0)
         {
             CreateAttackDeck();
+			OnMoveEnd = DrawFromAttackDeck;
         }
 
-		CurrentState = CombatState.Player_DEF;
+		StartCoroutine("FillHand");
 		playArea.ResetAP();
     }
 
@@ -168,7 +194,7 @@ public class CombatManager : MonoBehaviour {
     void CreateAttackDeck()
 	{
 		// Get all cards in play area
-        // Parent and relocate cads to attack deck
+		// Parent and relocate cads to attack deck
 		int childCount = playArea.transform.childCount;
 
 		for (int i = childCount - 1; i >= 0; i--)
@@ -185,12 +211,12 @@ public class CombatManager : MonoBehaviour {
         }
 	}
 
-    void DrawFromAttackDeck(bool isPlayerAttack)
+    void DrawFromAttackDeck()
 	{
 		Card child = AttackDeck.GetChild(AttackDeck.childCount-1).GetComponent<Card>();
-
+		OnMoveEnd = null;
 		// Take top card off attack deck and move it to appropriate reveal area
-		if (isPlayerAttack == true)
+		if (CurrentState == CombatState.AI_DEF)
 		{
 			
 			child.transform.SetParent(PlayerCardReveal);
@@ -198,7 +224,7 @@ public class CombatManager : MonoBehaviour {
 
 			CardsInCombat[0] = child;
 
-			AI.Defend();
+			AI.Defend(child.AP);
 
 		}
 
@@ -227,18 +253,21 @@ public class CombatManager : MonoBehaviour {
 			if (EnemyCardReveal.childCount > 0)
             {
                 CardsInCombat[1] = EnemyCardReveal.GetChild(0).GetComponent<Card>();
+				Enemy.TakeDamage(CardsInCombat[0].ATK - CardsInCombat[1].DEF);
             }
             else
             {
                 CardsInCombat[1] = null;
+				Enemy.TakeDamage(CardsInCombat[0].ATK);
             }
 
 			// TODO: Figure out damage equation
 
-			if (CardsInCombat[0] != null)
-			    Debug.Log("Player AttacK: " + CardsInCombat[0].ATK.ToString());
-			if (CardsInCombat[1] != null)
-    			Debug.Log("Enemy Defense: " + CardsInCombat[1].DEF.ToString());
+
+			//if (CardsInCombat[0] != null)
+			//    Debug.Log("Player AttacK: " + CardsInCombat[0].ATK.ToString());
+			//if (CardsInCombat[1] != null)
+    			//Debug.Log("Enemy Defense: " + CardsInCombat[1].DEF.ToString());
 		}
 
 		else if (CurrentState == CombatState.Player_DEF)
@@ -246,11 +275,15 @@ public class CombatManager : MonoBehaviour {
 			if (PlayerCardReveal.childCount > 0)
             {
                 CardsInCombat[0] = PlayerCardReveal.GetChild(0).GetComponent<Card>();
+				Player.TakeDamage(CardsInCombat[1].ATK - CardsInCombat[0].DEF);
             }
             else
             {
                 CardsInCombat[0] = null;
+				Player.TakeDamage(CardsInCombat[1].ATK);
             }
+
+
 
 			// TODO: Figure out damage equation
 			if (CardsInCombat[0] != null)
@@ -265,18 +298,64 @@ public class CombatManager : MonoBehaviour {
 		if (CardsInCombat[0] != null)
 		{
 			CardsInCombat[0].transform.SetParent(PlayerDiscard);
-			CardsInCombat[0].transform.position = PlayerDiscard.position;
-			CardsInCombat[0].transform.localScale = Vector3.one;
+			CardsInCombat[0].RegisterToMove(Vector3.zero);
+			CardsInCombat[0].RegisterToScale();
 			CardsInCombat[0].GetComponent<CanvasGroup>().blocksRaycasts = false;
+			PlayerDeck.DiscardCard(CardsInCombat[0]);
 		}
 		if (CardsInCombat[1] != null)
         {
 			CardsInCombat[1].transform.SetParent(EnemyDiscard);
-			CardsInCombat[1].transform.position = EnemyDiscard.position;
-			CardsInCombat[1].transform.localScale = Vector3.one;
-
+			CardsInCombat[1].RegisterToMove(Vector3.zero);
+            CardsInCombat[1].RegisterToScale();
+			EnemyDeck.DiscardCard(CardsInCombat[0]);
         }
 		Evaluate();
 	}
 
+    public void DoneMoving()
+	{
+		if (OnMoveEnd != null)
+		{
+			OnMoveEnd();
+			OnMoveEnd = null;
+		}
+        
+	}
+
+	IEnumerator FillHand()
+	{
+		if (CurrentState == CombatState.Player_DEF)
+		{
+			while (PlayerHand.transform.childCount < player.CardsInHand)
+			{
+				PlayerHand.DrawCard();
+
+				yield return new WaitForSeconds(0.5f);
+
+				if (PlayerDeck.transform.childCount == 0)
+					break;
+			}
+		}
+
+		else if (CurrentState == CombatState.AI_DEF)
+		{
+			while (EnemyHand.transform.childCount < Enemy.CardsInHand)
+            {
+				EnemyHand.DrawCard();
+
+                yield return new WaitForSeconds(0.5f);
+
+				if (EnemyDeck.transform.childCount == 0)
+                    break;
+            }
+		}
+		else
+			Debug.LogError("Should not be filling hand in state " + CurrentState);
+	}
+
+	void Here()
+	{
+		Debug.Log("Here");
+	}
 }

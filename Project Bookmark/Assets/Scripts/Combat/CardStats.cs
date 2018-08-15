@@ -9,7 +9,7 @@ public class CardStats {
 	public int DEF { get; protected set; }
 	public int AP { get; protected set; }
 	public string Name { get; protected set; }
-
+	public int TemplateID { get; protected set; }
 
 	public CardStats(CardType c, int a, int d, int ap, string name)
 	{
@@ -18,5 +18,10 @@ public class CardStats {
 		DEF = d;
 		AP = ap;
 		Name = name;
+	}
+
+    public void SetTemplateID(int id)
+	{
+		TemplateID = id;
 	}
 }

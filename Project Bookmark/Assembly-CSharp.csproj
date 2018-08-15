@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\Combat\Card.cs" />
     <Compile Include="Assets\Scripts\Combat\CardStats.cs" />
     <Compile Include="Assets\Scripts\Combat\CardTemplate.cs" />
+    <Compile Include="Assets\Scripts\Combat\CharacterData.cs" />
     <Compile Include="Assets\Scripts\Combat\CombatManager.cs" />
     <Compile Include="Assets\Scripts\Combat\CombatUI.cs" />
     <Compile Include="Assets\Scripts\Combat\Deck.cs" />
@@ -81,7 +82,7 @@
     <Compile Include="Assets\Scripts\Combat\EnemyAI.cs" />
     <Compile Include="Assets\Scripts\Combat\Hand.cs" />
     <Compile Include="Assets\Scripts\Combat\PlayArea.cs" />
-    <Compile Include="Assets\Scripts\Combat\Player.cs" />
+    <Compile Include="Assets\Scripts\Combat\Trash.cs" />
     <Compile Include="Assets\Scripts\ControlManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Reference Include="UnityEditor.StandardEvents">

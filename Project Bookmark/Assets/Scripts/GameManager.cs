@@ -6,9 +6,11 @@ public class GameManager : MonoBehaviour {
 
 	BookManager bookManager;
 
+	bool inBook = true;
+
 	// Use this for initialization
 	void Start () {
-		PlayerData player = new PlayerData();
+		//PlayerData player = new PlayerData();
 
 		// Test Stats
 		//Debug.Log("Strength: " + player.GetStat(Stats.Strength).ToString());
@@ -18,10 +20,14 @@ public class GameManager : MonoBehaviour {
 		//Debug.Log("Wisdom: " + player.GetStat(Stats.Wisdom).ToString());
 		//Debug.Log("Charisma: " + player.GetStat(Stats.Charisma).ToString());
 
-		//bookManager = new BookManager("Prologue");
-		//bookManager.SetupPage(0);
 
-		//UIManager.instance.SetButtonListeners(bookManager);
+		if (inBook == true)
+		{
+			bookManager = new BookManager("Prologue");
+			bookManager.SetupPage(0);
+
+			UIManager.instance.SetButtonListeners(bookManager);
+		}
 
 
 	}

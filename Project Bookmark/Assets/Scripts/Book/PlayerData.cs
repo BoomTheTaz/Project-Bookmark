@@ -2,62 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Stats { Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma, NUM_ELEMENTS };
+public enum Stats { Power, Technique, Constitution, Magic, Wisdom, Charisma, NUM_ELEMENTS };
 
-public class PlayerData {
-
-	// ===== STATS =====
-	int[] PlayerStats = new int[(int)Stats.NUM_ELEMENTS];
-
-
-	public static PlayerData instance;
-
-	public PlayerData (int s, int d, int c, int i, int w, int ch)
+public class PlayerData : CharacterData {
+    
+    void Awake()
 	{
-		PlayerStats[(int)Stats.Strength] = s;
-		PlayerStats[(int)Stats.Dexterity] = d;
-		PlayerStats[(int)Stats.Constitution] = c;
-		PlayerStats[(int)Stats.Intelligence] = i;
-		PlayerStats[(int)Stats.Wisdom] = w;
-		PlayerStats[(int)Stats.Strength] = ch;
+		CharacterStats[(int)Stats.Power] = Random.Range(1,6);
+		CharacterStats[(int)Stats.Technique] = Random.Range(1, 6);
+		CharacterStats[(int)Stats.Constitution] = Random.Range(1, 6);
+		CharacterStats[(int)Stats.Magic] = Random.Range(1, 6);
+		CharacterStats[(int)Stats.Wisdom] = Random.Range(1, 6);
+		CharacterStats[(int)Stats.Charisma] = Random.Range(1, 6);
 
-		if (instance == null)
-		    instance = this;
-	}
+        // ======= TEMP HARD CODE ========
+        MaxAP = 3;
+        MaxHealth = 100;
+        CurrentHealth = 100;
+        MaxCards = 10;
+        CardsInHand = 5;
 
-    public PlayerData()
-	{
-		PlayerStats[(int)Stats.Strength] = Roll(3);
-		PlayerStats[(int)Stats.Dexterity] = Roll(3);
-		PlayerStats[(int)Stats.Constitution] = Roll(3);
-		PlayerStats[(int)Stats.Intelligence] = Roll(3);
-		PlayerStats[(int)Stats.Wisdom] = Roll(3);
-		PlayerStats[(int)Stats.Charisma] = Roll(3);
+		WeaponPhys = 2;
+		WeaponMag = 2;
+		ArmorMag = 1;
+		ArmorPhys = 1;
+        
 
-		if (instance == null)
-            instance = this;
-	}
+		//Debug.Log("Power: " + CharacterStats[(int)Stats.Power].ToString());
+		//Debug.Log("Technique: " + CharacterStats[(int)Stats.Technique].ToString());
+		//Debug.Log("Magic: " + CharacterStats[(int)Stats.Magic].ToString());
 
-    // roll d D6
-    int Roll(int d)
-	{
-		int sum = 0;
-		for (int i = 0; i < d; i++)
-		{
-			sum += Random.Range(1, 7);
-		}
-		return sum;
-	}
-
-	public int GetStat(Stats s)
-	{
-		return PlayerStats[(int)s];
 	}
 
 	public bool StatCheck(Stats s, int n)
 	{
-		if (PlayerStats[(int)s] >= n)
+		if (CharacterStats[(int)s] >= n)
 			return true;
 		return false;
 	}
+
+    
 }

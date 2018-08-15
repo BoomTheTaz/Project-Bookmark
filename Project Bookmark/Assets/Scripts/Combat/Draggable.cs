@@ -16,7 +16,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	public void OnBeginDrag(PointerEventData eventData)
 	{
 		// Set target transform to current transform
-		Debug.Log(currentDropzone.name);
 		offset = eventData.position - (Vector2)transform.position;
 
 		eventData.pointerDrag.GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -35,7 +34,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		eventData.pointerDrag.GetComponent<CanvasGroup>().blocksRaycasts = true;
         
 		Dropped();
-		Debug.Log(currentDropzone.name);
 	}
 
 #endregion
@@ -43,7 +41,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	public void SetCurrentDropzone(Dropzone d)
 	{
 		currentDropzone = d;
-
 		//SetNewTransform(d.GetRelevantTransform());
 	}
     
@@ -69,11 +66,12 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     
     void Dropped()
 	{
+		
+
 		if (previousDropzone != currentDropzone)
 		{
 			//transform.SetParent(targetTransform);
 
-			Debug.Log("HERE");
 			currentDropzone.AddCardAP(GetComponent<Card>().AP);
 			// ========================== DO SOMETHING WITH THIS, 
 			// ========================== GIVE PLAY AREA CARD AND LET IT DECIDE HOW THE CARD IS PLAYED
@@ -92,7 +90,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		else
 		{
 			previousDropzone.ReorganizeCards();
-			Debug.Log("HEREEEE");
 		}
 		//GoToDropzone();
 	}

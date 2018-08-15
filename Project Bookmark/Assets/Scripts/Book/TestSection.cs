@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class TestSection : Section {
 
+	PlayerData player;
+
 	public TestSection()
 	{
 		SectionName = "TestSection";
 		NumPages = 5;
+		GameObject.FindObjectOfType<PlayerData>();
 	}
 
 	protected override void Switches(int i)
@@ -45,19 +48,19 @@ public class TestSection : Section {
                      "THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. " +
                      "THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. " +
                      "THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. ");
-        if (PlayerData.instance == null)
+        if (player == null)
             Debug.Log("AHHHH");
-        if (PlayerData.instance.StatCheck(Stats.Strength, 10) == true)
+		if (player.StatCheck(Stats.Power, 10) == true)
             page.SetOptionText(0, "You are strong enough.");
-        if (PlayerData.instance.StatCheck(Stats.Dexterity, 10) == true)
+		if (player.StatCheck(Stats.Technique, 10) == true)
             page.SetOptionText(1, "You are Dexterous enough.");
-        if (PlayerData.instance.StatCheck(Stats.Constitution, 10) == true)
+		if (player.StatCheck(Stats.Constitution, 10) == true)
             page.SetOptionText(2, "You are Con enough.");
-        if (PlayerData.instance.StatCheck(Stats.Intelligence, 10) == true)
+		if (player.StatCheck(Stats.Magic, 10) == true)
             page.SetOptionText(3, "You are Smart enough.");
-        if (PlayerData.instance.StatCheck(Stats.Wisdom, 10) == true)
+		if (player.StatCheck(Stats.Wisdom, 10) == true)
             page.SetOptionText(4, "You are wise enough.");
-        if (PlayerData.instance.StatCheck(Stats.Charisma, 10) == true)
+		if (player.StatCheck(Stats.Charisma, 10) == true)
             page.SetOptionText(5, "You are Charismatic enough.");
 
         return page;

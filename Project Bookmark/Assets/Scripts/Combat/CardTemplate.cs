@@ -6,26 +6,37 @@ public class CardTemplate : MonoBehaviour {
 
 	public static CardStats GetTemplate(int i)
 	{
+		CardStats result = null;
 		switch (i)
 		{
 
 			case 0:
-				return new CardStats(CardType.ATK_Phys, 1, 1, 1, "Thrust");
+				result = new CardStats(CardType.ATK_Phys, 1, 1, 1, "Thrust");
+				break;
 			case 1:
-				return new CardStats(CardType.ATK_Phys, 2, 1, 2, "Slash");
+				result = new CardStats(CardType.ATK_Phys, 2, 1, 2, "Slash");
+                break;
             case 2:
-				return new CardStats(CardType.DEF_Mag, 1, 2, 2, "Shield");
+				result = new CardStats(CardType.DEF_Mag, 1, 2, 2, "Shield");
+                break;
             case 3:
-				return new CardStats(CardType.ATK_Mag, 3, 1, 3, "Fireball");
+				result = new CardStats(CardType.ATK_Mag, 3, 1, 3, "Fireball");
+                break;
             case 4:
-				return new CardStats(CardType.DEF_Phys, 1, 2, 2, "Deflect");
+				result = new CardStats(CardType.DEF_Phys, 1, 2, 2, "Deflect");
+                break;
             case 5:
-				return new CardStats(CardType.DEF_Phys, 1, 1, 1, "Brace");
+				result = new CardStats(CardType.DEF_Phys, 1, 1, 1, "Brace");
+                break;
 
 
 			default:
 				Debug.LogError("Could not find CardTemplate with identifier " + i.ToString());
-				return null;
+				return null;            
 		}
+
+		result.SetTemplateID(i);
+
+		return result;
 	}
 }

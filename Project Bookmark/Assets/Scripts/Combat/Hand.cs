@@ -9,7 +9,7 @@ public class Hand : MonoBehaviour {
 	public Deck deck;
 	Dropzone HandDropzone;
 
-	private void Start()
+	private void Awake()
 	{
 		HandDropzone = GetComponent<Dropzone>();
 	}
@@ -36,18 +36,27 @@ public class Hand : MonoBehaviour {
 		return result;
 	}
 
-	public Card GetHighestDEF()
+	public Card GetHighestDEF(int APLimit)
     {
         Card result = null;
         for (int i = 0; i < transform.childCount; i++)
         {
+			Card test = transform.GetChild(i).GetComponent<Card>();
+
+			if (test.AP > APLimit)
+				continue;
+			
             if (result == null)
                 result = transform.GetChild(i).GetComponent<Card>();
             else if (transform.GetChild(i).GetComponent<Card>().DEF > result.DEF)
                 result = transform.GetChild(i).GetComponent<Card>();
         }
-		Debug.Log(result.DEF);
+
         return result;
     }
 
+    public void Reorganize()
+	{
+		HandDropzone.ReorganizeCards();
+	}
 }

@@ -34,7 +34,7 @@ public class PlayerData : CharacterData {
 
 	}
 
-	public bool StatCheck(Stats s, int n)
+	public override bool StatCheck(Stats s, int n)
 	{
 		if (CharacterStats[(int)s] >= n)
 			return true;

@@ -57,7 +57,6 @@ public class EnemyAI : MonoBehaviour {
 		playArea.AddCardToEnemyReveal(hand.GetHighestDEF(APLimit).transform);
 		hand.Reorganize();
 
-		Debug.Log("DECIDED");
 	}
 
 	public void Attack()
@@ -73,7 +72,7 @@ public class EnemyAI : MonoBehaviour {
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      
 
 		yield return new WaitForSeconds(Random.Range(5, 15) / 10f);
-		playArea.AddCard(hand.GetHighestATK().gameObject);
+		playArea.AddCard(hand.GetHighestATK());
 		hand.Reorganize();
 
         // SHOULD EVALUATE TO CreateAttackDeck, which will then register draw

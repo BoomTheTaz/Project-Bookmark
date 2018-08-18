@@ -9,37 +9,29 @@ public class CombatManager : MonoBehaviour {
 	public GameObject CardPrefab;
 	public PlayArea playArea;
 
-	public Deck PlayerDeck;
-	public Deck EnemyDeck;
-
 	Transform AttackDeck;
 	public Transform PlayerCardReveal;
 	public Transform EnemyCardReveal;
-	public Transform PlayerDiscard;
-	public Transform EnemyDiscard;
 
 	public CharacterData Enemy;
 	public PlayerData Player;
-	public Hand PlayerHand;
-	public Hand EnemyHand;
 
 	public static bool CanDrag;
 
 	public static CombatState CurrentState { get; private set; }
 
-	int PlayerATK;
-	int PlayerDEF;
-	int AI_ATK;
-	int AI_DEF;
-
 	PlayerData player;
 	EnemyAI AI;
 
 	public static CombatManager instance;
+
 	delegate void NextStep();
 	NextStep OnMoveEnd;
 
 	bool isPlayerStarting;
+
+	public CardManager PlayerCardMgr;
+	public CardManager EnemyCardMgr;
 
 	private void Awake()
 	{
@@ -51,10 +43,9 @@ public class CombatManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
+    
 		// TEMP: create Decks for player and AI
-		CreateDeck();
-		CreateAIDeck();
+		CreateDecks();
 
 		// TEMP: Start with player attacking
         //      Compare Speeds in future to decide who initiates
@@ -66,7 +57,8 @@ public class CombatManager : MonoBehaviour {
 
 		SetupUI();
 
-		StartCoroutine("SetupBoard");
+		StartCoroutine(PlayerCardMgr.FillHand());
+		StartCoroutine(EnemyCardMgr.FillHand());
 
 		if (isPlayerStarting == false)
 		{
@@ -80,29 +72,6 @@ public class CombatManager : MonoBehaviour {
         }
 	}
 
-	IEnumerator SetupBoard()
-	{
-		int playerCard = player.CardsInHand;
-		int enemyCard = Enemy.CardsInHand;
-
-		for (int i = 0; i < Mathf.Max(playerCard, enemyCard); i++)
-		{
-			yield return new WaitForSeconds(0.5f);
-
-			if (i < playerCard)
-			{
-				PlayerHand.DrawCard();
-			}
-			if (i < enemyCard)
-			{
-				EnemyHand.DrawCard();
-			}
-
-
-		}
-
-	}
-
     void SetupUI()
 	{
 		CombatUI.instance.ChangeAP(player.MaxAP, true);
@@ -113,16 +82,12 @@ public class CombatManager : MonoBehaviour {
 	}
 
 	// TEMPORARY: Generate generic deck
-    void CreateDeck()
-	{      
-		PlayerDeck.CreateDeck(new int[] { 1, 2, 3, 4, 5, 0, 0, 1, 2, 3, 4, 5 });
-	}
-
-	void CreateAIDeck()
+	void CreateDecks()
 	{
-		EnemyDeck.CreateDeck(new int[] { 1, 2, 3, 4, 5, 0, 0, 1, 2, 3, 4, 5 });
+		PlayerCardMgr.CreateDeck(new int[] { 1, 2, 3, 4, 5, 0, 0, 1, 2, 3, 4, 5 }, CardPrefab);
+		EnemyCardMgr.CreateDeck(new int[] { 1, 2, 3, 4, 5, 0, 0, 1, 2, 3, 4, 5 }, CardPrefab);
 	}
-
+ 
 	bool AttackPending = false;
     // Figure out where to go next
     public void Evaluate()
@@ -180,7 +145,7 @@ public class CombatManager : MonoBehaviour {
     void FinalizePlayerAttack()
 	{
 		CurrentState = CombatState.AI_DEF;
-		StartCoroutine("FillHand");
+		StartCoroutine(EnemyCardMgr.FillHand());
         
         // If player is attacking, create the attack deck
 		if (playArea.transform.childCount > 0)
@@ -212,7 +177,7 @@ public class CombatManager : MonoBehaviour {
 	public void FinalizeAIAttack()
     {
 		CurrentState = CombatState.Player_DEF;
-		StartCoroutine("FillHand");
+		StartCoroutine(PlayerCardMgr.FillHand());
         playArea.ResetAP();
 
 		if (playArea.transform.childCount > 0)
@@ -345,14 +310,7 @@ public class CombatManager : MonoBehaviour {
                 CardsInCombat[0] = null;
 				Player.TakeDamage(CardsInCombat[1].ATK, true);
             }
-
-
-
-			// TODO: Figure out damage equation
-			if (CardsInCombat[0] != null)
-                Debug.Log("Player Defense: " + CardsInCombat[0].DEF.ToString());
-            if (CardsInCombat[1] != null)
-				Debug.Log("Enemy Attack: " + CardsInCombat[1].ATK.ToString());
+            
 		}
 		else
 			Debug.LogError("Invalid State to evaluate combat.");
@@ -370,18 +328,18 @@ public class CombatManager : MonoBehaviour {
         if (CardsInCombat[0] != null)
         {
 			if (ShouldTrash(CardsInCombat[0]) == true)
-				ToTrashPile(CardsInCombat[0]);
+				PlayerCardMgr.TrashCard(CardsInCombat[0]);
 			else
-				ToDiscardPile(CardsInCombat[0]);
+				PlayerCardMgr.DiscardCard(CardsInCombat[0]);
             
             
         }
         if (CardsInCombat[1] != null)
         {
 			if (ShouldTrash(CardsInCombat[1]) == true)
-                ToTrashPile(CardsInCombat[1]);
+				EnemyCardMgr.TrashCard(CardsInCombat[1]);
             else
-                ToDiscardPile(CardsInCombat[1]);
+				EnemyCardMgr.DiscardCard(CardsInCombat[1]);
    
         }
 	}
@@ -422,38 +380,8 @@ public class CombatManager : MonoBehaviour {
 
 		return toReturn;
 	}
-
-	// Move card to discard pile
-    void ToDiscardPile(Card c)
-	{
-		if (c.isPlayer == true)
-		{
-			c.transform.SetParent(PlayerDiscard);
-            c.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            PlayerDeck.DiscardCard(c);
-		}
-
-		else
-		{
-			c.transform.SetParent(EnemyDiscard);
-            EnemyDeck.DiscardCard(c);
-		}
-
-		c.RegisterToMove(Vector3.zero);
-        c.RegisterToScale();
-	}
-
-    // Move card to trash pile
-    void ToTrashPile(Card c)
-	{
-		// TODO: Handle trashing of cards
-		Debug.Log("Magic Used");
-		c.transform.SetParent(null);
-		c.gameObject.SetActive(false);
-		
-	}
-
-    public void DoneMoving()
+   
+	public void DoneMoving()
 	{
 		if (OnMoveEnd != null)
 		{
@@ -462,38 +390,7 @@ public class CombatManager : MonoBehaviour {
 		}
         
 	}
-
-	IEnumerator FillHand()
-	{
-		if (CurrentState == CombatState.Player_DEF)
-		{
-			while (PlayerHand.transform.childCount < player.CardsInHand)
-			{
-				PlayerHand.DrawCard();
-
-				yield return new WaitForSeconds(0.5f);
-
-				if (PlayerDeck.transform.childCount == 0)
-					break;
-			}
-		}
-
-		else if (CurrentState == CombatState.AI_DEF)
-		{
-			while (EnemyHand.transform.childCount < Enemy.CardsInHand)
-            {
-				EnemyHand.DrawCard();
-
-                yield return new WaitForSeconds(0.5f);
-
-				if (EnemyDeck.transform.childCount == 0)
-                    break;
-            }
-		}
-		else
-			Debug.LogError("Should not be filling hand in state " + CurrentState);
-	}
-
+    
 	public void EvaluateOnEndMove()
 	{
 		StartCoroutine("DelayedEvaluate");
@@ -504,6 +401,18 @@ public class CombatManager : MonoBehaviour {
 		yield return new WaitForEndOfFrame();
 		OnMoveEnd = Evaluate;
 
+	}
+
+
+    public void EndGame(bool isPlayer)
+	{
+		// Player lost
+		if (isPlayer == true)
+			Debug.Log("Player has died.");
+
+        // Player won
+		else
+			Debug.Log("Player has won!!!");
 	}
 
 	void Here()

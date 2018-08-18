@@ -8,6 +8,7 @@ public class ControlManager : MonoBehaviour {
 	OnUpdate Controls;
 
 	public Hand PlayerHand;
+	public CardManager PlayerCardMgr;
 
 	private void Start()
 	{
@@ -28,10 +29,13 @@ public class ControlManager : MonoBehaviour {
 	{
 
 		if (Input.GetKeyDown(KeyCode.Space))
-			PlayerHand.DrawCard();
+			PlayerCardMgr.DrawCard();
 
 		if (Input.GetKeyDown(KeyCode.RightArrow))
 			FindObjectOfType<CombatManager>().Evaluate();
-
+		if (Input.GetKeyDown(KeyCode.A))
+		{
+			StartCoroutine(PlayerCardMgr.ForceDiscard(2));
+		}
 	}
 }

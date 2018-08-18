@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Page {
 
@@ -12,9 +13,12 @@ public class Page {
 	public string[] OptionTexts { get; protected set; }
 	public PageReference[] OptionPageReference { get; protected set; }
 
+	public UnityAction[] ButtonActions;
+
     public Page()
 	{
 		OptionTexts = new string[MAX_OPTIONS];
+		ButtonActions = new UnityAction[MAX_OPTIONS];
 		OptionPageReference = new PageReference[MAX_OPTIONS];
 	}
 
@@ -41,6 +45,18 @@ public class Page {
 	public PageReference GetPageReference(int o)
 	{
 		return OptionPageReference[o];
+	}
+
+	public void LinkPage(int i, PageReference pr)
+	{
+		Debug.Log("Adding page reference");
+		ButtonActions[i] += OptionActions.GoToPage(pr);
+	}
+
+	public void GoToCombat(int i, string s)
+	{
+		Debug.Log("Adding combat");
+		ButtonActions[i] += OptionActions.GoToCombat(s);
 	}
 
 }

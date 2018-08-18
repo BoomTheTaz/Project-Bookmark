@@ -2,18 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BookManager  {
+public class BookManager : MonoBehaviour  {
 
 	Section CurrentSection;
 	Page CurrentPage;
 	Dictionary<string, Section> Sections;
 
+	public static BookManager instance;
 
-	public BookManager(string s)
+	private void Awake()
+	{
+		if (instance == null)
+			instance = this;
+		else
+			Destroy(this);
+	}
+
+	private void Start()
 	{
 		Sections = new Dictionary<string, Section>();
-		AddSection(s);
 	}
+
 
     void AddSection(string s)
 	{
@@ -47,6 +56,12 @@ public class BookManager  {
 
 		UIManager.instance.SetupPage(CurrentPage);
 	}
+
+	public void SetupPageReference(PageReference pr)
+    {
+		SetupPageFromSection(pr.section, pr.page);
+    }
+    
     
 	public void SetupPageFromSection(string s, int i)
 	{
@@ -71,6 +86,14 @@ public class BookManager  {
 			SetupPage(pr.page);
 		else
 			SetupPageFromSection(pr.section, pr.page);
+	}
+
+	public void GoToPage(PageReference pr)
+	{
+		if (CurrentSection.GetSectionName() == pr.section)
+            SetupPage(pr.page);
+        else
+            SetupPageFromSection(pr.section, pr.page);
 	}
 
 }

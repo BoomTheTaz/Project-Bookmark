@@ -75,9 +75,16 @@ public class CharacterData : MonoBehaviour {
 	{
 		if (d > 0)
 			CurrentHealth -= d;
-		Debug.Log("Current Health: " + CurrentHealth.ToString());
 
 		CombatUI.instance.ChangeHealth(CurrentHealth, isPlayer);
+
+		if (CurrentHealth <= 0)
+			CombatManager.instance.EndGame(isPlayer);
+	}
+
+	public virtual bool StatCheck(Stats s, int n)
+	{
+		return false;
 	}
     
 }

@@ -63,6 +63,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Book\BookManager.cs" />
     <Compile Include="Assets\Scripts\Book\Chapter.cs" />
+    <Compile Include="Assets\Scripts\Book\OptionActions.cs" />
+    <Compile Include="Assets\Scripts\Book\OptionButton.cs" />
     <Compile Include="Assets\Scripts\Book\Page.cs" />
     <Compile Include="Assets\Scripts\Book\PageReference.cs" />
     <Compile Include="Assets\Scripts\Book\PlayerData.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="Assets\Scripts\Book\TestSection.cs" />
     <Compile Include="Assets\Scripts\Book\UIManager.cs" />
     <Compile Include="Assets\Scripts\Combat\Card.cs" />
+    <Compile Include="Assets\Scripts\Combat\CardManager.cs" />
     <Compile Include="Assets\Scripts\Combat\CardStats.cs" />
     <Compile Include="Assets\Scripts\Combat\CardTemplate.cs" />
     <Compile Include="Assets\Scripts\Combat\CharacterData.cs" />

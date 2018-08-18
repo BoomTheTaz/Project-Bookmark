@@ -8,9 +8,22 @@ public class GameManager : MonoBehaviour {
 
 	bool inBook = true;
 
+	public static GameManager instance;
+
+	private void Awake()
+	{
+		if (instance == null)
+		{
+			instance = this;
+			DontDestroyOnLoad(this);
+		}
+		else
+			Destroy(this);
+	}
+
 	// Use this for initialization
 	void Start () {
-		//PlayerData player = new PlayerData();
+		PlayerData player = new PlayerData();
 
 		// Test Stats
 		//Debug.Log("Strength: " + player.GetStat(Stats.Strength).ToString());
@@ -19,12 +32,12 @@ public class GameManager : MonoBehaviour {
 		//Debug.Log("Intelligence: " + player.GetStat(Stats.Intelligence).ToString());
 		//Debug.Log("Wisdom: " + player.GetStat(Stats.Wisdom).ToString());
 		//Debug.Log("Charisma: " + player.GetStat(Stats.Charisma).ToString());
-
+       
 
 		if (inBook == true)
 		{
-			bookManager = new BookManager("Prologue");
-			bookManager.SetupPage(0);
+
+			BookManager.instance.SetupPageReference(new PageReference("Prologue", 0));
 
 			UIManager.instance.SetButtonListeners(bookManager);
 		}

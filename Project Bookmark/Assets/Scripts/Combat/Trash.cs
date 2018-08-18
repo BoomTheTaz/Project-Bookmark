@@ -1,10 +1,10 @@
 ﻿
 public class Trash : Dropzone {
 
-	public Deck PlayerDeck;
+	public CardManager CM;
 
 	public override void PlaceCard(Card card)
 	{
-		PlayerDeck.TrashAndShuffle(card);
+		CM.TrashAndShuffle(card);
 	}
 }

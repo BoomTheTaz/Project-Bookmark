@@ -41,33 +41,11 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	public void SetCurrentDropzone(Dropzone d)
 	{
 		currentDropzone = d;
-		//SetNewTransform(d.GetRelevantTransform());
 	}
     
- //   public void GoToDropzone()
-	//{
-	//	//GetComponent<RectTransform>().pivot = transform.parent.GetComponent<RectTransform>().pivot;
-	//	// if null
 
-
-	//	if (currentDropzone == previousDropzone)
-	//		//transform.position = previousPosition;
-	//		GetComponent<Card>().RegisterToMove(previousPosition);
-	//	else
-	//	{
-	//		currentDropzone.ReorganizeCards();
-	//	}
-	//	    //transform.position = targetTransform.position;
-
-        
-	//	//if (currentDropzone.transform == targetTransform )
-	//	    //currentDropzone.ReorganizeCards();
-	//}
-    
     void Dropped()
 	{
-		
-
 		if (previousDropzone != currentDropzone)
 		{
 			//transform.SetParent(targetTransform);
@@ -91,6 +69,5 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		{
 			previousDropzone.ReorganizeCards();
 		}
-		//GoToDropzone();
 	}
 }

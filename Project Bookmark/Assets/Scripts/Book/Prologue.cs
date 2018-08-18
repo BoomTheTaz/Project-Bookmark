@@ -50,22 +50,23 @@ public class Prologue : Section {
 		             "THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. " +
 		             "THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. ");
 		
-		page.SetOptionText(0, "Go to page 0.");
-        page.SetOptionText(1, "Go to page 1.");
+		page.SetOptionText(0, "Go to PR 0.");
+        page.SetOptionText(1, "Go to PR 1 and Combat.");
         page.SetOptionText(2, "Go to page 2.");
         page.SetOptionText(3, "Go to page 3.");
         page.SetOptionText(4, "Go to page 4.");
         page.SetOptionText(5, "Go to page 5.");
 
-		page.SetOptionPageLink(0, new PageReference("Prologue", 0));
-		page.SetOptionPageLink(1, new PageReference("Prologue", 1));
-		page.SetOptionPageLink(2, new PageReference("Prologue", 2));
-		page.SetOptionPageLink(3, new PageReference("Prologue", 3));
-		page.SetOptionPageLink(4, new PageReference("Prologue", 4));
-		page.SetOptionPageLink(5, new PageReference("Prologue", 5));
+		page.LinkPage(0, new PageReference("Prologue", 0));
+		page.LinkPage(1, new PageReference("Prologue", 1));
+		page.GoToCombat(1, "rats");
 
-        
-        return page;
+		page.LinkPage(2, new PageReference("Prologue", 2));
+		page.LinkPage(3, new PageReference("Prologue", 3));
+		page.LinkPage(4, new PageReference("Prologue", 4));
+		page.LinkPage(5, new PageReference("Prologue", 5));
+  
+		return page;
     }
     
 

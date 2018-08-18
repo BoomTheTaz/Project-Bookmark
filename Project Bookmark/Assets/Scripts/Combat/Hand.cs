@@ -14,10 +14,14 @@ public class Hand : MonoBehaviour {
 		HandDropzone = GetComponent<Dropzone>();
 	}
 
+    public void AddCard(Card c)
+	{
+		HandDropzone.AddCard(c);
+	}
 	   
     public void DrawCard()
 	{
-		GameObject card = deck.DrawCard();
+		Card card = deck.DrawCard();
 
 		HandDropzone.AddCard(card);
 	}

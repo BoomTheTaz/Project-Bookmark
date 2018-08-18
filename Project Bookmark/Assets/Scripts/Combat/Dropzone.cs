@@ -96,7 +96,7 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 	}
 
     // Add a card to this dropzone
-	public void AddCard(GameObject card)
+	public void AddCard(Card card)
 	{
 		if (card == null)
 			return;
@@ -104,10 +104,10 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 		card.transform.SetParent(transform);
         
         // Only flip player cards
-		if (card.GetComponent<Card>().isPlayer == true)
-		    card.GetComponent<Card>().RegisterToFlip();
+		if (card.isPlayer == true)
+		    card.RegisterToFlip();
 		
-		card.GetComponent<Card>().RegisterToScale(true);
+		card.RegisterToScale(true);
 
 		card.GetComponent<Draggable>().SetCurrentDropzone(this);
         
@@ -160,4 +160,5 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 		ReorganizeCards();
 
 	}
+
 }

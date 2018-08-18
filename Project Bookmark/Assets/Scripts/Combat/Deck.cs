@@ -9,6 +9,8 @@ public class Deck : MonoBehaviour {
 	public GameObject CardPrefab;
 	public bool isPlayer;
 	public CharacterData data;
+	public Transform TrashLocation;
+	public PlayArea playArea;
     
 	List<Card> Draw;
 	List<Card> Hand;
@@ -96,31 +98,40 @@ public class Deck : MonoBehaviour {
 			return null;
 		}
 	}
-
+    
 	public void TrashAndShuffle(Card toTrash)
 	{
-		Hand.Remove(toTrash);
-		Trash.Add(toTrash);
-		Debug.Log("TRASHIN AND SHUFFLIN");
-
-        // Move all cards in hand back to deck
-		foreach (var c in Hand)
+		if (toTrash.isPlayer == false || playArea.CanShuffle() == true)
 		{
-			c.transform.SetParent(transform);
-			c.RegisterToFlip();
-			c.RegisterToScale();
-			c.RegisterToMove(Vector3.zero);
+			Hand.Remove(toTrash);
+			Trash.Add(toTrash);
+
+			// TODO: Animate something for this card, maybe it just fades out or burns up or something
+			toTrash.transform.SetParent(TrashLocation);
+			toTrash.gameObject.SetActive(false);
+
+			// Move all cards in hand back to deck
+			foreach (var c in Hand)
+			{
+				c.transform.SetParent(transform);
+				c.RegisterToFlip();
+				c.RegisterToScale();
+				c.RegisterToMove(Vector3.zero);
+			}
+
+			// Move all cards in discard back to deck
+			foreach (var c in Discard)
+			{
+				c.transform.SetParent(transform);
+				c.RegisterToFlip();
+				c.RegisterToMove(Vector3.zero);
+			}
+
+			Shuffle();
+			Debug.Log("TRASHIN AND SHUFFLIN");
 		}
-
-        // Move all cards in discard back to deck
-		foreach (var c in Discard)
-        {
-            c.transform.SetParent(transform);
-            c.RegisterToFlip();
-            c.RegisterToMove(Vector3.zero);
-        }
-
-		Shuffle();
+		else
+			Debug.Log("CANNOT SHUFFLE AT THIS TIME");
 	}
 
     public void DiscardCard(Card c)

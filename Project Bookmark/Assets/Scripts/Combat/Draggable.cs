@@ -72,14 +72,14 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		{
 			//transform.SetParent(targetTransform);
 
-			currentDropzone.AddCardAP(GetComponent<Card>().AP);
+			currentDropzone.DecreaseAP(GetComponent<Card>().AP);
 			// ========================== DO SOMETHING WITH THIS, 
 			// ========================== GIVE PLAY AREA CARD AND LET IT DECIDE HOW THE CARD IS PLAYED
 			currentDropzone.PlaceCard(GetComponent<Card>());
 			// =======================
 
 			previousDropzone.ReorganizeCards();
-			previousDropzone.RemoveCardAP(GetComponent<Card>().AP);
+			previousDropzone.IncreaseAP(GetComponent<Card>().AP);
 
 			//currentDropzone = previousDropzone;
 

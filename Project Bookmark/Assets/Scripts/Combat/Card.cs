@@ -62,9 +62,9 @@ public class Card : MonoBehaviour
 		return GetComponent<RectTransform>().rect.width;
 	}
 
-	float BaseScaler = 1.1f;
-	float AttackScaler = 1.1f;
-	float MagicScaler = 1.25f;
+	float BaseScaler = 0.6f;
+	float AttackScaler = 1.2f;
+	float MagicScaler = 1.5f;
 	float AltScaler = 2f;
 
 

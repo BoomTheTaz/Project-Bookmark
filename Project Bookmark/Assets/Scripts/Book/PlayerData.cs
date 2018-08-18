@@ -8,12 +8,12 @@ public class PlayerData : CharacterData {
     
     void Awake()
 	{
-		CharacterStats[(int)Stats.Power] = Random.Range(1,6);
-		CharacterStats[(int)Stats.Technique] = Random.Range(1, 6);
-		CharacterStats[(int)Stats.Constitution] = Random.Range(1, 6);
-		CharacterStats[(int)Stats.Magic] = Random.Range(1, 6);
-		CharacterStats[(int)Stats.Wisdom] = Random.Range(1, 6);
-		CharacterStats[(int)Stats.Charisma] = Random.Range(1, 6);
+		CharacterStats[(int)Stats.Power] = Random.Range(3,6);
+		CharacterStats[(int)Stats.Technique] = Random.Range(3, 6);
+		CharacterStats[(int)Stats.Constitution] = Random.Range(3, 6);
+		CharacterStats[(int)Stats.Magic] = Random.Range(3, 6);
+		CharacterStats[(int)Stats.Wisdom] = Random.Range(3, 6);
+		CharacterStats[(int)Stats.Charisma] = Random.Range(3, 6);
 
         // ======= TEMP HARD CODE ========
         MaxAP = 3;

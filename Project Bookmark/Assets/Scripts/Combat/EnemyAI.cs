@@ -73,7 +73,11 @@ public class EnemyAI : MonoBehaviour {
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      
 
 		yield return new WaitForSeconds(Random.Range(5, 15) / 10f);
-		playArea.AddAICard(hand.GetHighestATK().gameObject);
+		playArea.AddCard(hand.GetHighestATK().gameObject);
 		hand.Reorganize();
+
+        // SHOULD EVALUATE TO CreateAttackDeck, which will then register draw
+		CombatManager.instance.EvaluateOnEndMove();
+
 	}
 }

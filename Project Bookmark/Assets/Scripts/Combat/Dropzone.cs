@@ -132,12 +132,12 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 		return true;
 	}
 
-	public virtual void RemoveCardAP(int ap)
+	public virtual void IncreaseAP(int ap)
 	{
 		return;
 	}
 
-	public virtual void AddCardAP(int ap)
+	public virtual void DecreaseAP(int ap)
     {
         return;
     }

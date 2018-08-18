@@ -2,18 +2,18 @@
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Combat/CombatManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/Combat/Card.cs" Line="195" Column="27" />
-      <File FileName="Assets/Scripts/Combat/Hand.cs" Line="18" Column="19" />
-      <File FileName="Assets/Scripts/Combat/CombatManager.cs" Line="318" Column="25" />
-      <File FileName="Assets/Scripts/Combat/Draggable.cs" Line="41" Column="26" />
-      <File FileName="Assets/Scripts/Combat/Dropzone.cs" Line="103" Column="3" />
-      <File FileName="Assets/Scripts/Combat/EnemyAI.cs" Line="31" Column="2" />
-      <File FileName="Assets/Scripts/Combat/CombatUI.cs" Line="64" Column="6" />
-      <File FileName="Assets/Scripts/Combat/CharacterData.cs" Line="23" Column="2" />
-      <File FileName="Assets/Scripts/Book/PlayerData.cs" Line="33" Column="72" />
-      <File FileName="Assets/Scripts/Combat/PlayArea.cs" Line="36" Column="14" />
-      <File FileName="Assets/Scripts/Combat/Deck.cs" Line="121" Column="10" />
+      <File FileName="Assets/Scripts/Combat/Card.cs" Line="29" Column="46" />
+      <File FileName="Assets/Scripts/Combat/Hand.cs" Line="28" Column="26" />
+      <File FileName="Assets/Scripts/Combat/Draggable.cs" Line="78" Column="20" />
+      <File FileName="Assets/Scripts/Combat/Dropzone.cs" Line="58" Column="14" />
+      <File FileName="Assets/Scripts/Combat/EnemyAI.cs" Line="63" Column="22" />
+      <File FileName="Assets/Scripts/Combat/CombatUI.cs" Line="71" Column="6" />
+      <File FileName="Assets/Scripts/Combat/CharacterData.cs" Line="72" Column="6" />
+      <File FileName="Assets/Scripts/Book/PlayerData.cs" Line="10" Column="3" />
+      <File FileName="Assets/Scripts/Combat/PlayArea.cs" Line="26" Column="19" />
+      <File FileName="Assets/Scripts/Combat/Deck.cs" Line="101" Column="5" />
       <File FileName="Assets/Scripts/ControlManager.cs" Line="31" Column="15" />
+      <File FileName="Assets/Scripts/Combat/CombatManager.cs" Line="356" Column="7" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

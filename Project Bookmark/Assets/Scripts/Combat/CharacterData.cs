@@ -23,12 +23,12 @@ public class CharacterData : MonoBehaviour {
 
 	private void Awake()
 	{
-		CharacterStats[(int)Stats.Power] = Roll(3, 6);
-		CharacterStats[(int)Stats.Technique] = Roll(3, 6);
-        CharacterStats[(int)Stats.Constitution] = Roll(3, 6);
-		CharacterStats[(int)Stats.Magic] = Roll(3, 6);
-        CharacterStats[(int)Stats.Wisdom] = Roll(3, 6);
-        CharacterStats[(int)Stats.Charisma] = Roll(3, 6);
+		CharacterStats[(int)Stats.Power] = Roll(1, 6);
+		CharacterStats[(int)Stats.Technique] = Roll(1, 6);
+        CharacterStats[(int)Stats.Constitution] = Roll(1, 6);
+		CharacterStats[(int)Stats.Magic] = Roll(1, 6);
+        CharacterStats[(int)Stats.Wisdom] = Roll(1, 6);
+        CharacterStats[(int)Stats.Charisma] = Roll(1, 6);
 
         // ======= TEMP HARD CODE ========
         MaxAP = 3;
@@ -71,11 +71,13 @@ public class CharacterData : MonoBehaviour {
         return CharacterStats[(int)s];
     }
 
-	public void TakeDamage(int d)
+	public void TakeDamage(int d, bool isPlayer)
 	{
 		if (d > 0)
 			CurrentHealth -= d;
 		Debug.Log("Current Health: " + CurrentHealth.ToString());
-	}
 
+		CombatUI.instance.ChangeHealth(CurrentHealth, isPlayer);
+	}
+    
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatUI : MonoBehaviour {
 
@@ -9,6 +10,10 @@ public class CombatUI : MonoBehaviour {
 	MoveCards CardsToFlip;
 	MoveCards CardsToScale;
 
+	public Text PlayerAP;
+	public Text EnemyAP;
+	public Text PlayerHealth;
+	public Text EnemyHealth;
 
 	public static CombatUI instance;
 
@@ -71,5 +76,21 @@ public class CombatUI : MonoBehaviour {
 		CardsToScale -= c.Scale;
 		if (CardsToFlip == null && CardsToMove == null && CardsToScale == null)
             CombatManager.instance.DoneMoving();
+    }
+
+    public void ChangeHealth(int h, bool isPlayer)
+	{
+		if (isPlayer == true)
+			PlayerHealth.text = h.ToString();
+		else
+			EnemyHealth.text = h.ToString();
+	}
+
+	public void ChangeAP(int ap, bool isPlayer)
+    {
+        if (isPlayer == true)
+			PlayerAP.text = ap.ToString();
+        else
+			EnemyAP.text = ap.ToString();
     }
 }

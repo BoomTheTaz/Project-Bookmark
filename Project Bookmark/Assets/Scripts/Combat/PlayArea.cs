@@ -21,7 +21,7 @@ public class PlayArea : Dropzone {
     
 	protected override bool CanAddCard(int ap)
 	{
-		if (MaxAP - CurrentAP >= ap)
+		if (CurrentAP >= ap || CombatManager.CurrentState == CombatState.Player_DEF)
         {
 			// DO THIS SHIT
 
@@ -30,6 +30,7 @@ public class PlayArea : Dropzone {
 				return true;
             }
 
+			// FIXME: Probably redundant state check
 			if (CombatManager.CurrentState == CombatState.Player_DEF && ap <= EnemyReveal.GetChild(0).GetComponent<Card>().AP)
             {
                 return true;
@@ -41,38 +42,24 @@ public class PlayArea : Dropzone {
 		return false;
 	}
    
-	public override void RemoveCardAP(int ap)
+	public override void IncreaseAP(int ap)
 	{
-		CurrentAP -= ap;
+		CurrentAP += ap;
+		CombatUI.instance.ChangeAP(CurrentAP, true);
 		Debug.Log("REMOVING AP. Current AP: " + CurrentAP.ToString());
 	}
     
-	public override void AddCardAP(int ap)
+	public override void DecreaseAP(int ap)
     {
-        CurrentAP += ap;
+        CurrentAP -= ap;
+		CombatUI.instance.ChangeAP(CurrentAP, true);
         Debug.Log("ADDING AP. Current AP: " + CurrentAP.ToString());
     }
 
-	//public override Transform GetRelevantTransform()
-	//{
-
-	//	if (CombatManager.CurrentState == CombatState.Player_ATK)
-	//	{
-	//		return transform;
-	//	}
-	//	if (CombatManager.CurrentState == CombatState.Player_DEF)
-	//	{
-	//		return PlayerReveal;
-	//	}
-	//	Debug.LogError("Cannot get relevant transform in this state.");
-	//	return transform;
-			
-
-	//}
-
     public void ResetAP()
 	{
-		CurrentAP = 0;
+		CurrentAP = MaxAP;
+		CombatUI.instance.ChangeAP(CurrentAP, true);
 	}
 
 	public void AddCardToEnemyReveal(Transform t)
@@ -82,7 +69,6 @@ public class PlayArea : Dropzone {
 		t.GetComponent<Card>().RegisterToFlip();
 
 	}
-
 
 	public override void PlaceCard(Card card)
     {
@@ -100,10 +86,10 @@ public class PlayArea : Dropzone {
 			// If already card in player reveal, replace it
             if (PlayerReveal.childCount > 0)
             {
-				RemoveCardAP(PlayerReveal.GetChild(0).GetComponent<Card>().AP);
+				IncreaseAP(PlayerReveal.GetChild(0).GetComponent<Card>().AP);
 				PlayerHand.PlaceCard(PlayerReveal.GetChild(0).GetComponent<Card>());
             }
-
+            
 			// Set Parent
 			if (card.isPlayer == true)
 				card.transform.SetParent(PlayerReveal);
@@ -119,4 +105,11 @@ public class PlayArea : Dropzone {
 		    Debug.LogError("Cannot get relevant transform in this state.");
 
     }
+
+	public bool CanShuffle()
+	{
+		if (CurrentAP == MaxAP)
+			return true;
+		return false;
+	}
 }

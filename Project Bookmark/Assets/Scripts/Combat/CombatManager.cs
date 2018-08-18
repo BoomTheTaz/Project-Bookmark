@@ -179,12 +179,13 @@ public class CombatManager : MonoBehaviour {
     // Take all cards in play area and put in attack deck
     void FinalizePlayerAttack()
 	{
+		CurrentState = CombatState.AI_DEF;
 		StartCoroutine("FillHand");
         
         // If player is attacking, create the attack deck
 		if (playArea.transform.childCount > 0)
         {
-			CurrentState = CombatState.AI_DEF;
+			
             CreateAttackDeck();
         }
 
@@ -368,19 +369,88 @@ public class CombatManager : MonoBehaviour {
 		// Move cards to discard pile
         if (CardsInCombat[0] != null)
         {
-            CardsInCombat[0].transform.SetParent(PlayerDiscard);
-            CardsInCombat[0].RegisterToMove(Vector3.zero);
-            CardsInCombat[0].RegisterToScale();
-            CardsInCombat[0].GetComponent<CanvasGroup>().blocksRaycasts = false;
-            PlayerDeck.DiscardCard(CardsInCombat[0]);
+			if (ShouldTrash(CardsInCombat[0]) == true)
+				ToTrashPile(CardsInCombat[0]);
+			else
+				ToDiscardPile(CardsInCombat[0]);
+            
+            
         }
         if (CardsInCombat[1] != null)
         {
-            CardsInCombat[1].transform.SetParent(EnemyDiscard);
-            CardsInCombat[1].RegisterToMove(Vector3.zero);
-            CardsInCombat[1].RegisterToScale();
-            EnemyDeck.DiscardCard(CardsInCombat[0]);
+			if (ShouldTrash(CardsInCombat[1]) == true)
+                ToTrashPile(CardsInCombat[1]);
+            else
+                ToDiscardPile(CardsInCombat[1]);
+   
         }
+	}
+
+    bool ShouldTrash(Card c)
+	{
+		// Boolean  to return
+		bool toReturn = false;
+
+        // Only care if certain card types, i.e. magic
+		// NOTE: Combat should only be evaluated on Defensive States
+		switch (c.Type)
+		{
+			// Case: magic attack
+			case CardType.ATK_Mag:
+				if (CurrentState == CombatState.AI_DEF)
+					toReturn =  true;
+				else if (CurrentState == CombatState.Player_DEF)
+				    toReturn = false;
+				break;
+
+			// Case: magic defense
+			case CardType.DEF_Mag:
+				if (CurrentState == CombatState.Player_DEF)
+					toReturn = true;
+				else if (CurrentState == CombatState.AI_DEF)
+					toReturn = false;
+				break;
+
+			default:
+				
+				return false;
+		}
+
+        // Previous switch based on player results, flip for Enemy results
+		if (c.isPlayer == false)
+			toReturn = !toReturn;
+
+		return toReturn;
+	}
+
+	// Move card to discard pile
+    void ToDiscardPile(Card c)
+	{
+		if (c.isPlayer == true)
+		{
+			c.transform.SetParent(PlayerDiscard);
+            c.GetComponent<CanvasGroup>().blocksRaycasts = false;
+            PlayerDeck.DiscardCard(c);
+		}
+
+		else
+		{
+			c.transform.SetParent(EnemyDiscard);
+            EnemyDeck.DiscardCard(c);
+		}
+
+		c.RegisterToMove(Vector3.zero);
+        c.RegisterToScale();
+	}
+
+    // Move card to trash pile
+    void ToTrashPile(Card c)
+	{
+		// TODO: Handle trashing of cards
+		Debug.Log("Magic Used");
+		c.transform.SetParent(null);
+		c.gameObject.SetActive(false);
+		
 	}
 
     public void DoneMoving()

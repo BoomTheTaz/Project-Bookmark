@@ -8,36 +8,40 @@ public class Section {
 	protected int NumPages;
 
     // Store pages
-	protected Dictionary<int, PageDelegate> Pages;
+	//protected Dictionary<int, PageDelegate> Pages;
 
 	protected string SectionName;
 
-    public Page GetPage(int i)
-	{
-		if (Pages.ContainsKey(i) == true)
-			return Pages[i].Invoke();
-		else
-		{
-			Debug.LogError("Invalid index " + i.ToString() + " in Section " + SectionName + ".");
-			return null;
-		}
-	}
+ //   public Page GetPage(int i)
+	//{
+	//	if (Pages.ContainsKey(i) == true)
+	//		return Pages[i].Invoke();
+	//	else
+	//	{
+	//		Debug.LogError("Invalid index " + i.ToString() + " in Section " + SectionName + ".");
+	//		return null;
+	//	}
+	//}
     
-
-    public void SetupDictionary()
+	public virtual Page GetPage(int i)
 	{
-		Pages = new Dictionary<int, PageDelegate>();
-
-        for (int i = 0; i < NumPages; i++)
-        {
-            Switches(i);
-        }
+		return null;
 	}
 
-	protected virtual void Switches(int i)
-	{
+ //   public void SetupDictionary()
+	//{
+	//	Pages = new Dictionary<int, PageDelegate>();
+
+ //       for (int i = 0; i < NumPages; i++)
+ //       {
+ //           Switches(i);
+ //       }
+	//}
+
+	//protected virtual void Switches(int i)
+	//{
 		
-	}
+	//}
 
     public string GetSectionName()
 	{

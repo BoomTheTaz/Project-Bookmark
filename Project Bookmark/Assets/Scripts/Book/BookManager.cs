@@ -35,13 +35,11 @@ public class BookManager : MonoBehaviour  {
 		{
 			case "Prologue":
 				section = new Prologue();
-				section.SetupDictionary();
 				Sections.Add(s, section);
 				break;
 
 			case "TestSection":
 				section = new TestSection();
-                section.SetupDictionary();
                 Sections.Add(s, section);
                 break;
 

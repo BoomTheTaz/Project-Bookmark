@@ -13,31 +13,31 @@ public class TestSection : Section {
 		GameObject.FindObjectOfType<PlayerData>();
 	}
 
-	protected override void Switches(int i)
-    {
-        switch (i)
-        {
-            case 0:
-                Pages.Add(i, GetPage0);
-                break;
-            case 1:
-                Pages.Add(i, GetPage1);
-                break;
-            case 2:
-                Pages.Add(i, GetPage2);
-                break;
-            case 3:
-                Pages.Add(i, GetPage3);
-                break;
-            case 4:
-                Pages.Add(i, GetPage4);
-				break;
+	//protected override void Switches(int i)
+    //{
+    //    switch (i)
+    //    {
+    //        case 0:
+    //            Pages.Add(i, GetPage0);
+    //            break;
+    //        case 1:
+    //            Pages.Add(i, GetPage1);
+    //            break;
+    //        case 2:
+    //            Pages.Add(i, GetPage2);
+    //            break;
+    //        case 3:
+    //            Pages.Add(i, GetPage3);
+    //            break;
+    //        case 4:
+    //            Pages.Add(i, GetPage4);
+				//break;
 
-            default:
-                Debug.LogError("Case " + i.ToString() + " not found in Section " + SectionName);
-                break;
-        }
-    }
+    //        default:
+    //            Debug.LogError("Case " + i.ToString() + " not found in Section " + SectionName);
+    //            break;
+    //    }
+    //}
 
 	Page GetPage0()
     {

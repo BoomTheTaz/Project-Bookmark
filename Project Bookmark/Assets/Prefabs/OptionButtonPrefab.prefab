@@ -119,6 +119,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Label: {fileID: 114502804203293202}
+  SelectedColor: {r: 0.63403344, g: 0.77054524, b: 0.9811321, a: 1}
 --- !u!114 &114727828279090386
 MonoBehaviour:
   m_ObjectHideFlags: 1

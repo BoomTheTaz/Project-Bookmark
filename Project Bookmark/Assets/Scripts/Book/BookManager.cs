@@ -13,14 +13,18 @@ public class BookManager : MonoBehaviour  {
 	private void Awake()
 	{
 		if (instance == null)
+		{
 			instance = this;
+			Sections = new Dictionary<string, Section>();
+		}
 		else
 			Destroy(this);
 	}
 
 	private void Start()
 	{
-		Sections = new Dictionary<string, Section>();
+
+		SetupPageReference(GameManager.instance.PageToLoad);
 	}
 
 
@@ -65,6 +69,8 @@ public class BookManager : MonoBehaviour  {
     
 	public void SetupPageFromSection(string s, int i)
 	{
+
+
 		if (Sections.ContainsKey(s) == true)
 		{
 			CurrentSection = Sections[s];

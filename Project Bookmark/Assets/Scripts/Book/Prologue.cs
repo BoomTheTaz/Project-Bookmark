@@ -8,7 +8,7 @@ public class Prologue : Section {
 	public Prologue()
 	{
 		SectionName = "Prologue";
-		NumPages = 6;
+		NumPages = 17;
 	}
 
 	protected override void Switches(int i)
@@ -33,6 +33,40 @@ public class Prologue : Section {
 			case 5:
 				Pages.Add(i, GetPage5);
                 break;
+			case 6:
+                Pages.Add(i, GetPage6);
+                break;
+			case 7:
+                Pages.Add(i, GetPage7);
+                break;
+			case 8:
+                Pages.Add(i, GetPage8);
+                break;
+			case 9:
+                Pages.Add(i, GetPage9);
+                break;
+			case 10:
+                Pages.Add(i, GetPage10);
+                break;
+			case 11:
+                Pages.Add(i, GetPage11);
+                break;
+			case 12:
+                Pages.Add(i, GetPage12);
+                break;
+			case 13:
+                Pages.Add(i, GetPage13);
+                break;
+			case 14:
+                Pages.Add(i, GetPage14);
+                break;
+			case 15:
+                Pages.Add(i, GetPage15);
+                break;
+			case 16:
+                Pages.Add(i, GetPage16);
+                break;
+
 
 			default:
 				Debug.LogError("Case " + i.ToString() + " not found in Section " + SectionName);
@@ -44,27 +78,23 @@ public class Prologue : Section {
     {
         Page page = new Page();
         
-        page.SetHeader("PAGE ZERO");
-		page.SetBody("THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. " +
-		             "THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. " +
-		             "THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. " +
-		             "THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. THIS IS PAGE ZERO. ");
-		
-		page.SetOptionText(0, "Go to PR 0.");
-        page.SetOptionText(1, "Go to PR 1 and Combat.");
-        page.SetOptionText(2, "Go to page 2.");
-        page.SetOptionText(3, "Go to page 3.");
-        page.SetOptionText(4, "Go to page 4.");
-        page.SetOptionText(5, "Go to page 5.");
+        page.SetHeader("WELCOME");
+		page.SetBody("This is the first page of your journey.\n" +
+		             "I hope you enjoy!\n" +
+		             "Where would you like to go first?\n" +
+		             "Where does your adventure take you?");
 
-		page.LinkPage(0, new PageReference("Prologue", 0));
-		page.LinkPage(1, new PageReference("Prologue", 1));
-		page.GoToCombat(1, "rats");
 
-		page.LinkPage(2, new PageReference("Prologue", 2));
-		page.LinkPage(3, new PageReference("Prologue", 3));
-		page.LinkPage(4, new PageReference("Prologue", 4));
-		page.LinkPage(5, new PageReference("Prologue", 5));
+
+		page.SetOptionText(0, "I want to sleep in.");
+        page.SetOptionText(1, "Let's go to the pub");
+        
+
+		page.LinkPage(0, new PageReference("Prologue", 1));
+		page.LinkPage(1, new PageReference("Prologue", 3));
+		//page.GoToCombat(1, "rats");
+
+
   
 		return page;
     }
@@ -74,26 +104,18 @@ public class Prologue : Section {
 	{
 		Page page = new Page();
 
-		page.SetHeader("PAGE ONE");
-		page.SetBody("THIS IS PAGE ONE. THIS IS PAGE ONE. THIS IS PAGE ONE. THIS IS PAGE ONE. " +
-		             "THIS IS PAGE ONE. THIS IS PAGE ONE. THIS IS PAGE ONE. THIS IS PAGE ONE. " +
-		             "THIS IS PAGE ONE. THIS IS PAGE ONE. THIS IS PAGE ONE. THIS IS PAGE ONE. " +
-		             "THIS IS PAGE ONE. THIS IS PAGE ONE. THIS IS PAGE ONE. THIS IS PAGE ONE.");
+		page.SetHeader("BOOOORING!");
+		page.SetBody("Okay, let's say you have already done that\n" +
+		             "And you are currently not tired.\n" +
+		             "Now what would you like to do?");
 
-		page.SetOptionText(0, "Go to Test page 0.");
-		page.SetOptionText(1, "Go to Test page 1.");
-        page.SetOptionText(2, "Go to page 2.");
-        page.SetOptionText(3, "Go to page 3.");
-        page.SetOptionText(4, "Go to page 4.");
-        page.SetOptionText(5, "Go to page 5.");
+		page.SetOptionText(0, "Netflix all day!");
+        page.SetOptionText(1, "Let's head to the pub.");
 
-		page.SetOptionPageLink(0, new PageReference("TestSection", 0));
-		page.SetOptionPageLink(1, new PageReference("TestSection", 1));
-        page.SetOptionPageLink(2, new PageReference("Prologue", 2));
-        page.SetOptionPageLink(3, new PageReference("Prologue", 3));
-        page.SetOptionPageLink(4, new PageReference("Prologue", 4));
-        page.SetOptionPageLink(5, new PageReference("Prologue", 5));
 
+        page.LinkPage(0, new PageReference("Prologue", 2));
+        page.LinkPage(1, new PageReference("Prologue", 3));
+        
 		return page;
 	}
 
@@ -101,25 +123,21 @@ public class Prologue : Section {
     {
 		Page page = new Page();
 
-        page.SetHeader("PAGE TWO");
-		page.SetBody("THIS IS PAGE TWO. THIS IS PAGE TWO. THIS IS PAGE TWO. THIS IS PAGE TWO. " +
-		             "THIS IS PAGE TWO. THIS IS PAGE TWO. THIS IS PAGE TWO. THIS IS PAGE TWO. " +
-		             "THIS IS PAGE TWO. THIS IS PAGE TWO. THIS IS PAGE TWO. THIS IS PAGE TWO. " +
-		             "THIS IS PAGE TWO. THIS IS PAGE TWO. THIS IS PAGE TWO. THIS IS PAGE TWO. ");
+		page.SetBody("Oh how wonderful!\n" +
+		             "You want to start at the pub?\n" +
+		             "Great Idea!\n" +
+		             "Great Idea!\n" +
+		             "Great Idea!\n" +
+		             "Great Idea!\n" +
+		             "Great Idea!\n" +
+		             "Great Idea!\n" +
+		             "Great Idea!\n" +
+		             "Great Idea!\n" +
+		             "All great advenures start there.");
 
-		page.SetOptionText(0, "Go to page 0.");
-		page.SetOptionText(1, "Go to page 1.");
-		page.SetOptionText(2, "Go to page 2.");
-		page.SetOptionText(3, "Go to page 3.");
-		page.SetOptionText(4, "Go to page 4.");
-		page.SetOptionText(5, "Go to page 5.");
+		page.SetOptionText(0, "Fine.... You win.");
 
-		page.SetOptionPageLink(0, new PageReference("Prologue", 0));
-        page.SetOptionPageLink(1, new PageReference("Prologue", 1));
-        page.SetOptionPageLink(2, new PageReference("Prologue", 2));
-        page.SetOptionPageLink(3, new PageReference("Prologue", 3));
-        page.SetOptionPageLink(4, new PageReference("Prologue", 4));
-        page.SetOptionPageLink(5, new PageReference("Prologue", 5));
+        page.LinkPage(0, new PageReference("Prologue", 3));
 
         return page;
     }
@@ -128,25 +146,19 @@ public class Prologue : Section {
     {
 		Page page = new Page();
 
-        page.SetHeader("PAGE THREE");
-		page.SetBody("THIS IS PAGE THREE. THIS IS PAGE THREE. THIS IS PAGE THREE. THIS IS PAGE THREE. " +
-		             "THIS IS PAGE THREE. THIS IS PAGE THREE. THIS IS PAGE THREE. THIS IS PAGE THREE. " +
-		             "THIS IS PAGE THREE. THIS IS PAGE THREE. THIS IS PAGE THREE. THIS IS PAGE THREE. " +
-		             "THIS IS PAGE THREE. THIS IS PAGE THREE. THIS IS PAGE THREE. THIS IS PAGE THREE. ");
+		page.SetHeader("Setting: Pub");
+		page.SetBody("The pub is packed with the usual crowd\n" +
+		             "A bunch of midday drunks yell from the corner\n" +
+		             "The bartender acknowledges your entrance with a slight nod\n" +
+		             "How would you like to proceed.");
 
-		page.SetOptionText(0, "Go to page 0.");
-        page.SetOptionText(1, "Go to page 1.");
-        page.SetOptionText(2, "Go to page 2.");
-        page.SetOptionText(3, "Go to page 3.");
-        page.SetOptionText(4, "Go to page 4.");
-        page.SetOptionText(5, "Go to page 5.");
+		page.SetOptionText(0, "Approach the drunks");
+        page.SetOptionText(1, "Approach the bartender");
+       
 
-		page.SetOptionPageLink(0, new PageReference("Prologue", 0));
-        page.SetOptionPageLink(1, new PageReference("Prologue", 1));
-        page.SetOptionPageLink(2, new PageReference("Prologue", 2));
-        page.SetOptionPageLink(3, new PageReference("Prologue", 3));
-        page.SetOptionPageLink(4, new PageReference("Prologue", 4));
-        page.SetOptionPageLink(5, new PageReference("Prologue", 5));
+		page.LinkPage(0, new PageReference("Prologue", 4));
+		page.LinkPage(1, new PageReference("Prologue", 5));
+        
 
         return page;
     }
@@ -154,27 +166,15 @@ public class Prologue : Section {
 	Page GetPage4()
     {
         Page page = new Page();
-
-        page.SetHeader("PAGE FOUR");
-		page.SetBody("THIS IS PAGE FOUR. THIS IS PAGE FOUR. THIS IS PAGE FOUR. THIS IS PAGE FOUR. " +
-		             "THIS IS PAGE FOUR. THIS IS PAGE FOUR. THIS IS PAGE FOUR. THIS IS PAGE FOUR. " +
-		             "THIS IS PAGE FOUR. THIS IS PAGE FOUR. THIS IS PAGE FOUR. THIS IS PAGE FOUR. " +
-		             "THIS IS PAGE FOUR. THIS IS PAGE FOUR. THIS IS PAGE FOUR. THIS IS PAGE FOUR. ");
-
-		page.SetOptionText(0, "Go to page 0.");
-        page.SetOptionText(1, "Go to page 1.");
-        page.SetOptionText(2, "Go to page 2.");
-        page.SetOptionText(3, "Go to page 3.");
-        page.SetOptionText(4, "Go to page 4.");
-        page.SetOptionText(5, "Go to page 5.");
-
-		page.SetOptionPageLink(0, new PageReference("Prologue", 0));
-        page.SetOptionPageLink(1, new PageReference("Prologue", 1));
-        page.SetOptionPageLink(2, new PageReference("Prologue", 2));
-        page.SetOptionPageLink(3, new PageReference("Prologue", 3));
-        page.SetOptionPageLink(4, new PageReference("Prologue", 4));
-        page.SetOptionPageLink(5, new PageReference("Prologue", 5));
-
+        
+		page.SetBody("The drunks pay you little mind.");
+        
+		page.SetOptionText(0, "Shove one of them");
+        page.SetOptionText(1, "Go to the bartender");
+             
+		page.LinkPage(0, new PageReference("Prologue", 6));
+		page.LinkPage(1, new PageReference("Prologue", 5));
+        
         return page;
     }
 
@@ -182,28 +182,211 @@ public class Prologue : Section {
     {
 		Page page = new Page();
 
-        page.SetHeader("PAGE FIVE");
-		page.SetBody("THIS IS PAGE FIVE. THIS IS PAGE FIVE. THIS IS PAGE FIVE. THIS IS PAGE FIVE. " +
-		             "THIS IS PAGE FIVE. THIS IS PAGE FIVE. THIS IS PAGE FIVE. THIS IS PAGE FIVE. " +
-		             "THIS IS PAGE FIVE. THIS IS PAGE FIVE. THIS IS PAGE FIVE. THIS IS PAGE FIVE. " +
-		             "THIS IS PAGE FIVE. THIS IS PAGE FIVE. THIS IS PAGE FIVE. THIS IS PAGE FIVE. ");
+		page.SetBody("\"What can I do for you?\" asks the bartender");
+        
+		page.SetOptionText(0, "I need a drink.");
+        page.SetOptionText(1, "Looking for work.");
+        
 
-		page.SetOptionText(0, "Go to page 0.");
-        page.SetOptionText(1, "Go to page 1.");
-        page.SetOptionText(2, "Go to page 2.");
-        page.SetOptionText(3, "Go to page 3.");
-        page.SetOptionText(4, "Go to page 4.");
-        page.SetOptionText(5, "Go to page 5.");
-
-		page.SetOptionPageLink(0, new PageReference("Prologue", 0));
-        page.SetOptionPageLink(1, new PageReference("Prologue", 1));
-        page.SetOptionPageLink(2, new PageReference("Prologue", 2));
-        page.SetOptionPageLink(3, new PageReference("Prologue", 3));
-        page.SetOptionPageLink(4, new PageReference("Prologue", 4));
-        page.SetOptionPageLink(5, new PageReference("Prologue", 5));
+		page.LinkPage(0, new PageReference("Prologue", 9));
+		page.LinkPage(1, new PageReference("Prologue", 10));
 
         return page;
     }
 
+
+	Page GetPage6()
+    {
+        Page page = new Page();
+
+        page.SetBody("This enrages the drunks to the point of fighting.\n" +
+		             "There's no getting out of this one." +
+		             "Prepare for battle!");
+
+        page.SetOptionText(0, "Whelp, here goes nothing...");
+
+
+		page.GoToCombat(0, "Drunks", new PageReference("Prologue", 7), new PageReference("Prologue", 8));
+       
+        return page;
+    }
+
+	// VICTORY: Drunks
+    Page GetPage7()
+    {
+        Page page = new Page();
+		page.SetHeader("Victory!");
+        page.SetBody("You have successfully defeated the drunks\n" +
+		             "Congratulations on your victory!\n" +
+		             "Where to now?");
+
+        page.SetOptionText(0, "Let's start over.");
+		page.SetOptionText(1, "Let's Fight again");
+
+		page.LinkPage(0, new PageReference("Prologue", 0));
+		page.GoToCombat(1, "Drunks", new PageReference("Prologue", 7), new PageReference("Prologue", 8));
+
+        return page;
+    }
+
+	// DEFEAT: Drunks
+    Page GetPage8()
+    {
+		Page page = new Page();
+        page.SetHeader("Defeat!");
+        page.SetBody("You have been bested by the drunks\n" +
+                     "How embarassing!\n" +
+                     "How will you redeem yourself?");
+
+		page.SetOptionText(0, "Let's start over.");
+        page.SetOptionText(1, "Let's Fight again");
+
+        page.LinkPage(0, new PageReference("Prologue", 0));
+        page.GoToCombat(1, "Drunks", new PageReference("Prologue", 7), new PageReference("Prologue", 8));
+
+        return page;
+    }
+
+    // drink
+	Page GetPage9()
+    {
+        Page page = new Page();
+
+        page.SetBody("The bartender gives you a drink\n" +
+		             "While you sip it, the bartender says," +
+		             "\"You look like the kind of guy who can fight well.\"");
+
+        page.SetOptionText(0, "Go on...");
+        //page.SetOptionText(10, "Looking for work.");
+
+
+        page.LinkPage(0, new PageReference("Prologue", 10));
+
+        return page;
+    }
+
+    // work
+	Page GetPage10()
+    {
+        Page page = new Page();
+
+        page.SetBody("\"I have a rat infestation,\n" +
+		             "think you could lend a hand?\" asks the bartender");
+
+        page.SetOptionText(0, "Sure thing. Glad to help.");
+        page.SetOptionText(1, "I'm not feeling it today");
+
+
+        page.LinkPage(0, new PageReference("Prologue", 11));
+        page.LinkPage(1, new PageReference("Prologue", 14));
+
+        return page;
+    }
+
+	Page GetPage11()
+    {
+        Page page = new Page();
+
+        page.SetBody("\"Thank you kindly.\n" +
+                     "Drink is on me. Now get to it.\" asks the bartender");
+
+        page.SetOptionText(0, "On my way!");
+        
+		page.GoToCombat(1, "Rats", new PageReference("Prologue", 12), new PageReference("Prologue", 13));
+        
+        return page;
+    }
+
+	// VICTORY: Rats
+    Page GetPage12()
+    {
+        Page page = new Page();
+        page.SetHeader("Victory!");
+        page.SetBody("You have successfully defeated the rats\n" +
+                     "Congratulations on your victory!\n" +
+                     "Where to now?");
+
+        page.SetOptionText(0, "Let's start over.");
+        page.SetOptionText(1, "Let's Fight again");
+
+        page.LinkPage(0, new PageReference("Prologue", 0));
+		page.GoToCombat(1, "Rats", new PageReference("Prologue", 12), new PageReference("Prologue", 13));
+
+        return page;
+    }
+
+    // DEFEAT: Drunks
+    Page GetPage13()
+    {
+        Page page = new Page();
+        page.SetHeader("Defeat!");
+        page.SetBody("You have been bested by the rats\n" +
+                     "How embarassing!\n" +
+                     "How will you redeem yourself?");
+
+        page.SetOptionText(0, "Let's start over.");
+        page.SetOptionText(1, "Let's Fight again");
+
+        page.LinkPage(0, new PageReference("Prologue", 0));
+		page.GoToCombat(1, "Rats", new PageReference("Prologue", 12), new PageReference("Prologue", 13));
+
+        return page;
+    }
+
+	Page GetPage14()
+    {
+        Page page = new Page();
+
+		page.SetBody("\"That wasn't really a question,\"\n" +
+		             "the bartender growls." +
+		             "\"You fight me or them\n" +
+		             "Take your pick\"");
+
+        page.SetOptionText(0, "Rats it is...");
+        page.SetOptionText(1, "You've made a huge mistake");
+
+		page.GoToCombat(0, "Rats", new PageReference("Prologue", 12), new PageReference("Prologue", 13));
+        page.GoToCombat(1, "Bartender", new PageReference("Prologue", 15), new PageReference("Prologue", 16));
+
+        return page;
+    }
+
+	// VICTORY: Bartender
+    Page GetPage15()
+    {
+        Page page = new Page();
+        page.SetHeader("Victory!");
+        page.SetBody("You have successfully defeated the Bartender\n" +
+                     "As you stand over his corpse, you feel pride\n" +
+		             "And more than a little confusion." +
+                     "What will you do now?");
+
+        page.SetOptionText(0, "Let's start over.");
+        page.SetOptionText(1, "Let's Fight again");
+
+        page.LinkPage(0, new PageReference("Prologue", 0));
+		page.GoToCombat(1, "Bartender", new PageReference("Prologue", 15), new PageReference("Prologue", 16));
+
+        return page;
+    }
+
+    // DEFEAT: Bartender
+    Page GetPage16()
+    {
+        Page page = new Page();
+        page.SetHeader("Defeat!");
+        page.SetBody("You have been bested by the bartender\n" +
+                     "How embarassing!\n" +
+		             "He spits on your bloodied body and laughs.\n" +
+                     "How will you redeem yourself?");
+
+        page.SetOptionText(0, "Let's start over.");
+        page.SetOptionText(1, "Let's Fight again");
+
+        page.LinkPage(0, new PageReference("Prologue", 0));
+		page.GoToCombat(1, "Bartender", new PageReference("Prologue", 15), new PageReference("Prologue", 16));
+
+        return page;
+    }
 
 }

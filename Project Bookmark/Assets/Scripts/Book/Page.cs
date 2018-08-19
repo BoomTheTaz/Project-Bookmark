@@ -46,17 +46,15 @@ public class Page {
 	{
 		return OptionPageReference[o];
 	}
-
+    
 	public void LinkPage(int i, PageReference pr)
 	{
-		Debug.Log("Adding page reference");
 		ButtonActions[i] += OptionActions.GoToPage(pr);
 	}
 
-	public void GoToCombat(int i, string s)
+	public void GoToCombat(int i, string s, PageReference v, PageReference d)
 	{
-		Debug.Log("Adding combat");
-		ButtonActions[i] += OptionActions.GoToCombat(s);
+		ButtonActions[i] += OptionActions.GoToCombat(s,v,d);
 	}
 
 }

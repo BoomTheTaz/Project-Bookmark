@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour {
 	public Text HeaderText;
 	public Text BodyText;
 	public Transform OptionContainer;
+	public RectTransform ScrollContent;
 
 	OptionButton[] Options;
 
@@ -28,13 +29,32 @@ public class UIManager : MonoBehaviour {
 			Options[i] = OptionContainer.GetChild(i).GetComponent<OptionButton>();
 		}
 	}
-
+    
 
 	public void SetupPage(Page page)
 	{
-		HeaderText.text = page.Header;
-		BodyText.text = page.Body;
+		// Disable Header if none given, else setup normally
+		if (page.Header == null)
+		{
+			HeaderText.gameObject.SetActive(false);
+		}
+		else
+		{
+			HeaderText.gameObject.SetActive(true);
+			HeaderText.text = page.Header;
 
+		}
+
+        // Disable Body if none given, else setup normally
+		if (page.Body == null)
+        {
+			BodyText.gameObject.SetActive(false);
+        }
+        else
+        {
+			BodyText.gameObject.SetActive(true);
+			BodyText.text = page.Body;
+        }      
 
 		for (int i = 0; i < page.OptionTexts.Length; i++)
 		{
@@ -49,17 +69,20 @@ public class UIManager : MonoBehaviour {
 				Options[i].gameObject.SetActive(false);
 			}
 		}
+
+		LayoutRebuilder.ForceRebuildLayoutImmediate(ScrollContent);
 	}
-   
-	public void SetButtonListeners(BookManager b)
-	{
-		for (int i = 0; i < Options.Length; i++)
-		{
-			int iLocal = i;
-			//Options[iLocal].onClick.AddListener(delegate
-			//{
-			//	b.SelectedOption(iLocal);
-			//});
-		}
-	}
+
+    
+	//public void SetButtonListeners(BookManager b)
+	//{
+	//	for (int i = 0; i < Options.Length; i++)
+	//	{
+	//		int iLocal = i;
+	//		//Options[iLocal].onClick.AddListener(delegate
+	//		//{
+	//		//	b.SelectedOption(iLocal);
+	//		//});
+	//	}
+	//}
 }

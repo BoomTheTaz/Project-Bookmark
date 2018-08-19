@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 
 public class OptionActions  {
@@ -14,9 +15,15 @@ public class OptionActions  {
 		return temp;
 	}
 
-	public static UnityAction GoToCombat(string s)
+	public static UnityAction GoToCombat(string s, PageReference VictoryPR, PageReference DefeatPR)
 	{
-		UnityAction temp = () => Debug.Log("Off to fight " + s);
+		UnityAction temp = () =>
+		{
+			Debug.Log("Off to fight " + s);
+
+			GameManager.instance.SetPostCombatPages(VictoryPR, DefeatPR);
+			SceneManager.LoadScene("Combat");
+		};
 		return temp;
 	}
 

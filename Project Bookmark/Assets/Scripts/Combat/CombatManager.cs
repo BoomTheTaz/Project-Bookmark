@@ -408,11 +408,17 @@ public class CombatManager : MonoBehaviour {
 	{
 		// Player lost
 		if (isPlayer == true)
+		{
 			Debug.Log("Player has died.");
+			GameManager.instance.CombatDefeat();
+		}
 
         // Player won
 		else
+		{
 			Debug.Log("Player has won!!!");
+			GameManager.instance.CombatVictory();
+		}
 	}
 
 	void Here()

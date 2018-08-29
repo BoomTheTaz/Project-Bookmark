@@ -27,6 +27,13 @@ public class BookManager : MonoBehaviour  {
 		SetupPageReference(GameManager.instance.PageToLoad);
 	}
 
+    /*
+     * 
+     * 
+     * NOTE: THIS IS ONLY  A TEST OF GITHUB DESKTOP, DELETE WHEN NOTICED
+     * 
+     * 
+     * */
 
     void AddSection(string s)
 	{

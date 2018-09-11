@@ -54,6 +54,7 @@ public class Card : MonoBehaviour
         {
             Width = Mathf.RoundToInt(GetComponent<RectTransform>().rect.width);
             Height = Mathf.RoundToInt(GetComponent<RectTransform>().rect.height);
+            Debug.Log("JUST TESTING!\nWidth: " + Width.ToString() + "\nHeight: " + Height.ToString());
         }
 	}
  

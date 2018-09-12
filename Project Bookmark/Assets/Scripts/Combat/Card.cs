@@ -40,10 +40,19 @@ public class Card : MonoBehaviour
 
 	public bool isPlayer;
 
+    // ===== MOVE VARIABLES =====
+    const float moveTime = .3f;
+    Vector3 moveVel;
 
-	float moveSpeed = 0.07f;
-	float flipSpeed = 0.07f;
-	float scaleSpeed = 0.15f;
+    // ===== FLIP VARIABLES =====
+    const float flipSpeed = 6f;
+
+    // ===== SCALE VARIABLES =====
+    const float scaleSpeed = 10f;
+
+    float moveSpeed = 0.04f;
+	//float flipSpeed = 0.07f;
+	//float scaleSpeed = 0.15f;
 	float scaleScaler = 1.5f;
 
 	public int TemplateID { get; private set; }
@@ -154,13 +163,8 @@ public class Card : MonoBehaviour
 
 	public void Move()
 	{
-
-
-		//transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, 10);
-		transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition, moveSpeed);
-		//transform.localPosition = Vector3.Slerp(transform.localPosition, targetPosition, moveSpeed);
-		//Debug.Log(transform.localPosition);
-		//Debug.Log(targetPosition);
+        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref moveVel, moveTime);
+		
 		if (Vector3.Distance(transform.localPosition, targetPosition) < 1)
 		{
 			transform.localPosition = targetPosition;
@@ -181,13 +185,15 @@ public class Card : MonoBehaviour
 		else
 			targetRotation = Quaternion.Euler(0, 0, 0);
 
+
 		CombatUI.instance.RegisterCardToFlip(this);
 	}
 	public void Flip()
 	{
-		float before = transform.rotation.eulerAngles.y;
+       
+        float before = transform.rotation.eulerAngles.y;
 		// Lerp rotation to target
-		transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, flipSpeed);
+		transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, flipSpeed * Time.deltaTime);
 		float after = transform.rotation.eulerAngles.y;
 
 		if (hasFlipped == true)
@@ -198,7 +204,7 @@ public class Card : MonoBehaviour
 			transform.rotation = targetRotation;
 			CombatUI.instance.UnregisterCardToFlip(this);
 		}
-
+        
 		if (hasFlipped == true)
 			return;
 
@@ -247,7 +253,7 @@ public class Card : MonoBehaviour
 	#region Scale Card
 	public void Scale()
 	{
-		transform.localScale = Vector3.Lerp(transform.localScale, targetScale, scaleSpeed);
+        transform.localScale = Vector3.Lerp(transform.localScale, targetScale, scaleSpeed * Time.deltaTime);
 
 		if (Vector3.Distance(transform.localScale, targetScale) < 0.1f)
 		{

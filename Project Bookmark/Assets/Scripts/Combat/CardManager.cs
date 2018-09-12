@@ -12,7 +12,9 @@ public class CardManager : MonoBehaviour {
 	public PlayArea playArea;
 
 	CharacterData data;
-    
+    int currentAP;
+    CombatUI UI;
+
 	List<Card> DrawList;
 	List<Card> HandList;
 	List<Card> DiscardList;
@@ -22,13 +24,12 @@ public class CardManager : MonoBehaviour {
 
 	private void Awake()
 	{
-		data = GetComponent<CharacterData>();
+        UI = FindObjectOfType<CombatUI>();
+        data = GetComponent<CharacterData>();
+        currentAP = data.MaxAP;
+        UI.ChangeAP(currentAP, isPlayer);
 	}
 
-	private void Start()
-	{
-		
-	}
     
 	public void CreateDeck(int[] cards, GameObject CardPrefab)
 	{
@@ -167,4 +168,31 @@ public class CardManager : MonoBehaviour {
 			yield return new WaitForSeconds(TimeBetweenDraws);
 		}
 	}
+
+    public int CurrentAP()
+    {
+        return currentAP;
+    }
+
+    public void UseAP(int i)
+    {
+        currentAP -= i;
+
+        UI.ChangeAP(currentAP, isPlayer);
+    }
+
+    public void GetBackAP(int i)
+    {
+        currentAP += i;
+
+        UI.ChangeAP(currentAP, isPlayer);
+    }
+
+    public void ResetAP()
+    {
+        currentAP = data.MaxAP;
+
+        UI.ChangeAP(currentAP, isPlayer);
+
+    }
 }

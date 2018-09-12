@@ -154,6 +154,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 141668142}
+  - component: {fileID: 141668144}
+  - component: {fileID: 141668143}
+  - component: {fileID: 141668145}
   m_Layer: 5
   m_Name: EnemyAreas
   m_TagString: Untagged
@@ -184,6 +187,48 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &141668143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 141668141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4dc1535eebbb475582d944efadf3329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deck: {fileID: 2015550397}
+  hand: {fileID: 585739957}
+  discard: {fileID: 1981622755}
+  trash: {fileID: 1032508391}
+  isPlayer: 0
+  playArea: {fileID: 941190230}
+--- !u!114 &141668144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 141668141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 138a8174a92b84c2dadfb32032e8ccb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &141668145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 141668141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20c810a71eb9041f9accfa26ad806db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deck: {fileID: 2015550397}
+  hand: {fileID: 585739957}
+  playArea: {fileID: 941190230}
 --- !u!1 &169870932
 GameObject:
   m_ObjectHideFlags: 0
@@ -981,10 +1026,10 @@ MonoBehaviour:
   playArea: {fileID: 941190230}
   PlayerCardReveal: {fileID: 210424694}
   EnemyCardReveal: {fileID: 110261783}
-  Enemy: {fileID: 1371184210}
-  Player: {fileID: 1177505832}
-  PlayerCardMgr: {fileID: 1177505834}
-  EnemyCardMgr: {fileID: 1371184211}
+  Enemy: {fileID: 141668144}
+  Player: {fileID: 1817702442}
+  PlayerCardMgr: {fileID: 1817702441}
+  EnemyCardMgr: {fileID: 141668143}
 --- !u!4 &745515913
 Transform:
   m_ObjectHideFlags: 0
@@ -1183,6 +1228,7 @@ MonoBehaviour:
   PlayerReveal: {fileID: 210424694}
   EnemyReveal: {fileID: 110261783}
   PlayerHand: {fileID: 937315902}
+  PlayerCM: {fileID: 1817702441}
 --- !u!114 &941190231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1320,64 +1366,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1160974041}
   m_CullTransparentMesh: 0
---- !u!1 &1177505831
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1177505833}
-  - component: {fileID: 1177505832}
-  - component: {fileID: 1177505834}
-  m_Layer: 0
-  m_Name: Player
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1177505832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1177505831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8616a1d0598e24f45aad8b307b7ed755, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1177505833
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1177505831}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1177505834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1177505831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4dc1535eebbb475582d944efadf3329, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deck: {fileID: 1443400238}
-  hand: {fileID: 937315903}
-  discard: {fileID: 1918007751}
-  trash: {fileID: 1569751098}
-  isPlayer: 1
-  playArea: {fileID: 941190230}
 --- !u!1 &1344380063
 GameObject:
   m_ObjectHideFlags: 0
@@ -1448,79 +1436,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1344380063}
   m_CullTransparentMesh: 0
---- !u!1 &1371184207
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1371184209}
-  - component: {fileID: 1371184208}
-  - component: {fileID: 1371184210}
-  - component: {fileID: 1371184211}
-  m_Layer: 0
-  m_Name: EnemyAI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1371184208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1371184207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20c810a71eb9041f9accfa26ad806db9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deck: {fileID: 2015550397}
-  hand: {fileID: 585739957}
-  playArea: {fileID: 941190230}
---- !u!4 &1371184209
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1371184207}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 47.41887, y: 217.96872, z: 4.2746134}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1371184210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1371184207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 138a8174a92b84c2dadfb32032e8ccb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1371184211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1371184207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4dc1535eebbb475582d944efadf3329, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deck: {fileID: 2015550397}
-  hand: {fileID: 585739957}
-  discard: {fileID: 1981622755}
-  trash: {fileID: 1032508391}
-  isPlayer: 0
-  playArea: {fileID: 941190230}
 --- !u!1 &1443400237
 GameObject:
   m_ObjectHideFlags: 0
@@ -1552,7 +1467,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardPrefab: {fileID: 1396743686663866, guid: 08c667b158fd6449ba999e1d1fabb4e4, type: 2}
   isPlayer: 1
-  data: {fileID: 1177505832}
   TrashLocation: {fileID: 1569751098}
   playArea: {fileID: 941190230}
 --- !u!114 &1443400239
@@ -1688,7 +1602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b18c88b7c209f461a90ece794e73a5fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CM: {fileID: 1177505834}
+  CM: {fileID: 1817702441}
 --- !u!1 &1475006912
 GameObject:
   m_ObjectHideFlags: 0
@@ -1848,7 +1762,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerHand: {fileID: 937315903}
-  PlayerCardMgr: {fileID: 1177505834}
+  PlayerCardMgr: {fileID: 1817702441}
 --- !u!4 &1520510490
 Transform:
   m_ObjectHideFlags: 0
@@ -2031,6 +1945,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1817702440}
+  - component: {fileID: 1817702442}
+  - component: {fileID: 1817702441}
   m_Layer: 5
   m_Name: PlayerAreas
   m_TagString: Untagged
@@ -2061,6 +1977,34 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1817702441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1817702439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4dc1535eebbb475582d944efadf3329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deck: {fileID: 1443400238}
+  hand: {fileID: 937315903}
+  discard: {fileID: 1918007751}
+  trash: {fileID: 1569751098}
+  isPlayer: 1
+  playArea: {fileID: 941190230}
+--- !u!114 &1817702442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1817702439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8616a1d0598e24f45aad8b307b7ed755, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1918007750
 GameObject:
   m_ObjectHideFlags: 0
@@ -2338,7 +2282,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardPrefab: {fileID: 1396743686663866, guid: 08c667b158fd6449ba999e1d1fabb4e4, type: 2}
   isPlayer: 0
-  data: {fileID: 1371184210}
   TrashLocation: {fileID: 0}
   playArea: {fileID: 0}
 --- !u!114 &2015550398

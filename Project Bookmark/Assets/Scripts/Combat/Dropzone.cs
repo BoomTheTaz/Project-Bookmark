@@ -116,16 +116,6 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
   
 	}
 
-	public void AddAICard(GameObject card)
-	{
-		if (card == null)
-            return;
-        
-        card.transform.SetParent(transform);
-        
-		card.GetComponent<Card>().RegisterToScale();
-        ReorganizeCards();
-	}
 
 	protected virtual bool CanAddCard(int ap)
 	{
@@ -161,4 +151,19 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 
 	}
 
+
+    public virtual void PlayCard(Card card)
+    {
+        // Set the parent
+        card.transform.SetParent(transform);
+        card.GetComponent<Draggable>().SetCurrentDropzone(this);
+
+        // Reorganize dropzone, takes care of movement
+        ReorganizeCards();
+    }
+
+    public virtual void UnplayCard(Card card)
+    {
+        ReorganizeCards();
+    }
 }

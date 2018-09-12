@@ -9,19 +9,20 @@ public class PlayArea : Dropzone {
 	public Transform PlayerReveal;
 	public Transform EnemyReveal;
 	public Dropzone PlayerHand;
+
+    public CardManager PlayerCM;
     
 	private new void Start()
 	{
 		base.Start();
+        MaxAP = PlayerCM.CurrentAP();
 
-		MaxAP = FindObjectOfType<PlayerData>().MaxAP;
+    }
 
-	}
 
-    
-	protected override bool CanAddCard(int ap)
+    protected override bool CanAddCard(int ap)
 	{
-		if (CurrentAP >= ap || CombatManager.CurrentState == CombatState.Player_DEF)
+		if (PlayerCM.CurrentAP() >= ap /*|| CombatManager.CurrentState == CombatState.Player_DEF*/)
         {
 			// DO THIS SHIT
 
@@ -41,28 +42,8 @@ public class PlayArea : Dropzone {
 		}
 		return false;
 	}
-   
-	public override void IncreaseAP(int ap)
-	{
-		CurrentAP += ap;
-		CombatUI.instance.ChangeAP(CurrentAP, true);
-		Debug.Log("REMOVING AP. Current AP: " + CurrentAP.ToString());
-	}
-    
-	public override void DecreaseAP(int ap)
-    {
-        CurrentAP -= ap;
-		CombatUI.instance.ChangeAP(CurrentAP, true);
-        Debug.Log("ADDING AP. Current AP: " + CurrentAP.ToString());
-    }
 
-    public void ResetAP()
-	{
-		CurrentAP = MaxAP;
-		CombatUI.instance.ChangeAP(CurrentAP, true);
-	}
-
-	public void AddCardToEnemyReveal(Transform t)
+  	public void AddCardToEnemyReveal(Transform t)
 	{
 		t.SetParent(EnemyReveal);
 		t.GetComponent<Card>().RegisterToMove(Vector3.zero);
@@ -86,8 +67,7 @@ public class PlayArea : Dropzone {
 			// If already card in player reveal, replace it
             if (PlayerReveal.childCount > 0)
             {
-				IncreaseAP(PlayerReveal.GetChild(0).GetComponent<Card>().AP);
-				PlayerHand.PlaceCard(PlayerReveal.GetChild(0).GetComponent<Card>());
+				UnplayCard(PlayerReveal.GetChild(0).GetComponent<Card>());
             }
             
 			// Set Parent
@@ -113,4 +93,15 @@ public class PlayArea : Dropzone {
 		return false;
 	}
 
+    public override void PlayCard(Card card)
+    {
+        PlayerCM.UseAP(card.AP);
+        PlaceCard(card);
+    }
+
+    public override void UnplayCard(Card card)
+    {
+        PlayerHand.PlayCard(card);
+        PlayerCM.GetBackAP(card.AP);
+    }
 }

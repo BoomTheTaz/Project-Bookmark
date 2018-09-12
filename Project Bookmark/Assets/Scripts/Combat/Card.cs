@@ -38,7 +38,14 @@ public class Card : MonoBehaviour
 	bool hasFlipped;
 	bool isScalingToOne;
 
-	public bool isPlayer;
+    public bool hasAttackEffect { get; private set; }
+    public bool hasDefenseEffect { get; private set; }
+
+    public delegate void CardEffect();
+    public CardEffect AttackEffect { get; private set; }
+    public CardEffect DefenseEffect { get; private set; }
+
+    public bool isPlayer;
 
     // ===== MOVE VARIABLES =====
     const float moveTime = .3f;
@@ -63,7 +70,6 @@ public class Card : MonoBehaviour
         {
             Width = Mathf.RoundToInt(GetComponent<RectTransform>().rect.width);
             Height = Mathf.RoundToInt(GetComponent<RectTransform>().rect.height);
-            Debug.Log("JUST TESTING!\nWidth: " + Width.ToString() + "\nHeight: " + Height.ToString());
         }
 	}
  
@@ -109,10 +115,35 @@ public class Card : MonoBehaviour
 				break;
 		}
 
+        if (c.EffectType != EffectTypes.NONE)
+            SetCardEffects(c.EffectType, c.EffectInt);
+
 		ATK = Mathf.RoundToInt(ATK * AttackScaler);
 
 		UpdateVisuals();
 	}
+
+    void SetCardEffects(EffectTypes t, int i)
+    {
+        Debug.Log("Setting up card Effect");
+        switch (t)
+        {
+            case EffectTypes.NONE:
+                break;
+            case EffectTypes.GainAP:
+                DefenseEffect =  () => {CombatManager.instance.GainAP(i, isPlayer); };
+                hasDefenseEffect = true;
+                break;
+            case EffectTypes.TakeAP:
+                break;
+            case EffectTypes.DrawCard:
+                break;
+            case EffectTypes.DiscardCard:
+                break;
+            default:
+                break;
+        }
+    }
     
 	void UpdateVisuals()
 	{
@@ -152,9 +183,18 @@ public class Card : MonoBehaviour
 		CardBack.GetComponent<Image>().sprite = Resources.Load<Sprite>("EnemyBack");
 	}
 
+    public void HasAttackEffect()
+    {
+        hasAttackEffect = true;
+    }
 
-	#region Move Card
-	public void RegisterToMove(Vector3 p)
+    public void HasDefenseEffect()
+    {
+        hasDefenseEffect = true;
+    }
+
+    #region Move Card
+    public void RegisterToMove(Vector3 p)
 	{
 		targetPosition = p;
 

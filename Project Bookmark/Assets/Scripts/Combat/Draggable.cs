@@ -11,9 +11,17 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	Transform previousTransform;
 
-	#region Drag Functions
-	// What to do at the beginning of the drag
-	public void OnBeginDrag(PointerEventData eventData)
+    Card card;
+
+    private void Awake()
+    {
+        card = GetComponent<Card>();
+        
+    }
+
+    #region Drag Functions
+    // What to do at the beginning of the drag
+    public void OnBeginDrag(PointerEventData eventData)
 	{
 		// Set target transform to current transform
 		offset = eventData.position - (Vector2)transform.position;
@@ -46,28 +54,36 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
     void Dropped()
 	{
-		if (previousDropzone != currentDropzone)
-		{
-			//transform.SetParent(targetTransform);
+        if (previousDropzone != currentDropzone)
+        {
+            //transform.SetParent(targetTransform);
 
-			currentDropzone.DecreaseAP(GetComponent<Card>().AP);
-			// ========================== DO SOMETHING WITH THIS, 
-			// ========================== GIVE PLAY AREA CARD AND LET IT DECIDE HOW THE CARD IS PLAYED
-			currentDropzone.PlaceCard(GetComponent<Card>());
-			// =======================
+            /////currentDropzone.DecreaseAP(card.AP);
+            // ========================== DO SOMETHING WITH THIS, 
+            // ========================== GIVE PLAY AREA CARD AND LET IT DECIDE HOW THE CARD IS PLAYED
+            /////currentDropzone.PlaceCard(card);
+            // =======================
 
-			previousDropzone.ReorganizeCards();
-			previousDropzone.IncreaseAP(GetComponent<Card>().AP);
+            currentDropzone.PlayCard(card);
 
-			//currentDropzone = previousDropzone;
+            previousDropzone.UnplayCard(card);
+
+            /////previousDropzone.ReorganizeCards();
+           ///// previousDropzone.IncreaseAP(GetComponent<Card>().AP);
+
+            //currentDropzone = previousDropzone;
 
 
-		}
-		else if (transform.parent.GetComponent<Dropzone>() == null)
-			GetComponent<Card>().RegisterToMove(Vector3.zero);
-		else
-		{
-			previousDropzone.ReorganizeCards();
-		}
+        }
+        // in card reveal area
+        else if (transform.parent.GetComponent<Dropzone>() == null)
+        {
+            card.RegisterToMove(Vector3.zero);
+            Debug.Log("WHERE AM I");
+        }
+        else
+        {
+            previousDropzone.ReorganizeCards();
+        }
 	}
 }

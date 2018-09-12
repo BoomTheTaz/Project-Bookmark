@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum CombatState { Player_DEF, Player_ATK, AI_DEF, AI_ATK };
+public enum EffectTypes { NONE, GainAP, TakeAP, DrawCard, DiscardCard };
+
 
 public class CombatManager : MonoBehaviour {
 
@@ -33,7 +35,8 @@ public class CombatManager : MonoBehaviour {
 	public CardManager PlayerCardMgr;
 	public CardManager EnemyCardMgr;
 
-	private void Awake()
+
+    private void Awake()
 	{
 		if (instance == null)
 			instance = this;
@@ -178,7 +181,7 @@ public class CombatManager : MonoBehaviour {
     {
 		CurrentState = CombatState.Player_DEF;
 		StartCoroutine(PlayerCardMgr.FillHand());
-        playArea.ResetAP();
+        PlayerCardMgr.ResetAP();
 
 		if (playArea.transform.childCount > 0)
         {
@@ -267,7 +270,8 @@ public class CombatManager : MonoBehaviour {
 
     void EvaluateCombat()
 	{
-		// Compare cards in reveal areas and compute damage/other effects
+        // Compare cards in reveal areas and compute damage/other effects
+        int DMG;
       
         // Calculate damage based on current state
         // AI is defending against player attack
@@ -277,24 +281,31 @@ public class CombatManager : MonoBehaviour {
 			if (EnemyCardReveal.childCount > 0)
             {
                 CardsInCombat[1] = EnemyCardReveal.GetChild(0).GetComponent<Card>();
-				Enemy.TakeDamage(CardsInCombat[0].ATK - CardsInCombat[1].DEF, false);
+                DMG = CardsInCombat[0].ATK - CardsInCombat[1].DEF;
+
             }
             else
             {
                 CardsInCombat[1] = null;
-				Enemy.TakeDamage(CardsInCombat[0].ATK, false);
+                DMG = CardsInCombat[0].ATK;
             }
 
-			// TODO: Figure out damage equation
+            // Take damage calculated above
+            Enemy.TakeDamage(DMG, false);
+
+            // Evaluate any card effects
+            if (DMG > 0 && CardsInCombat[0].hasAttackEffect == true)
+                CardsInCombat[0].AttackEffect();
+            else if (DMG <= 0 && CardsInCombat[1].hasDefenseEffect == true)
+                CardsInCombat[1].DefenseEffect();
+
+            // TODO: Figure out damage equation
 
 
-			if (AttackDeck.childCount == 0)
+            if (AttackDeck.childCount == 0)
 				OnMoveEnd = AI.Attack;
 
-			//if (CardsInCombat[0] != null)
-			//    Debug.Log("Player AttacK: " + CardsInCombat[0].ATK.ToString());
-			//if (CardsInCombat[1] != null)
-    			//Debug.Log("Enemy Defense: " + CardsInCombat[1].DEF.ToString());
+			
 		}
         // Player is defending against AI attack
 		else if (CurrentState == CombatState.Player_DEF)
@@ -303,16 +314,22 @@ public class CombatManager : MonoBehaviour {
 			if (PlayerCardReveal.childCount > 0)
             {
                 CardsInCombat[0] = PlayerCardReveal.GetChild(0).GetComponent<Card>();
-				Player.TakeDamage(CardsInCombat[1].ATK - CardsInCombat[0].DEF, true);
+                DMG = CardsInCombat[1].ATK - CardsInCombat[0].DEF;
             }
             else
             {
                 CardsInCombat[0] = null;
-				Player.TakeDamage(CardsInCombat[1].ATK, true);
+                DMG = CardsInCombat[1].ATK;
             }
-            
-		}
-		else
+
+            Player.TakeDamage(DMG, true);
+
+            if (DMG > 0 && CardsInCombat[1].hasAttackEffect == true)
+                CardsInCombat[1].AttackEffect();
+            else if (DMG <= 0 && CardsInCombat[0].hasDefenseEffect == true)
+                CardsInCombat[0].DefenseEffect();
+        }
+        else
 			Debug.LogError("Invalid State to evaluate combat.");
 
 
@@ -425,4 +442,34 @@ public class CombatManager : MonoBehaviour {
 	{
 		Debug.Log("Here");
 	}
+
+    // ===== FOR CARD EFFECTS =====
+
+    public void GainAP(int i, bool player)
+    {
+        Debug.Log("Gaining AP");
+        if (player == true)
+        {
+            PlayerCardMgr.GetBackAP(i);
+        }
+        else
+        {
+            EnemyCardMgr.GetBackAP(i);
+        }
+    }
+
+    public void TakeAP(int i, bool player)
+    {
+
+    }
+
+    public void GainCard(int i, bool player)
+    {
+
+    }
+
+    public void DiscardCard(int i, bool player)
+    {
+
+    }
 }

@@ -8,7 +8,6 @@ public class Deck : MonoBehaviour {
 	// TODO: create deck in here, store cards in list/array, track discarded/trashed
 	public GameObject CardPrefab;
 	public bool isPlayer;
-	public CharacterData data;
 	public Transform TrashLocation;
 	public PlayArea playArea;
 

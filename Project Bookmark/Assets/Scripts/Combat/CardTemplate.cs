@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CardTemplate : MonoBehaviour {
+
+   
 
 	public static CardStats GetTemplate(int i)
 	{
@@ -23,7 +26,7 @@ public class CardTemplate : MonoBehaviour {
 				result = new CardStats(CardType.ATK_Mag, 3, 1, 3, "Fireball");
                 break;
             case 4:
-				result = new CardStats(CardType.DEF_Phys, 1, 2, 2, "Deflect");
+				result = new CardStats(CardType.DEF_Phys, 1, 5, 2, "Counter", 2, EffectTypes.GainAP);
                 break;
             case 5:
 				result = new CardStats(CardType.DEF_Phys, 1, 1, 1, "Brace");

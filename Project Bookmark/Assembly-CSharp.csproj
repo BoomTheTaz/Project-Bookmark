@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\Book\TestSection.cs" />
     <Compile Include="Assets\Scripts\Book\UIManager.cs" />
     <Compile Include="Assets\Scripts\Combat\Card.cs" />
+    <Compile Include="Assets\Scripts\Combat\CardEffect.cs" />
     <Compile Include="Assets\Scripts\Combat\CardManager.cs" />
     <Compile Include="Assets\Scripts\Combat\CardStats.cs" />
     <Compile Include="Assets\Scripts\Combat\CardTemplate.cs" />

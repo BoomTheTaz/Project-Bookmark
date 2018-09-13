@@ -26,7 +26,7 @@ public class CardTemplate : MonoBehaviour {
 				result = new CardStats(CardType.ATK_Mag, 3, 1, 3, "Fireball");
                 break;
             case 4:
-				result = new CardStats(CardType.DEF_Phys, 1, 5, 2, "Counter", 2, EffectTypes.GainAP);
+                result = new CardStats(CardType.DEF_Phys, 1, 5, 2, "Counter", new CardEffect[] { new CardEffect(EffectTypes.GainAP, 2) });
                 break;
             case 5:
 				result = new CardStats(CardType.DEF_Phys, 1, 1, 1, "Brace");

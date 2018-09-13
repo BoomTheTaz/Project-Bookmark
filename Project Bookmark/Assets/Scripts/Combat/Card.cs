@@ -41,9 +41,9 @@ public class Card : MonoBehaviour
     public bool hasAttackEffect { get; private set; }
     public bool hasDefenseEffect { get; private set; }
 
-    public delegate void CardEffect();
-    public CardEffect AttackEffect { get; private set; }
-    public CardEffect DefenseEffect { get; private set; }
+    public delegate void CardEffectCall();
+    public CardEffectCall AttackEffect { get; private set; }
+    public CardEffectCall DefenseEffect { get; private set; }
 
     public bool isPlayer;
 
@@ -115,34 +115,49 @@ public class Card : MonoBehaviour
 				break;
 		}
 
-        if (c.EffectType != EffectTypes.NONE)
-            SetCardEffects(c.EffectType, c.EffectInt);
+        if (c.Effects != null)
+            SetCardEffects(c.GetCardEfffects());
 
 		ATK = Mathf.RoundToInt(ATK * AttackScaler);
 
 		UpdateVisuals();
 	}
 
-    void SetCardEffects(EffectTypes t, int i)
+    void SetCardEffects(CardEffect[] e)
     {
-        Debug.Log("Setting up card Effect");
-        switch (t)
+        Debug.Log("Setting up card Effects");
+        CardEffectCall temp = null;
+        
+        // For each effect, add to temporary call
+        foreach (CardEffect i in e)
         {
-            case EffectTypes.NONE:
-                break;
-            case EffectTypes.GainAP:
-                DefenseEffect =  () => {CombatManager.instance.GainAP(i, isPlayer); };
-                hasDefenseEffect = true;
-                break;
-            case EffectTypes.TakeAP:
-                break;
-            case EffectTypes.DrawCard:
-                break;
-            case EffectTypes.DiscardCard:
-                break;
-            default:
-                break;
+
+            switch (i.effectType)
+            {
+                case EffectTypes.NONE:
+                    break;
+                case EffectTypes.GainAP:
+                    temp += () => { CombatManager.instance.GainAP(i.effectAmount, isPlayer); };
+                    hasDefenseEffect = true;
+                    break;
+                case EffectTypes.TakeAP:
+                    break;
+                case EffectTypes.DrawCard:
+                    break;
+                case EffectTypes.DiscardCard:
+                    break;
+                default:
+                    break;
+            }
         }
+
+        // Set as defense or attack based ontype of card
+        if (Type == CardType.ATK_Mag || Type == CardType.ATK_Phys)
+            AttackEffect = temp;
+        else if (Type == CardType.DEF_Mag || Type == CardType.DEF_Phys)
+            DefenseEffect = temp;
+        else
+            Debug.LogError("Unsure what to do with this card type.");
     }
     
 	void UpdateVisuals()

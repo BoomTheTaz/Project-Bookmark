@@ -26,7 +26,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - ActiveCard
   - 
   - 
   - 
@@ -40,4 +40,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: ActiveCard
+    uniqueID: 1699250469
     locked: 0

@@ -17,7 +17,7 @@ public class CardTemplate : MonoBehaviour {
 				result = new CardStats(CardType.ATK_Phys, 1, 1, 1, "Thrust");
 				break;
 			case 1:
-				result = new CardStats(CardType.ATK_Phys, 2, 1, 2, "Slash");
+				result = new CardStats(CardType.ATK_Phys, 2, 1, 2, "Slash", new CardEffect[] { new CardEffect(EffectTypes.DrawCard, 2) });
                 break;
             case 2:
 				result = new CardStats(CardType.DEF_Mag, 1, 2, 2, "Shield");
@@ -26,7 +26,7 @@ public class CardTemplate : MonoBehaviour {
 				result = new CardStats(CardType.ATK_Mag, 3, 1, 3, "Fireball");
                 break;
             case 4:
-                result = new CardStats(CardType.DEF_Phys, 1, 5, 2, "Counter", new CardEffect[] { new CardEffect(EffectTypes.GainAP, 2) });
+                result = new CardStats(CardType.DEF_Phys, 1, 5, 2, "Counter", new CardEffect[] { new CardEffect(EffectTypes.DiscardCard, 2) });
                 break;
             case 5:
 				result = new CardStats(CardType.DEF_Phys, 1, 1, 1, "Brace");

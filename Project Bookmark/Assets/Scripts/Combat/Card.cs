@@ -141,10 +141,16 @@ public class Card : MonoBehaviour
                     hasDefenseEffect = true;
                     break;
                 case EffectTypes.TakeAP:
+                    temp += () => { CombatManager.instance.TakeAP(i.effectAmount, isPlayer); };
+                    hasAttackEffect = true;
                     break;
                 case EffectTypes.DrawCard:
+                    temp += () => { CombatManager.instance.GainCard(i.effectAmount, isPlayer); };
+                    hasAttackEffect = true;
                     break;
                 case EffectTypes.DiscardCard:
+                    temp += () => { CombatManager.instance.DiscardCard(i.effectAmount, isPlayer); };
+                    hasDefenseEffect = true;
                     break;
                 default:
                     break;
@@ -212,8 +218,8 @@ public class Card : MonoBehaviour
     public void RegisterToMove(Vector3 p)
 	{
 		targetPosition = p;
-
-		CombatUI.instance.RegisterCardToMove(this);
+        
+        CombatUI.instance.RegisterCardToMove(this);
 	}
 
 	public void Move()
@@ -224,8 +230,11 @@ public class Card : MonoBehaviour
 		{
 			transform.localPosition = targetPosition;
 			CombatUI.instance.UnregisterCardToMove(this);
-		}
-	}
+
+            GetComponent<Canvas>().overrideSorting = false;
+
+        }
+    }
 	#endregion
 
 	#region Flip Card

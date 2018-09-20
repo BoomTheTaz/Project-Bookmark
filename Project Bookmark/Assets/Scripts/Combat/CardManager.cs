@@ -66,17 +66,11 @@ public class CardManager : MonoBehaviour {
 	}
     
 	// Fill hand to limit
-	public IEnumerator FillHand()
+	public void FillHand()
 	{
         // Try for max hand size, break if no cards to draw
-		while (hand.transform.childCount < data.CardsInHand)
-		{
-			if (deck.transform.childCount == 0)
-				break;
-
-			yield return new WaitForSeconds(TimeBetweenDraws);
-			DrawCard();
-		}
+        int c = data.CardsInHand - HandList.Count;
+        StartCoroutine(DrawCards(c));
 	}
 
     // Draw a card from the deck and place in hand
@@ -88,6 +82,18 @@ public class CardManager : MonoBehaviour {
 
 		hand.AddCard(temp);
 	}
+
+    public IEnumerator DrawCards(int c)
+    {
+        Debug.Log("DRAWING CARDS: " + c.ToString());
+        yield return new WaitForSeconds(.1f);
+        for (int i = 0; i < c; i++)
+        {
+            DrawCard();
+            
+            yield return new WaitForSeconds(TimeBetweenDraws);
+        }
+    }
  
 	public void TrashAndShuffle(Card toTrash)
     {
@@ -149,6 +155,7 @@ public class CardManager : MonoBehaviour {
 
 	public IEnumerator ForceDiscard(int n)
 	{
+        Debug.Log("FORCING DISCARD");
 		for (int i = 0; i < n; i++)
 		{
 			Card temp = deck.DrawCard();
@@ -163,7 +170,10 @@ public class CardManager : MonoBehaviour {
 
 			temp.GetComponent<CanvasGroup>().blocksRaycasts = false;
             temp.transform.SetParent(discard);
+            temp.GetComponent<Canvas>().overrideSorting = true;
+            temp.GetComponent<Canvas>().sortingOrder = i+1;
             temp.RegisterToMove(Vector3.zero);
+            temp.RegisterToFlip();
 
 			yield return new WaitForSeconds(TimeBetweenDraws);
 		}

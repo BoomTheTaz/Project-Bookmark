@@ -29,8 +29,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		eventData.pointerDrag.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
 		previousDropzone = currentDropzone;
-		
-	}
+        
+    }
 
 	public void OnDrag(PointerEventData eventData)
 	{
@@ -42,6 +42,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		eventData.pointerDrag.GetComponent<CanvasGroup>().blocksRaycasts = true;
         
 		Dropped();
+
 	}
 
 #endregion
@@ -79,7 +80,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
         else if (transform.parent.GetComponent<Dropzone>() == null)
         {
             card.RegisterToMove(Vector3.zero);
-            Debug.Log("WHERE AM I");
+            
         }
         else
         {

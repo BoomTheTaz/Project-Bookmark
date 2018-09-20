@@ -23,12 +23,12 @@ public class CharacterData : MonoBehaviour {
 
 	private void Awake()
 	{
-		CharacterStats[(int)Stats.Power] = Roll(1, 6);
-		CharacterStats[(int)Stats.Technique] = Roll(1, 6);
-        CharacterStats[(int)Stats.Constitution] = Roll(1, 6);
-		CharacterStats[(int)Stats.Magic] = Roll(1, 6);
-        CharacterStats[(int)Stats.Wisdom] = Roll(1, 6);
-        CharacterStats[(int)Stats.Charisma] = Roll(1, 6);
+		CharacterStats[(int)Stats.Power] = Roll(1, 3);
+		CharacterStats[(int)Stats.Technique] = Roll(1, 3);
+        CharacterStats[(int)Stats.Constitution] = Roll(1, 3);
+		CharacterStats[(int)Stats.Magic] = Roll(1, 3);
+        CharacterStats[(int)Stats.Wisdom] = Roll(1, 3);
+        CharacterStats[(int)Stats.Charisma] = Roll(1, 3);
 
         // ======= TEMP HARD CODE ========
         MaxAP = 3;

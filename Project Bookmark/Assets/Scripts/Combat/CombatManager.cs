@@ -60,8 +60,8 @@ public class CombatManager : MonoBehaviour {
 
 		SetupUI();
 
-		StartCoroutine(PlayerCardMgr.FillHand());
-		StartCoroutine(EnemyCardMgr.FillHand());
+        PlayerCardMgr.FillHand();
+		EnemyCardMgr.FillHand(); 
 
 		if (isPlayerStarting == false)
 		{
@@ -148,7 +148,7 @@ public class CombatManager : MonoBehaviour {
     void FinalizePlayerAttack()
 	{
 		CurrentState = CombatState.AI_DEF;
-		StartCoroutine(EnemyCardMgr.FillHand());
+		EnemyCardMgr.FillHand();
         
         // If player is attacking, create the attack deck
 		if (playArea.transform.childCount > 0)
@@ -180,7 +180,7 @@ public class CombatManager : MonoBehaviour {
 	public void FinalizeAIAttack()
     {
 		CurrentState = CombatState.Player_DEF;
-		StartCoroutine(PlayerCardMgr.FillHand());
+		PlayerCardMgr.FillHand();
         PlayerCardMgr.ResetAP();
 
 		if (playArea.transform.childCount > 0)
@@ -460,16 +460,40 @@ public class CombatManager : MonoBehaviour {
 
     public void TakeAP(int i, bool player)
     {
-
+        Debug.Log("Taking AP");
+        if (player == true)
+        {
+            EnemyCardMgr.UseAP(i);
+        }
+        else
+        {
+            PlayerCardMgr.UseAP(i);
+        }
     }
 
     public void GainCard(int i, bool player)
     {
-
+        Debug.Log("Gaining Card");
+        if (player == true)
+        {
+            StartCoroutine(PlayerCardMgr.DrawCards(i));
+        }
+        else
+        {
+            StartCoroutine(EnemyCardMgr.DrawCards(i));
+        }
     }
 
     public void DiscardCard(int i, bool player)
     {
-
+        Debug.Log("Discarding Card");
+        if (player == true)
+        {
+            StartCoroutine(EnemyCardMgr.ForceDiscard(i));
+        }
+        else
+        {
+            StartCoroutine(PlayerCardMgr.ForceDiscard(i));
+        }
     }
 }

@@ -73,6 +73,8 @@
     <Compile Include="Assets\Scripts\Book\Section.cs" />
     <Compile Include="Assets\Scripts\Book\TestSection.cs" />
     <Compile Include="Assets\Scripts\Book\UIManager.cs" />
+    <Compile Include="Assets\Scripts\Combat\AttackAI.cs" />
+    <Compile Include="Assets\Scripts\Combat\BaseAI.cs" />
     <Compile Include="Assets\Scripts\Combat\Card.cs" />
     <Compile Include="Assets\Scripts\Combat\CardEffect.cs" />
     <Compile Include="Assets\Scripts\Combat\CardManager.cs" />

@@ -10,25 +10,25 @@ public class EnemyAI : MonoBehaviour {
 
 	int MaxCardsInHand = 5;
 
-	Dropzone handDZ;
+
+    BaseAI AI;
 
 	// Use this for initialization
 	void Start () {
-		handDZ = hand.GetComponent<Dropzone>();
 
-		//while (hand.transform.childCount < MaxCardsInHand)
-  //      {
-  //          if (deck.transform.childCount == 0)
-  //              break;
-  //          handDZ.AddAICard(deck.DrawCard());
-  //      }
-
-		//handDZ.ReorganizeCards();
+        // TEMPORARY HARD CODE OF AI
+        // TODO: Decide AI when setting up battle
+        SetAI(new BaseAI());
 	}
 
 
 	int APLimit;
 	   
+    public void SetAI(BaseAI a)
+    {
+        AI = a
+    }
+
     public void Defend(int ap)
 	{
 		APLimit = ap;

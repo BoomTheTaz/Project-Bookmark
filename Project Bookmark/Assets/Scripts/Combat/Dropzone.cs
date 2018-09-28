@@ -50,7 +50,7 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 		if (eventData.pointerDrag == null)
 			return;
 		Draggable draggable = eventData.pointerDrag.GetComponent<Draggable>();
-        Debug.Log("Pointer entered " + this.name);
+
         // if there is a draggable
         if (draggable != null)
         {

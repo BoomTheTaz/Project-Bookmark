@@ -34,7 +34,7 @@ public class PlayArea : Dropzone {
             // Check if player added viable card
             else if (CombatManager.CurrentState == CombatState.AI_ATK)
             {
-                Debug.Log(ap);
+                
                 // Must have equal or lower AP value to enemy card
                 if (EnemyReveal.GetChild(0).GetComponent<Card>().AP >= ap)
                     return true;

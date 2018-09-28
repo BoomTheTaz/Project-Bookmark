@@ -26,7 +26,6 @@ public class CombatManager : MonoBehaviour {
 
 	public static CombatManager instance;
 
-
 	bool isPlayerStarting;
 
 	public CardManager PlayerCM;
@@ -101,11 +100,15 @@ public class CombatManager : MonoBehaviour {
     {
         if (CurrentState == CombatState.Player_ATK)
         {
+            EnemyCM.NewTurn();
 
+            CurrentState = CombatState.AI_ATK;
         }
         else if (CurrentState == CombatState.AI_ATK)
         {
+            PlayerCM.NewTurn();
 
+            CurrentState = CombatState.Player_ATK;
         }
         else
             Debug.LogError("HOW DID I GET HERE?");
@@ -113,7 +116,12 @@ public class CombatManager : MonoBehaviour {
 
     public void ButtonPress()
     {
-        EvaluateCombat();
+        if (CurrentState == CombatState.AI_ATK && EnemyCardReveal.childCount > 0)
+            EvaluateCombat();
+        else if (CurrentState == CombatState.Player_ATK && PlayerCardReveal.childCount == 0)
+            PassTurn();
+        else
+            Debug.Log("I am refusing to do anything!");
     }
 
     public void NoDefense()
@@ -137,35 +145,6 @@ public class CombatManager : MonoBehaviour {
 		EnemyCM.CreateDeck(new int[] { 1, 2, 3, 4, 5, 0, 0, 1, 2, 3, 4, 5 }, CardPrefab);
 	}
 
-    // Lock in atk power/dmg against AI
-    // Take all cards in play area and put in attack deck
-    void FinalizePlayerAttack()
-	{
-		
-	}
-
-    // Resolve player attacks against AI defense
-    // Draw from attack deck one by one and prompt AI for defense card
-	void FinalizeAIDefense()
-    {
-       
-    }
-
-    // Lock in atk power/dmg against player
-    // Have AI choose attack cards, then move all in play area to attack deck
-	public void FinalizeAIAttack()
-    {
-		
-
-    }
-
-    // Resolve AI attacks against player
-    // Draw from attack deck one by one, prompting player for defense card
-	void FinalizePlayerDefense()
-    {
-		
-    }
-   
     // Array to store relevant cards in combat
     Card AttackingCard;
     Card DefendingCard;
@@ -179,13 +158,19 @@ public class CombatManager : MonoBehaviour {
         if (CurrentState == CombatState.Player_ATK)
         {
             AttackingCard = PlayerCardReveal.GetChild(0).GetComponent<Card>();
-            DefendingCard = EnemyCardReveal.GetChild(0).GetComponent<Card>();
+
+            if (EnemyCardReveal.childCount > 0)
+                DefendingCard = EnemyCardReveal.GetChild(0).GetComponent<Card>();
+
             Defender = Enemy;
         }
         else if (CurrentState == CombatState.AI_ATK)
         {
             AttackingCard = EnemyCardReveal.GetChild(0).GetComponent<Card>();
-            DefendingCard = PlayerCardReveal.GetChild(0).GetComponent<Card>();
+
+            if (PlayerCardReveal.childCount > 0)
+                DefendingCard = PlayerCardReveal.GetChild(0).GetComponent<Card>();
+
             Defender = Player;
         }
 
@@ -247,6 +232,11 @@ public class CombatManager : MonoBehaviour {
             }
 
         }
+
+        AttackingCard = null;
+        DefendingCard = null;
+
+        CombatUI.instance.CheckDoneMoving();
 	}
 
     bool ShouldTrash(Card c)
@@ -260,22 +250,22 @@ public class CombatManager : MonoBehaviour {
 		{
 			// Case: magic attack
 			case CardType.ATK_Mag:
-				if (CurrentState == CombatState.AI_DEF)
+				if (CurrentState == CombatState.Player_ATK)
 					toReturn =  true;
-				else if (CurrentState == CombatState.Player_DEF)
+				else if (CurrentState == CombatState.AI_ATK)
 				    toReturn = false;
 				break;
 
 			// Case: magic defense
 			case CardType.DEF_Mag:
-				if (CurrentState == CombatState.Player_DEF)
+				if (CurrentState == CombatState.AI_ATK)
 					toReturn = true;
-				else if (CurrentState == CombatState.AI_DEF)
+				else if (CurrentState == CombatState.Player_ATK)
 					toReturn = false;
 				break;
 
 			default:
-				
+                
 				return false;
 		}
 
@@ -313,7 +303,7 @@ public class CombatManager : MonoBehaviour {
 
     public void GainAP(int i, bool player)
     {
-        Debug.Log("Gaining AP");
+        //Debug.Log("Gaining AP");
         if (player == true)
         {
             PlayerCM.GetBackAP(i);
@@ -326,7 +316,7 @@ public class CombatManager : MonoBehaviour {
 
     public void TakeAP(int i, bool player)
     {
-        Debug.Log("Taking AP");
+        //Debug.Log("Taking AP");
         if (player == true)
         {
             EnemyCM.UseAP(i);
@@ -339,7 +329,7 @@ public class CombatManager : MonoBehaviour {
 
     public void GainCard(int i, bool player)
     {
-        Debug.Log("Gaining Card");
+        //Debug.Log("Gaining Card");
         if (player == true)
         {
             StartCoroutine(PlayerCM.DrawCards(i));
@@ -352,7 +342,8 @@ public class CombatManager : MonoBehaviour {
 
     public void DiscardCard(int i, bool player)
     {
-        Debug.Log("Discarding Card");
+        //Debug.Log("Discarding Card");
+        //Debug.Log(player);
         if (player == true)
         {
             StartCoroutine(EnemyCM.ForceDiscard(i));

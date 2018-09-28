@@ -50,7 +50,7 @@ public class EnemyAI : MonoBehaviour {
 	{
 		yield return new WaitForSeconds(Random.Range(3, 10) / 10f);
 
-        Card defense = AI.DecideDefense(PlayerCardReveal.GetChild(0).GetComponent<Card>(),CM.GetHand());
+        Card defense = AI.DecideDefense(PlayerCardReveal.GetChild(0).GetComponent<Card>(),CM.GetHand().ToArray());
 
         if (defense == null)
             NoDefense();
@@ -66,7 +66,7 @@ public class EnemyAI : MonoBehaviour {
     {
         //Debug.Log("Time to attack");
         if (AttackPlan == null)
-            AttackPlan = AI.DecideAttack(CM.CurrentAP(),CM.GetHand());
+            AttackPlan = AI.DecideAttack(CM.CurrentAP(), CM.GetHand().ToArray());
 
 		StartCoroutine("DecideAttack");
     }
@@ -77,7 +77,7 @@ public class EnemyAI : MonoBehaviour {
 		yield return new WaitForSeconds(Random.Range(5, 15) / 10f);
 
         // Pass turn if nothing to do
-        if (AttackPlan == null || attackCounter == AttackPlan.Length)
+        if (AttackPlan == null || attackCounter == AttackPlan.Length || AttackPlan[attackCounter] == null)
         {
             PassTurn();
         }
@@ -85,6 +85,7 @@ public class EnemyAI : MonoBehaviour {
         {
             // Play next attack card and increment counter
             playArea.PlaceCard(AttackPlan[attackCounter]);
+            CM.UseAP(AttackPlan[attackCounter].AP);
             attackCounter++;
 
             // Make sure hand is reorganized
@@ -103,5 +104,6 @@ public class EnemyAI : MonoBehaviour {
         Debug.Log("Passing Turn");
         AttackPlan = null;
         attackCounter = 0;
+        CombatManager.instance.PassTurn();
     }
 }

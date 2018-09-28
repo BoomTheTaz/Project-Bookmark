@@ -20,11 +20,12 @@ public class PlayerData : CharacterData {
 		CharacterStats[(int)Stats.Charisma] = Random.Range(3, 6);
 
         // ======= TEMP HARD CODE ========
-        MaxAP = 3;
+        MaxAP = 6;
         MaxHealth = 100;
         CurrentHealth = 100;
         MaxCards = 10;
         CardsInHand = 5;
+        TurnAP = Mathf.FloorToInt(MaxAP / 2);
 
 		WeaponPhys = 2;
 		WeaponMag = 2;

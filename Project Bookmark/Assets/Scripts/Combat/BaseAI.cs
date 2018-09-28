@@ -5,12 +5,12 @@ using UnityEngine;
 public class BaseAI  {
 
 	
-    public virtual Card[] DecideAttack(int ap, List<Card> hand)
+    public virtual Card[] DecideAttack(int ap, Card[] hand)
     {
         return null;
     }
 
-    public virtual Card DecideDefense(Card c, List<Card> hand)
+    public virtual Card DecideDefense(Card c, Card[] hand)
     {
         return null;
     }

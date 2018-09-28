@@ -17,6 +17,7 @@ public class CharacterData : MonoBehaviour {
 	public int WeaponMag { get; protected set; }
 	public int ArmorPhys { get; protected set; }
 	public int ArmorMag { get; protected set; }
+    public int TurnAP { get; protected set; }
 
     public bool isPlayer = false;
 
@@ -31,11 +32,12 @@ public class CharacterData : MonoBehaviour {
         CharacterStats[(int)Stats.Charisma] = Roll(1, 3);
 
         // ======= TEMP HARD CODE ========
-        MaxAP = 3;
+        MaxAP = 6;
         MaxHealth = 100;
         CurrentHealth = 100;
         MaxCards = 10;
         CardsInHand = 5;
+        TurnAP = Mathf.FloorToInt(MaxAP / 2);
 	}
 
 

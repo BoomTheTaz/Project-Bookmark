@@ -75,7 +75,7 @@ public class CombatUI : MonoBehaviour {
         CheckDoneMoving();
     }
 
-    void CheckDoneMoving()
+    public void CheckDoneMoving()
     {
         if (CardsToFlip == null && CardsToMove == null && CardsToScale == null)
             CombatManager.instance.DoNextThing();

@@ -151,6 +151,7 @@ public class CardManager : MonoBehaviour {
 		c.transform.localPosition = Vector3.zero;
 		c.gameObject.SetActive(false);
 
+        
 	}
 
 	public IEnumerator ForceDiscard(int n)
@@ -195,6 +196,9 @@ public class CardManager : MonoBehaviour {
     {
         currentAP += i;
 
+        if (currentAP > data.MaxAP)
+            currentAP = data.MaxAP;
+
         UI.ChangeAP(currentAP, isPlayer);
     }
 
@@ -209,5 +213,12 @@ public class CardManager : MonoBehaviour {
     public List<Card> GetHand()
     {
         return HandList;
+    }
+
+    public void NewTurn()
+    {
+        // Add AP
+        GetBackAP(data.TurnAP);
+        FillHand();
     }
 }

@@ -50,20 +50,20 @@ public class Dropzone : MonoBehaviour, IPointerEnterHandler {
 		if (eventData.pointerDrag == null)
 			return;
 		Draggable draggable = eventData.pointerDrag.GetComponent<Draggable>();
-
+        Debug.Log("Pointer entered " + this.name);
         // if there is a draggable
         if (draggable != null)
         {
 			// and has enough AP to add
 			if (CanAddCard(draggable.GetComponent<Card>().AP))
 			{
-				//Debug.Log("WE HAVE ENOUGH AP.");
-                //draggable.transform.SetParent(transform);
                 draggable.SetCurrentDropzone(this);
             }
             else
             {
                 //Debug.Log("AHHHH!!! WE'RE OUT OF AP");
+
+                // TODO: Some graphic saying not enough ap or too slow card, maybe that doesn't go here but in CanAddCard
             }
 
 

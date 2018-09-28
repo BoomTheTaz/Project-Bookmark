@@ -31,8 +31,7 @@ public class ControlManager : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Space))
 			PlayerCardMgr.DrawCard();
 
-		if (Input.GetKeyDown(KeyCode.RightArrow))
-			FindObjectOfType<CombatManager>().Evaluate();
+		
 		if (Input.GetKeyDown(KeyCode.A))
 		{
 			StartCoroutine(PlayerCardMgr.ForceDiscard(2));

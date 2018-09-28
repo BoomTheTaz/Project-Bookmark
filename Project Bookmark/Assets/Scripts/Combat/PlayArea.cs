@@ -22,20 +22,25 @@ public class PlayArea : Dropzone {
 
     protected override bool CanAddCard(int ap)
 	{
+        
+        // Check if have enough AP to play card
 		if (PlayerCM.CurrentAP() >= ap /*|| CombatManager.CurrentState == CombatState.Player_DEF*/)
         {
-			// DO THIS SHIT
-
-    		if (CombatManager.CurrentState == CombatState.Player_ATK)
-            {
-				return true;
-            }
-
-			// FIXME: Probably redundant state check
-			if (CombatManager.CurrentState == CombatState.Player_DEF && ap <= EnemyReveal.GetChild(0).GetComponent<Card>().AP)
-            {
+            
+            // Above check should suffice on offense
+            if (CombatManager.CurrentState == CombatState.Player_ATK)
                 return true;
+
+            // Check if player added viable card
+            else if (CombatManager.CurrentState == CombatState.AI_ATK)
+            {
+                Debug.Log(ap);
+                // Must have equal or lower AP value to enemy card
+                if (EnemyReveal.GetChild(0).GetComponent<Card>().AP >= ap)
+                    return true;
+                return false;
             }
+            
             else
                 Debug.Log("Not a fast enough card");
 
@@ -43,18 +48,40 @@ public class PlayArea : Dropzone {
 		return false;
 	}
 
-  	public void AddCardToEnemyReveal(Transform t)
+  	public void AddCardToEnemyReveal(Card c)
 	{
-		t.SetParent(EnemyReveal);
-		t.GetComponent<Card>().RegisterToMove(Vector3.zero);
-		t.GetComponent<Card>().RegisterToFlip();
+		c.transform.SetParent(EnemyReveal);
+		c.RegisterToMove(Vector3.zero);
+		c.RegisterToFlip();
 
 	}
 
-	public override void PlaceCard(Card card)
+    public void AddCardToPlayerReveal(Card c)
+    {
+        c.transform.SetParent(PlayerReveal);
+        c.RegisterToMove(Vector3.zero);
+    }
+
+    public override void PlaceCard(Card card)
     {
 
-		if (CombatManager.CurrentState == CombatState.Player_ATK)
+        // Player playing offensive card
+        if (card.isPlayer == true)
+        {
+            AddCardToPlayerReveal(card);
+        }
+
+        // AI playing defensive card
+        if (card.isPlayer == false)
+        {
+            AddCardToEnemyReveal(card);
+        }
+
+       
+
+        /*
+         * 
+        if (CombatManager.CurrentState == CombatState.Player_ATK)
         {            
             // Set parent
 			card.transform.SetParent(transform);
@@ -84,6 +111,7 @@ public class PlayArea : Dropzone {
 		else
 		    Debug.LogError("Cannot get relevant transform in this state.");
 
+        */
     }
 
 	public bool CanShuffle()

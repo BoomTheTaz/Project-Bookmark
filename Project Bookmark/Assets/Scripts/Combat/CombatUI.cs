@@ -48,9 +48,8 @@ public class CombatUI : MonoBehaviour {
     {
         CardsToMove -= c.Move;
 
-		if (CardsToFlip == null && CardsToMove == null && CardsToScale == null)         
-            CombatManager.instance.DoneMoving();
-        
+        CheckDoneMoving();
+
     }
 
 	public void RegisterCardToFlip(Card c)
@@ -61,8 +60,7 @@ public class CombatUI : MonoBehaviour {
     public void UnregisterCardToFlip(Card c)
     {
 		CardsToFlip -= c.Flip;
-		if (CardsToFlip == null && CardsToMove == null && CardsToScale == null)
-            CombatManager.instance.DoneMoving();
+        CheckDoneMoving();
     }
 
 	public void RegisterCardToScale(Card c)
@@ -74,8 +72,13 @@ public class CombatUI : MonoBehaviour {
     {
 
 		CardsToScale -= c.Scale;
-		if (CardsToFlip == null && CardsToMove == null && CardsToScale == null)
-            CombatManager.instance.DoneMoving();
+        CheckDoneMoving();
+    }
+
+    void CheckDoneMoving()
+    {
+        if (CardsToFlip == null && CardsToMove == null && CardsToScale == null)
+            CombatManager.instance.DoNextThing();
     }
 
     public void ChangeHealth(int h, bool isPlayer)

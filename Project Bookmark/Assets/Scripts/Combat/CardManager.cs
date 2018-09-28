@@ -26,14 +26,15 @@ public class CardManager : MonoBehaviour {
 	{
         UI = FindObjectOfType<CombatUI>();
         data = GetComponent<CharacterData>();
-        currentAP = data.MaxAP;
+        
         UI.ChangeAP(currentAP, isPlayer);
 	}
 
     
 	public void CreateDeck(int[] cards, GameObject CardPrefab)
 	{
-		DrawList = new List<Card>();
+        currentAP = data.MaxAP;
+        DrawList = new List<Card>();
         HandList = new List<Card>();
         DiscardList = new List<Card>();
         TrashList = new List<Card>();
@@ -85,7 +86,6 @@ public class CardManager : MonoBehaviour {
 
     public IEnumerator DrawCards(int c)
     {
-        Debug.Log("DRAWING CARDS: " + c.ToString());
         yield return new WaitForSeconds(.1f);
         for (int i = 0; i < c; i++)
         {
@@ -204,5 +204,10 @@ public class CardManager : MonoBehaviour {
 
         UI.ChangeAP(currentAP, isPlayer);
 
+    }
+
+    public List<Card> GetHand()
+    {
+        return HandList;
     }
 }

@@ -6,8 +6,12 @@ public enum Stats { Power, Technique, Constitution, Magic, Wisdom, Charisma, NUM
 
 public class PlayerData : CharacterData {
     
+    
+
     void Awake()
 	{
+        isPlayer = true;
+
 		CharacterStats[(int)Stats.Power] = Random.Range(3,6);
 		CharacterStats[(int)Stats.Technique] = Random.Range(3, 6);
 		CharacterStats[(int)Stats.Constitution] = Random.Range(3, 6);

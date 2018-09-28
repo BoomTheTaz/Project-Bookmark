@@ -215,6 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 138a8174a92b84c2dadfb32032e8ccb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 0
 --- !u!114 &141668145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,6 +230,7 @@ MonoBehaviour:
   deck: {fileID: 2015550397}
   hand: {fileID: 585739957}
   playArea: {fileID: 941190230}
+  PlayerCardReveal: {fileID: 210424694}
 --- !u!1 &169870932
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,8 +908,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -40, y: 250}
-  m_SizeDelta: {x: 60, y: 60}
+  m_AnchoredPosition: {x: -60, y: 250}
+  m_SizeDelta: {x: 100, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &689498781
 MonoBehaviour:
@@ -949,7 +951,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 745515912}
-        m_MethodName: Evaluate
+        m_MethodName: ButtonPress
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1028,8 +1030,8 @@ MonoBehaviour:
   EnemyCardReveal: {fileID: 110261783}
   Enemy: {fileID: 141668144}
   Player: {fileID: 1817702442}
-  PlayerCardMgr: {fileID: 1817702441}
-  EnemyCardMgr: {fileID: 141668143}
+  PlayerCM: {fileID: 1817702441}
+  EnemyCM: {fileID: 141668143}
 --- !u!4 &745515913
 Transform:
   m_ObjectHideFlags: 0
@@ -2005,6 +2007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8616a1d0598e24f45aad8b307b7ed755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 0
 --- !u!1 &1918007750
 GameObject:
   m_ObjectHideFlags: 0
@@ -2385,7 +2388,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ->
+  m_Text: PASS
 --- !u!222 &2049149246
 CanvasRenderer:
   m_ObjectHideFlags: 0

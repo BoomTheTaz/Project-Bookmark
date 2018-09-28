@@ -125,7 +125,6 @@ public class Card : MonoBehaviour
 
     void SetCardEffects(CardEffect[] e)
     {
-        Debug.Log("Setting up card Effects");
         CardEffectCall temp = null;
         
         // For each effect, add to temporary call

@@ -18,7 +18,7 @@ public class CharacterData : MonoBehaviour {
 	public int ArmorPhys { get; protected set; }
 	public int ArmorMag { get; protected set; }
 
-
+    public bool isPlayer = false;
 
 
 	private void Awake()
@@ -71,7 +71,7 @@ public class CharacterData : MonoBehaviour {
         return CharacterStats[(int)s];
     }
 
-	public void TakeDamage(int d, bool isPlayer)
+	public void TakeDamage(int d)
 	{
 		if (d > 0)
 			CurrentHealth -= d;

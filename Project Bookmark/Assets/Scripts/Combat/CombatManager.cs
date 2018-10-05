@@ -15,13 +15,12 @@ public class CombatManager : MonoBehaviour {
 	public Transform EnemyCardReveal;
 
 	public CharacterData Enemy;
-	public PlayerData Player;
+	public CharacterData Player;
 
 	public static bool CanDrag;
 
 	public static CombatState CurrentState { get; private set; }
 
-	PlayerData player;
 	EnemyAI AI;
 
 	public static CombatManager instance;
@@ -42,9 +41,14 @@ public class CombatManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-    
-		// TEMP: create Decks for player and AI
-		CreateDecks();
+
+        // ========== PROBABLY TEMPORARY, CANT THINK AT MOMENT =============
+        
+        Enemy = GameManager.instance.enemyData;
+        Player = GameManager.instance.playerData;
+
+        // TEMP: create Decks for player and AI
+        CreateDecks();
 
 		// TEMP: Start with player attacking
         //      Compare Speeds in future to decide who initiates
@@ -52,7 +56,7 @@ public class CombatManager : MonoBehaviour {
 
         // Grab necessary Components
 		AI = FindObjectOfType<EnemyAI>();
-		player = FindObjectOfType<PlayerData>();
+		
 
 		SetupUI();
 
@@ -131,9 +135,9 @@ public class CombatManager : MonoBehaviour {
 
     void SetupUI()
 	{
-		CombatUI.instance.ChangeAP(player.MaxAP, true);
+		CombatUI.instance.ChangeAP(Player.MaxAP, true);
 		CombatUI.instance.ChangeAP(Enemy.MaxAP, false);
-		CombatUI.instance.ChangeHealth(player.CurrentHealth, true);
+		CombatUI.instance.ChangeHealth(Player.CurrentHealth, true);
 		CombatUI.instance.ChangeHealth(Enemy.MaxHealth, false);
         
 	}
@@ -141,8 +145,8 @@ public class CombatManager : MonoBehaviour {
 	// TEMPORARY: Generate generic deck
 	void CreateDecks()
 	{
-		PlayerCM.CreateDeck(new int[] { 1, 2, 3, 4, 5, 0, 0, 1, 2, 3, 4, 5 }, CardPrefab);
-		EnemyCM.CreateDeck(new int[] { 1, 2, 3, 4, 5, 0, 0, 1, 2, 3, 4, 5 }, CardPrefab);
+		PlayerCM.CreateDeck(CardPrefab);
+		EnemyCM.CreateDeck(CardPrefab);
 	}
 
     // Array to store relevant cards in combat

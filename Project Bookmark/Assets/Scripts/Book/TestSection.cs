@@ -10,7 +10,7 @@ public class TestSection : Section {
 	{
 		SectionName = "TestSection";
 		NumPages = 5;
-		GameObject.FindObjectOfType<PlayerData>();
+		
 	}
 
 	//protected override void Switches(int i)

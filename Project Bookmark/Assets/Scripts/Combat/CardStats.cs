@@ -11,10 +11,11 @@ public class CardStats {
 	public string Name { get; protected set; }
 	public int TemplateID { get; protected set; }
 
-    public CardEffect[] Effects { get; protected set; }
+    public CardEffect[] AttackEffects { get; protected set; }
+    public CardEffect[] DefenseEffects { get; protected set; }
 
 
-    public CardStats(CardType c, int a, int d, int ap, string name, CardEffect[] e = null)
+    public CardStats(CardType c, int a, int d, int ap, string name, CardEffect[] attackFX = null, CardEffect[] defenseFX = null)
 	{
 		Type = c;
 		ATK = a;
@@ -22,7 +23,8 @@ public class CardStats {
 		AP = ap;
 		Name = name;
 
-        Effects = e;
+        AttackEffects = attackFX;
+        DefenseEffects = defenseFX;
 	}
 
     public void SetTemplateID(int id)
@@ -30,8 +32,13 @@ public class CardStats {
 		TemplateID = id;
 	}
 
-    public CardEffect[] GetCardEfffects()
+    public CardEffect[] GetAttackEffects()
     {
-        return Effects;
+        return AttackEffects;
+    }
+
+    public CardEffect[] GetDefenseEffects()
+    {
+        return DefenseEffects;
     }
 }

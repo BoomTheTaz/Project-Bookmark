@@ -25,29 +25,48 @@ public class CardManager : MonoBehaviour {
 	private void Awake()
 	{
         UI = FindObjectOfType<CombatUI>();
-        data = GetComponent<CharacterData>();
-        
+
         UI.ChangeAP(currentAP, isPlayer);
 	}
 
-    
-	public void CreateDeck(int[] cards, GameObject CardPrefab)
+    private void Start()
+    {
+
+        GetData();
+    }
+
+    void GetData()
+    {
+        if (isPlayer == true)
+            data = GameManager.instance.playerData;
+        else
+            data = GameManager.instance.enemyData;
+    }
+
+    public void CreateDeck(GameObject CardPrefab)
 	{
+
+        if (data == null)
+            GetData();
         currentAP = data.MaxAP;
         DrawList = new List<Card>();
         HandList = new List<Card>();
         DiscardList = new List<Card>();
         TrashList = new List<Card>();
 
-		for (int i = 0; i < cards.Length; i++)
+		for (int i = 0; i < data.Cards.Length; i++)
         {
+            // Instantiate the prefab
             Card temp = Instantiate(CardPrefab, deck.transform.position, Quaternion.identity, deck.transform).GetComponent<Card>();
 
+            // Store in draw list
             DrawList.Add(temp);
 
+            // ========== PROBABLY UNDOING THIS AUTO FLIP ===========
             temp.FlipInstant();
 
-            temp.SetupCard(CardTemplate.GetTemplate(cards[i]), data);
+
+            temp.SetupCard(data.Cards[i], data);
 
             temp.isPlayer = isPlayer;
 

@@ -154,7 +154,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 141668142}
-  - component: {fileID: 141668144}
   - component: {fileID: 141668143}
   - component: {fileID: 141668145}
   m_Layer: 5
@@ -204,18 +203,6 @@ MonoBehaviour:
   trash: {fileID: 1032508391}
   isPlayer: 0
   playArea: {fileID: 941190230}
---- !u!114 &141668144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 141668141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 138a8174a92b84c2dadfb32032e8ccb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPlayer: 0
 --- !u!114 &141668145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1028,8 +1015,6 @@ MonoBehaviour:
   playArea: {fileID: 941190230}
   PlayerCardReveal: {fileID: 210424694}
   EnemyCardReveal: {fileID: 110261783}
-  Enemy: {fileID: 141668144}
-  Player: {fileID: 1817702442}
   PlayerCM: {fileID: 1817702441}
   EnemyCM: {fileID: 141668143}
 --- !u!4 &745515913
@@ -1947,7 +1932,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1817702440}
-  - component: {fileID: 1817702442}
   - component: {fileID: 1817702441}
   m_Layer: 5
   m_Name: PlayerAreas
@@ -1996,18 +1980,6 @@ MonoBehaviour:
   trash: {fileID: 1569751098}
   isPlayer: 1
   playArea: {fileID: 941190230}
---- !u!114 &1817702442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1817702439}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8616a1d0598e24f45aad8b307b7ed755, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPlayer: 0
 --- !u!1 &1918007750
 GameObject:
   m_ObjectHideFlags: 0

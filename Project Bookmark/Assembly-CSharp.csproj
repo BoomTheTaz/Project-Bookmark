@@ -86,12 +86,13 @@
     <Compile Include="Assets\Scripts\Combat\Deck.cs" />
     <Compile Include="Assets\Scripts\Combat\Draggable.cs" />
     <Compile Include="Assets\Scripts\Combat\Dropzone.cs" />
+    <Compile Include="Assets\Scripts\Combat\Enemies\RatsData.cs" />
     <Compile Include="Assets\Scripts\Combat\EnemyAI.cs" />
     <Compile Include="Assets\Scripts\Combat\Hand.cs" />
     <Compile Include="Assets\Scripts\Combat\PlayArea.cs" />
     <Compile Include="Assets\Scripts\Combat\Trash.cs" />
-    <Compile Include="Assets\Scripts\ControlManager.cs" />
-    <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\ControlManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/Joe/Documents/Github/Project-Bookmark/Project Bookmark/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>

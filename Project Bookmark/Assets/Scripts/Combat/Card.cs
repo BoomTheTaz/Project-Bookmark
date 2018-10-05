@@ -115,18 +115,21 @@ public class Card : MonoBehaviour
 				break;
 		}
 
-        if (c.Effects != null)
-            SetCardEffects(c.GetCardEfffects());
+        if (c.AttackEffects != null)
+            SetAttackEffects(c.GetAttackEffects());
+        if (c.DefenseEffects != null)
+            SetDefenseEffect(c.GetDefenseEffects());
 
-		ATK = Mathf.RoundToInt(ATK * AttackScaler);
+        ATK = Mathf.RoundToInt(ATK * AttackScaler);
 
 		UpdateVisuals();
 	}
 
-    void SetCardEffects(CardEffect[] e)
+    void SetAttackEffects(CardEffect[] e)
     {
         CardEffectCall temp = null;
-        
+        hasAttackEffect = true;
+
         // For each effect, add to temporary call
         foreach (CardEffect i in e)
         {
@@ -137,35 +140,58 @@ public class Card : MonoBehaviour
                     break;
                 case EffectTypes.GainAP:
                     temp += () => { CombatManager.instance.GainAP(i.effectAmount, isPlayer); };
-                    hasDefenseEffect = true;
                     break;
                 case EffectTypes.TakeAP:
                     temp += () => { CombatManager.instance.TakeAP(i.effectAmount, isPlayer); };
-                    hasAttackEffect = true;
                     break;
                 case EffectTypes.DrawCard:
                     temp += () => { CombatManager.instance.GainCard(i.effectAmount, isPlayer); };
-                    hasAttackEffect = true;
                     break;
                 case EffectTypes.DiscardCard:
                     temp += () => { CombatManager.instance.DiscardCard(i.effectAmount, isPlayer); };
-                    hasDefenseEffect = true;
                     break;
                 default:
                     break;
             }
         }
 
-        // Set as defense or attack based ontype of card
-        if (Type == CardType.ATK_Mag || Type == CardType.ATK_Phys)
-            AttackEffect = temp;
-        else if (Type == CardType.DEF_Mag || Type == CardType.DEF_Phys)
-            DefenseEffect = temp;
-        else
-            Debug.LogError("Unsure what to do with this card type.");
+        AttackEffect = temp;
     }
-    
-	void UpdateVisuals()
+
+    void SetDefenseEffect(CardEffect[] e)
+    {
+        CardEffectCall temp = null;
+        hasDefenseEffect = true;
+
+        // For each effect, add to temporary call
+        foreach (CardEffect i in e)
+        {
+            switch (i.effectType)
+            {
+                case EffectTypes.NONE:
+                    break;
+                case EffectTypes.GainAP:
+                    temp += () => { CombatManager.instance.GainAP(i.effectAmount, isPlayer); };
+                    break;
+                case EffectTypes.TakeAP:
+                    temp += () => { CombatManager.instance.TakeAP(i.effectAmount, isPlayer); };
+                    break;
+                case EffectTypes.DrawCard:
+                    temp += () => { CombatManager.instance.GainCard(i.effectAmount, isPlayer); };
+                    break;
+                case EffectTypes.DiscardCard:
+                    temp += () => { CombatManager.instance.DiscardCard(i.effectAmount, isPlayer); };
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        DefenseEffect = temp;
+    }
+
+
+    void UpdateVisuals()
 	{
 		ATKText.text = ATK.ToString();
 		DEFText.text = DEF.ToString();

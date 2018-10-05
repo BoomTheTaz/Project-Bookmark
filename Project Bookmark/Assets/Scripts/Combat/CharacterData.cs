@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterData : MonoBehaviour {
+public class CharacterData {
 
 	// ===== STATS =====
 	protected int[] CharacterStats = new int[(int)Stats.NUM_ELEMENTS];
@@ -20,54 +20,52 @@ public class CharacterData : MonoBehaviour {
     public int TurnAP { get; protected set; }
 
     public bool isPlayer = false;
+    
+    public CardStats[] Cards { get; protected set; }
 
+    // Constants
+    const int BaseMaxAP = 6;
+    const int TechPerAPLevel = 3;
 
-	private void Awake()
-	{
-		CharacterStats[(int)Stats.Power] = Roll(1, 3);
-		CharacterStats[(int)Stats.Technique] = Roll(1, 3);
-        CharacterStats[(int)Stats.Constitution] = Roll(1, 3);
-		CharacterStats[(int)Stats.Magic] = Roll(1, 3);
-        CharacterStats[(int)Stats.Wisdom] = Roll(1, 3);
-        CharacterStats[(int)Stats.Charisma] = Roll(1, 3);
-
-        // ======= TEMP HARD CODE ========
-        MaxAP = 6;
-        MaxHealth = 100;
-        CurrentHealth = 100;
-        MaxCards = 10;
-        CardsInHand = 5;
-        TurnAP = Mathf.FloorToInt(MaxAP / 2);
-	}
-
-
-	//public CharacterData(int s, int d, int c, int i, int w, int ch)
- //   {
- //       CharacterStats[(int)Stats.Strength] = s;
- //       CharacterStats[(int)Stats.Dexterity] = d;
- //       CharacterStats[(int)Stats.Constitution] = c;
- //       CharacterStats[(int)Stats.Intelligence] = i;
- //       CharacterStats[(int)Stats.Wisdom] = w;
- //       CharacterStats[(int)Stats.Strength] = ch;
-  
- //   }
-
-	//public CharacterData()
-    //{
-        
-    //}
-
-    // roll d Ds
-    public int Roll(int d, int s)
+    // Default Constructor should run DefaulSetup
+    public CharacterData()
     {
-        int sum = 0;
-        for (int i = 0; i < d; i++)
-        {
-            sum += Random.Range(1, s+1);
-        }
-        return sum;
+        DefaultSetup();
     }
 
+    // Default setup, used in child classes to set default enemy types
+    protected virtual void DefaultSetup()
+    {
+        return;
+    }
+
+    public CharacterData(int power, int tech, int magic, int health, CardStats[] cards)
+    {
+        StoreData(power, tech, magic, health, cards);
+    }
+
+    protected void StoreData(int power, int tech, int magic, int health, CardStats[] cards)
+    {
+        // ===== Store inputted values =====
+        CharacterStats[(int)Stats.Power] = power;
+        CharacterStats[(int)Stats.Technique] = tech;
+        CharacterStats[(int)Stats.Magic] = magic;
+        MaxHealth = health;
+        CurrentHealth = health;
+        Cards = cards;
+
+        // ===== Calculate other values based on inputs =====
+
+        // Gain 2 AP per every "TechPerAPLevel" tech levels
+        MaxAP = BaseMaxAP + Mathf.FloorToInt(CharacterStats[(int)Stats.Technique] / TechPerAPLevel) * 2;
+
+        // TurnAP is half of max
+        TurnAP = MaxAP / 2;
+
+        // Cards in hand will equal turnAP for now
+        CardsInHand = TurnAP;
+    }
+    
     public int GetStat(Stats s)
     {
         return CharacterStats[(int)s];
@@ -77,16 +75,18 @@ public class CharacterData : MonoBehaviour {
 	{
 		if (d > 0)
 			CurrentHealth -= d;
-
+        Debug.Log(isPlayer);
 		CombatUI.instance.ChangeHealth(CurrentHealth, isPlayer);
 
 		if (CurrentHealth <= 0)
 			CombatManager.instance.EndGame(isPlayer);
 	}
 
-	public virtual bool StatCheck(Stats s, int n)
+	public bool StatCheck(Stats s, int n)
 	{
-		return false;
-	}
+        if (CharacterStats[(int)s] >= n)
+            return true;
+        return false;
+    }
     
 }
